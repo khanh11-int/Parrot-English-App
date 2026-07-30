@@ -1,0 +1,61 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Firebase — log gỡ lỗi, không nên commit
+firebase-debug.log
+firestore-debug.log
+database-debug.log
+ui-debug.log
+.firebase/
+
+# Khoá service account — TUYỆT ĐỐI không commit.
+# Ai có file này là toàn quyền project Firebase.
+*serviceAccount*.json
+*-firebase-adminsdk-*.json
+
+# Ảnh gốc trước khi xoá chữ/nền, giữ để đối chiếu.
+# Không đóng gói vào app (không khai báo trong pubspec) nên không cần trong repo.
+assets/images_original/

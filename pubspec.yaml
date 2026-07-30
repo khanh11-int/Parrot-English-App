@@ -1,0 +1,44 @@
+name: parrot
+description: "Parrot - App học tiếng Anh."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # Quản lý state (đơn giản, type-safe, dễ test)
+  flutter_riverpod: ^2.6.1
+
+  # Điều hướng / routing khai báo tập trung
+  go_router: ^14.6.2
+
+  # Gọi REST API (interceptor, multipart upload, timeout)
+  dio: ^5.7.0
+
+  # Firebase: xác thực + database thật
+  firebase_core: ^4.12.1
+  firebase_auth: ^6.5.6
+  cloud_firestore: ^6.7.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/mascot/
+    - assets/images/ring/
+    - assets/images/icons/
+    - assets/images/stickers/
+    - assets/images/items/

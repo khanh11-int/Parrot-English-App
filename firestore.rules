@@ -1,0 +1,111 @@
+rules_version = '2';
+
+// Quy tắc truy cập Firestore của Parrot.
+//
+// Nguyên tắc: mặc định CHẶN, chỉ mở đúng chỗ cần. Mọi collection không được
+// khai báo ở đây sẽ tự động bị từ chối.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // --- Người dùng ----------------------------------------------------
+    // Ai đăng nhập cũng đọc được hồ sơ người khác (để xem trang cá nhân,
+    // bảng xếp hạng), nhưng chỉ chủ sở hữu được ghi.
+    match /users/{uid} {
+      allow read: if isSignedIn();
+      allow create: if isOwner(uid);
+      allow update: if isOwner(uid);
+      // Không cho xoá: xoá hồ sơ phải qua luồng xoá tài khoản có kiểm soát.
+      allow delete: if false;
+
+      // Tiến độ học từng từ: từ nào đã học, lịch ôn tới đâu.
+      match /wordProgress/{wordId} {
+        allow read, write: if isOwner(uid);
+      }
+      // Số từ đã học của từng chủ đề.
+      match /topicProgress/{topicId} {
+        allow read, write: if isOwner(uid);
+      }
+      // Bộ từ người dùng tự lưu từ ảnh chụp — tách biệt với phần học.
+      match /savedWords/{wordId} {
+        allow read, write: if isOwner(uid);
+      }
+      // Thống kê theo ngày, nuôi streak và nhiệm vụ hằng ngày.
+      match /dailyStats/{date} {
+        allow read, write: if isOwner(uid);
+      }
+      match /inventory/{itemId} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+
+    // --- Bài đăng ------------------------------------------------------
+    match /posts/{postId} {
+      allow read: if isSignedIn();
+      // Chỉ tạo được bài đứng tên chính mình — chặn việc mạo danh người khác.
+      allow create: if isSignedIn()
+                    && request.auth.uid == request.resource.data.authorId;
+      allow update, delete: if isSignedIn()
+                            && request.auth.uid == resource.data.authorId;
+
+      // Thích là subcollection, mỗi người một document id = uid. Cách này
+      // không vỡ khi bài có nhiều nghìn lượt thích, khác với mảng `likedBy`.
+      match /likes/{uid} {
+        allow read: if isSignedIn();
+        allow write: if isOwner(uid);
+      }
+      match /bookmarks/{uid} {
+        allow read: if isSignedIn();
+        allow write: if isOwner(uid);
+      }
+      match /comments/{commentId} {
+        allow read: if isSignedIn();
+        allow create: if isSignedIn()
+                      && request.auth.uid == request.resource.data.authorId;
+        allow update, delete: if isSignedIn()
+                              && request.auth.uid == resource.data.authorId;
+      }
+    }
+
+    // --- Nhóm học tập --------------------------------------------------
+    match /groups/{groupId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn()
+                    && request.auth.uid == request.resource.data.leaderId;
+      allow update, delete: if isSignedIn()
+                            && request.auth.uid == resource.data.leaderId;
+
+      match /members/{uid} {
+        allow read: if isSignedIn();
+        // Tự vào và tự rời nhóm được; kick người khác thì trưởng nhóm phải sửa
+        // qua document nhóm.
+        allow write: if isOwner(uid);
+      }
+    }
+
+    // --- Dữ liệu dùng chung, chỉ đọc -----------------------------------
+    // Chủ đề và vật phẩm do quản trị viên đặt qua Console, client không ghi.
+    match /topics/{topicId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+
+      // Bộ từ vựng của chủ đề: giáo trình dùng chung, admin soạn qua Console
+      // hoặc script. Client chỉ đọc — không ai tự thêm từ vào giáo trình.
+      match /words/{wordId} {
+        allow read: if isSignedIn();
+        allow write: if false;
+      }
+    }
+    match /shopItems/{itemId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+  }
+}

@@ -1,0 +1,127 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:parrot/core/constants/app_labels.dart';
+import 'package:parrot/features/home/domain/entities/home_summary.dart';
+import 'package:parrot/features/image_scan/domain/entities/recognized_word.dart';
+import 'package:parrot/features/profile/domain/entities/user_profile.dart';
+import 'package:parrot/features/shop/domain/entities/shop_item.dart';
+
+void main() {
+  group('DailyGoal', () {
+    test('tính đúng tỉ lệ hoàn thành', () {
+      const goal = DailyGoal(title: 'Học từ mới', completed: 9, target: 15);
+      expect(goal.progress, closeTo(0.6, 0.001));
+      expect(goal.isCompleted, isFalse);
+    });
+
+    test('mục tiêu bằng 0 không gây chia cho 0', () {
+      const goal = DailyGoal(title: 'Rỗng', completed: 0, target: 0);
+      expect(goal.progress, 0);
+    });
+
+    test('kẹp tỉ lệ ở 1 khi làm vượt mục tiêu', () {
+      const goal = DailyGoal(title: 'Vượt', completed: 20, target: 15);
+      expect(goal.progress, 1);
+      expect(goal.isCompleted, isTrue);
+    });
+  });
+
+  group('ForestRank', () {
+    test('suy ra đúng hạng theo XP', () {
+      expect(ForestRank.fromExperience(0), ForestRank.forestFloor);
+      expect(ForestRank.fromExperience(499), ForestRank.forestFloor);
+      expect(ForestRank.fromExperience(500), ForestRank.undergrowth);
+      expect(ForestRank.fromExperience(568), ForestRank.undergrowth);
+      expect(ForestRank.fromExperience(99999), ForestRank.emergent);
+    });
+
+    test('hạng cao nhất không có hạng kế tiếp', () {
+      expect(ForestRank.emergent.next, isNull);
+      expect(ForestRank.forestFloor.next, ForestRank.undergrowth);
+    });
+  });
+
+  group('UserProfile', () {
+    const profile = UserProfile(
+      name: 'Công Tình',
+      avatarAsset: 'a.png',
+      postCount: 18,
+      followerCount: 1,
+      followingCount: 5,
+      experience: 568,
+      streakDays: 1,
+      groupName: 'neu',
+      recentPostCount: 9,
+    );
+
+    test('hạng suy ra từ XP nên không lệch với dữ liệu', () {
+      expect(profile.rank, ForestRank.undergrowth);
+    });
+
+    test('tiến độ lên hạng kế tiếp nằm trong 0..1', () {
+      // 568 XP: đã qua mốc 500 (Bụi Rậm), đang tiến tới 1500 (Tán Thấp).
+      expect(profile.progressToNextRank, closeTo(68 / 1000, 0.001));
+    });
+  });
+
+  group('BoundingBox', () {
+    test('đổi tỉ lệ 0..1 sang pixel theo kích thước hiển thị', () {
+      const box = BoundingBox(left: 0.5, top: 0.25, width: 0.2, height: 0.4);
+      final scaled = box.scaleTo(400, 300);
+
+      expect(scaled.left, 200);
+      expect(scaled.top, 75);
+      expect(scaled.width, 80);
+      expect(scaled.height, 120);
+    });
+  });
+
+  group('Wallet', () {
+    const wallet = Wallet(seeds: 150, gems: 2);
+    const cheapItem = ShopItem(
+      id: 'a',
+      name: 'Quả Tăng Tốc',
+      description: '',
+      iconAsset: 'a.png',
+      price: 150,
+      currency: ShopCurrency.seed,
+    );
+    const expensiveItem = ShopItem(
+      id: 'b',
+      name: 'Khiên Vỏ Cây',
+      description: '',
+      iconAsset: 'b.png',
+      price: 200,
+      currency: ShopCurrency.seed,
+    );
+
+    test('mua được khi đủ tiền, không mua được khi thiếu', () {
+      expect(wallet.canAfford(cheapItem), isTrue);
+      expect(wallet.canAfford(expensiveItem), isFalse);
+    });
+
+    test('trừ đúng loại tiền khi mua', () {
+      final after = wallet.spend(cheapItem);
+      expect(after.seeds, 0);
+      expect(after.gems, 2, reason: 'mua bằng hạt thì ngọc phải không đổi');
+    });
+  });
+
+  group('SessionResult qua QuestGroup', () {
+    test('tiến độ nhóm nhiệm vụ là trung bình các nhiệm vụ con', () {
+      const group = QuestGroup(
+        title: 'Hằng ngày',
+        quests: [
+          Quest(title: 'a', completed: 1, target: 2),
+          Quest(title: 'b', completed: 0, target: 2),
+        ],
+      );
+      expect(group.progress, closeTo(0.25, 0.001));
+      expect(group.percent, 25);
+    });
+
+    test('nhóm rỗng có tiến độ 0', () {
+      const group = QuestGroup(title: 'Rỗng', quests: []);
+      expect(group.progress, 0);
+    });
+  });
+}

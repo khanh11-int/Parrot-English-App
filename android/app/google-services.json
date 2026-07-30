@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "175459918365",
+    "project_id": "parrot-english-app",
+    "storage_bucket": "parrot-english-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:175459918365:android:a2889e3bffbd6024ab1cf4",
+        "android_client_info": {
+          "package_name": "com.example.parrot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrm7ZOYS2Jgkdd6rjHpIFDldr2bB4kbcc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

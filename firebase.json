@@ -1,0 +1,27 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "parrot-english-app",
+          "appId": "1:175459918365:android:a2889e3bffbd6024ab1cf4",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "parrot-english-app",
+          "configurations": {
+            "android": "1:175459918365:android:a2889e3bffbd6024ab1cf4",
+            "ios": "1:175459918365:ios:1c81cd1d30957019ab1cf4",
+            "web": "1:175459918365:web:c681aa3c0bc05492ab1cf4"
+          }
+        }
+      }
+    }
+  }
+}
