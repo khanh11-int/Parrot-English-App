@@ -51,4 +51,22 @@ class CommunityRemoteRepository implements CommunityRepository {
     final json = isOn ? await _client.post(path) : await _client.delete(path);
     return CommunityPostDto.fromJson(json).toEntity();
   }
+
+  @override
+  Future<void> createPost({
+    required SharedWord word,
+    required String detectedLabel,
+  }) async {
+    await _client.post(
+      ApiEndpoints.posts,
+      body: {
+        'detected_label': detectedLabel,
+        'shared_word': {
+          'english': word.english,
+          'vietnamese': word.vietnamese,
+          'phonetic': word.phonetic,
+        },
+      },
+    );
+  }
 }

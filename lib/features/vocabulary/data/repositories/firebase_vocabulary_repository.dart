@@ -108,7 +108,11 @@ class FirebaseVocabularyRepository implements VocabularyRepository {
 
     try {
       final doc = _progress(uid).doc(word.id);
-      final snapshot = await doc.get();
+      // Đọc song song: tiến độ của từ và hồ sơ (để tính streak).
+      final (snapshot, userSnapshot) = await (
+        doc.get(),
+        _userDoc(uid).get(),
+      ).wait;
       final data = snapshot.data();
 
       final currentDays = switch (data?['reviewIntervalDays']) {
@@ -143,6 +147,7 @@ class FirebaseVocabularyRepository implements VocabularyRepository {
         uid: uid,
         isCorrect: isCorrect,
         isFirstTime: isFirstTime,
+        userData: userSnapshot.data() ?? const <String, dynamic>{},
       );
 
       await batch.commit();
@@ -160,23 +165,22 @@ class FirebaseVocabularyRepository implements VocabularyRepository {
     required String uid,
     required bool isCorrect,
     required bool isFirstTime,
+    required Map<String, dynamic> userData,
   }) {
-    final today = UserDocument.dateKey(DateTime.now());
+    final now = DateTime.now();
+    final today = UserDocument.dateKey(now);
 
-    if (isCorrect) {
-      batch.set(_userDoc(uid), {
+    batch.set(_userDoc(uid), {
+      // Trả lời sai vẫn tính là có hoạt động hôm nay, chỉ không được thưởng.
+      if (isCorrect) ...{
         'experience': FieldValue.increment(
           UserDocument.experiencePerCorrectAnswer,
         ),
         'seeds': FieldValue.increment(UserDocument.seedsPerCorrectAnswer),
-        'lastActiveDate': today,
-      }, SetOptions(merge: true));
-    } else {
-      // Trả lời sai vẫn tính là có hoạt động hôm nay, chỉ không được thưởng.
-      batch.set(_userDoc(uid), {
-        'lastActiveDate': today,
-      }, SetOptions(merge: true));
-    }
+      },
+      'lastActiveDate': today,
+      'streakDays': UserDocument.nextStreak(userData, now: now),
+    }, SetOptions(merge: true));
 
     batch.set(_dailyStats(uid, today), {
       if (isFirstTime) 'wordsLearned': FieldValue.increment(1),

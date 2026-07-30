@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/error/failure.dart';
+import '../../../community/domain/entities/community_entities.dart';
+import '../../../community/presentation/providers/community_providers.dart';
 import '../../../quiz/domain/entities/vocabulary_topic.dart';
 import '../../../quiz/presentation/providers/learn_providers.dart';
 import '../../../vocabulary/domain/entities/saved_word.dart';
@@ -134,8 +136,9 @@ class ScanController extends Notifier<ScanState> {
     }
   }
 
-  /// Lưu các từ đang chọn. [shouldPost] bật thì đăng luôn lên Cộng đồng.
+  /// Lưu các từ đang chọn vào bộ từ cá nhân.
   ///
+  /// [shouldPost] bật thì đăng thêm một bài lên Cộng đồng cho mỗi từ.
   /// Trả về `null` nếu thành công, hoặc thông điệp lỗi để trang hiển thị.
   Future<String?> saveSelectedWords({required bool shouldPost}) async {
     final words = state.selectedWords;
@@ -154,6 +157,23 @@ class ScanController extends Notifier<ScanState> {
             topicId: word.topicId,
           ),
       ]);
+
+      if (shouldPost) {
+        final community = ref.read(communityRepositoryProvider);
+        for (final word in words) {
+          await community.createPost(
+            word: SharedWord(
+              english: word.english,
+              vietnamese: word.vietnamese,
+              phonetic: word.phonetic,
+            ),
+            detectedLabel: word.overlayLabel,
+          );
+        }
+        // Bài mới vừa xuất hiện, buộc dòng thời gian tải lại.
+        ref.invalidate(feedProvider);
+      }
+
       return null;
     } on Failure catch (failure) {
       return failure.message;

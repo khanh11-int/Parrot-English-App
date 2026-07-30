@@ -159,6 +159,47 @@ class FirebaseCommunityRepository implements CommunityRepository {
     shouldSet: isBookmarked,
   );
 
+  @override
+  Future<void> createPost({
+    required SharedWord word,
+    required String detectedLabel,
+  }) async {
+    final user = _authRepository.currentUser;
+    if (user == null) throw const UnauthorizedFailure();
+
+    try {
+      final batch = _firestore.batch();
+
+      batch.set(_firestore.collection(PostDocument.collection).doc(), {
+        // `authorId` phải đúng uid của mình: rules chặn việc mạo danh người khác.
+        'authorId': user.id,
+        'authorName': user.greetingName,
+        'detectedLabel': detectedLabel,
+        'sharedWord': {
+          'english': word.english,
+          'vietnamese': word.vietnamese,
+          'phonetic': word.phonetic,
+        },
+        'likeCount': 0,
+        'commentCount': 0,
+        'bookmarkCount': 0,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      // Số bài đăng hiện ở trang cá nhân, phải tăng cùng lúc để hai chỗ khỏi
+      // lệch nhau.
+      batch.set(
+        _firestore.collection(UserDocument.collection).doc(user.id),
+        {'postCount': FieldValue.increment(1)},
+        SetOptions(merge: true),
+      );
+
+      await batch.commit();
+    } on FirebaseException catch (error) {
+      throw _toFailure(error);
+    }
+  }
+
   /// Đặt một cờ dạng subcollection (thích, lưu bài) và cập nhật số đếm.
   ///
   /// Nhận trạng thái **mong muốn** thay vì đảo trạng thái hiện tại: bấm nhanh

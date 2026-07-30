@@ -18,6 +18,7 @@ import '../../features/quiz/presentation/pages/session_page.dart';
 import '../../features/quiz/presentation/pages/topic_list_page.dart';
 import '../../features/quiz/presentation/providers/learn_providers.dart';
 import '../../features/shop/presentation/pages/shop_page.dart';
+import '../../features/vocabulary/presentation/pages/saved_words_page.dart';
 import '../../shared/widgets/app_shell.dart';
 import 'app_routes.dart';
 
@@ -100,6 +101,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const SessionPage(mode: SessionMode.review),
       ),
       GoRoute(path: AppRoutes.shop, builder: (_, _) => const ShopPage()),
+      GoRoute(
+        path: AppRoutes.savedWords,
+        builder: (_, _) => const SavedWordsPage(),
+      ),
       GoRoute(
         path: AppRoutes.settings,
         builder: (_, _) => const SettingsPage(),

@@ -218,8 +218,10 @@ chạy được khi chưa có backend.
       ôn tập = từ đã học đến hạn theo SRS
 - [ ] 3 `*FirebaseRepository` còn lại: home, flashcard (danh sách bộ từ),
       community
-- [ ] Trang xem `savedWords` (từ đã lưu từ ảnh) — hiện lưu được nhưng chưa có
-      chỗ nào xem lại
+- [x] Trang xem `savedWords` — vào từ Cài đặt, xoá được từng từ
+- [x] Tạo bài đăng thật — nút "Lưu và đăng tải" trước đây nói dối:
+      `shouldPost` được truyền vào nhưng không dùng ở đâu
+- [x] Tính streak — trước đây `streakDays` chỉ đọc, không bao giờ được ghi
 - [ ] Khóa ghi `experience`/`seeds`/`gems` — rules hiện cho chủ sở hữu tự ghi
       nên XP **gian lận được**; chỉ sửa được bằng Cloud Functions (gói Blaze)
 - [ ] Cloud Functions cho AI nhận diện ảnh (cần gói Blaze)

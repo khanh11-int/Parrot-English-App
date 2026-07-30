@@ -169,4 +169,11 @@ class CommunityMockRepository implements CommunityRepository {
     final posts = await getFeed();
     return posts.firstWhere((post) => post.id == postId);
   }
+
+  /// Bản mock không có nơi để đăng — bỏ qua một cách tường minh.
+  @override
+  Future<void> createPost({
+    required SharedWord word,
+    required String detectedLabel,
+  }) async {}
 }

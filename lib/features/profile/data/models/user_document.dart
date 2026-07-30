@@ -33,6 +33,30 @@ class UserDocument {
   static const experiencePerCorrectAnswer = 10;
   static const seedsPerCorrectAnswer = 2;
 
+  /// Chuỗi ngày học liên tiếp mới, tính từ `lastActiveDate` trong hồ sơ.
+  ///
+  /// Ba trường hợp:
+  /// - Đã học hôm nay rồi → giữ nguyên, không cộng thêm mỗi câu trả lời.
+  /// - Lần cuối là hôm qua → cộng 1.
+  /// - Cũ hơn (hoặc chưa từng học) → về 1, chuỗi đã đứt.
+  static int nextStreak(
+    Map<String, dynamic> userData, {
+    required DateTime now,
+  }) {
+    final current = switch (userData['streakDays']) {
+      final num value => value.toInt(),
+      _ => 0,
+    };
+    final lastActive = userData['lastActiveDate'];
+
+    final today = dateKey(now);
+    final yesterday = dateKey(now.subtract(const Duration(days: 1)));
+
+    if (lastActive == today) return current < 1 ? 1 : current;
+    if (lastActive == yesterday) return current + 1;
+    return 1;
+  }
+
   /// Khóa ngày dạng `yyyy-MM-dd` theo múi giờ máy người dùng.
   static String dateKey(DateTime date) {
     final month = date.month.toString().padLeft(2, '0');

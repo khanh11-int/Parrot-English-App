@@ -18,4 +18,13 @@ abstract interface class CommunityRepository {
     String postId, {
     required bool isBookmarked,
   });
+
+  /// Đăng một từ vựng lên dòng thời gian.
+  ///
+  /// [detectedLabel] là nhãn AI đọc được từ ảnh, ví dụ `chair - cái ghế 0.98`.
+  /// Chưa gửi ảnh kèm vì chưa dùng Cloud Storage.
+  Future<void> createPost({
+    required SharedWord word,
+    required String detectedLabel,
+  });
 }

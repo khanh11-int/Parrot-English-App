@@ -33,5 +33,8 @@ abstract final class AppRoutes {
 
   // Trang con
   static const shop = '/shop';
+
+  /// Sổ tay từ đã lưu từ ảnh chụp.
+  static const savedWords = '/saved-words';
   static const settings = '/settings';
 }
