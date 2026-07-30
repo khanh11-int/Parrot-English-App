@@ -1,4 +1,4 @@
-/// Đường dẫn của mọi endpoint. Xem `API_SPEC.md` để biết request/response.
+/// Đường dẫn của mọi endpoint. Xem `docs/API_SPEC.md` để biết request/response.
 ///
 /// Gom một chỗ để backend đổi đường dẫn thì chỉ sửa ở đây, và để nhìn được toàn
 /// bộ bề mặt API của app trong một file.

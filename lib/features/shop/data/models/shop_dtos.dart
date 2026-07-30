@@ -2,7 +2,7 @@ import '../../../../core/network/api_client.dart';
 import '../../../../core/network/json_reader.dart';
 import '../../domain/entities/shop_item.dart';
 
-/// DTO của `GET /shop` và `POST /shop/purchases`. Xem `API_SPEC.md`.
+/// DTO của `GET /shop` và `POST /shop/purchases`. Xem `docs/API_SPEC.md`.
 class ShopDataDto {
   const ShopDataDto({required this.wallet, required this.items});
 

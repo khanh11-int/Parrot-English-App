@@ -2,7 +2,7 @@ import '../../../../core/network/api_client.dart';
 import '../../../../core/network/json_reader.dart';
 import '../../domain/entities/home_summary.dart';
 
-/// DTO của `GET /me/home`. Xem `API_SPEC.md`.
+/// DTO của `GET /me/home`. Xem `docs/API_SPEC.md`.
 ///
 /// DTO tách khỏi entity: backend đổi tên field thì chỉ sửa `fromJson` ở đây,
 /// entity và UI không đổi.

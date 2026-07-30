@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-/// Khoảng cách theo bậc 4px. Xem mục 2.2 của `UI_SPEC.md`.
+/// Khoảng cách theo bậc 4px. Xem mục 2.2 của `docs/UI_SPEC.md`.
 abstract final class AppSpacing {
   static const xs = 4.0;
   static const sm = 8.0;
@@ -19,7 +19,7 @@ abstract final class AppSpacing {
   static const cardPadding = EdgeInsets.all(lg);
 }
 
-/// Bán kính bo góc. Xem mục 2.3 của `UI_SPEC.md`.
+/// Bán kính bo góc. Xem mục 2.3 của `docs/UI_SPEC.md`.
 abstract final class AppRadius {
   /// Viên thuốc (chip, pill).
   static const chip = 999.0;
@@ -35,7 +35,7 @@ abstract final class AppRadius {
   static const imageBorder = BorderRadius.all(Radius.circular(image));
 }
 
-/// Thời lượng animation. Giữ trong khoảng 200–300ms (mục 7 `UI_SPEC.md`).
+/// Thời lượng animation. Giữ trong khoảng 200–300ms (mục 7 `docs/UI_SPEC.md`).
 abstract final class AppDurations {
   static const fast = Duration(milliseconds: 200);
   static const normal = Duration(milliseconds: 300);

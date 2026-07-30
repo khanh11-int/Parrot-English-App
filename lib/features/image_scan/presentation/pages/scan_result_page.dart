@@ -13,7 +13,7 @@ import '../providers/scan_providers.dart';
 import '../widgets/scan_image_preview.dart';
 import '../widgets/topic_picker_sheet.dart';
 
-/// Kết quả nhận diện ảnh — mục 5.3 của `UI_SPEC.md`.
+/// Kết quả nhận diện ảnh — mục 5.3 của `docs/UI_SPEC.md`.
 ///
 /// Điểm nhấn của trang: bấm khung trên ảnh thì thẻ từ tương ứng bên dưới được
 /// cuộn tới và làm nổi, nên người dùng biết chắc từ nào ứng với vật nào.

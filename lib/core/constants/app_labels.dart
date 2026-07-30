@@ -1,4 +1,4 @@
-/// Bộ tên gọi theo chủ đề **rừng rậm**. Xem mục 2.6 của `UI_SPEC.md`.
+/// Bộ tên gọi theo chủ đề **rừng rậm**. Xem mục 2.6 của `docs/UI_SPEC.md`.
 ///
 /// Gom ở một chỗ để đổi tên hạng / vật phẩm không phải sửa rải rác trong UI,
 /// và để sau này thêm đa ngôn ngữ chỉ cần thay lớp này.

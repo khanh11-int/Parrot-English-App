@@ -12,7 +12,7 @@ import '../widgets/match_pairs_exercise.dart';
 import '../widgets/multiple_choice_exercise.dart';
 import 'session_summary_page.dart';
 
-/// Trang chạy một phiên học hoặc ôn tập — mục 5.4 và 5.5 của `UI_SPEC.md`.
+/// Trang chạy một phiên học hoặc ôn tập — mục 5.4 và 5.5 của `docs/UI_SPEC.md`.
 ///
 /// Hai luồng dùng cùng một trang, chỉ khác provider nguồn từ, nên mọi sửa đổi
 /// về bài tập tự động áp dụng cho cả hai.

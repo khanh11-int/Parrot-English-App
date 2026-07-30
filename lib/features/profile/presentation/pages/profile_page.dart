@@ -16,7 +16,7 @@ import '../../../../shared/widgets/stat_tile.dart';
 import '../../domain/entities/user_profile.dart';
 import '../providers/profile_providers.dart';
 
-/// Tab Hồ sơ — mục 5.8 của `UI_SPEC.md`.
+/// Tab Hồ sơ — mục 5.8 của `docs/UI_SPEC.md`.
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 

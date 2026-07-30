@@ -3,7 +3,7 @@ import '../../../../core/network/api_client.dart';
 import '../../../../core/network/json_reader.dart';
 import '../../domain/entities/community_entities.dart';
 
-/// DTO của `GET /feed` và các endpoint like/bookmark. Xem `API_SPEC.md`.
+/// DTO của `GET /feed` và các endpoint like/bookmark. Xem `docs/API_SPEC.md`.
 class CommunityPostDto {
   const CommunityPostDto({
     required this.id,

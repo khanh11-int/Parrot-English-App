@@ -2,7 +2,7 @@ import '../../../../core/network/api_client.dart';
 import '../../../../core/network/json_reader.dart';
 import '../../domain/entities/user_profile.dart';
 
-/// DTO của `GET /me/profile`. Xem `API_SPEC.md`.
+/// DTO của `GET /me/profile`. Xem `docs/API_SPEC.md`.
 class UserProfileDto {
   const UserProfileDto({
     required this.name,

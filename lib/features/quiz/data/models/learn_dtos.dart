@@ -4,7 +4,7 @@ import '../../../../core/network/json_reader.dart';
 import '../../domain/entities/learn_question.dart';
 import '../../domain/entities/vocabulary_topic.dart';
 
-/// DTO của `GET /me/topics`. Xem `API_SPEC.md`.
+/// DTO của `GET /me/topics`. Xem `docs/API_SPEC.md`.
 class VocabularyTopicDto {
   const VocabularyTopicDto({
     required this.id,

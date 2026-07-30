@@ -22,7 +22,7 @@ enum ScanStatus {
   };
 }
 
-/// DTO của `POST /scans` và `GET /scans/{id}`. Xem `API_SPEC.md`.
+/// DTO của `POST /scans` và `GET /scans/{id}`. Xem `docs/API_SPEC.md`.
 class ScanResultDto {
   const ScanResultDto({
     required this.id,

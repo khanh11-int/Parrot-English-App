@@ -4,7 +4,7 @@ import '../widgets/feed_tab.dart';
 import '../widgets/leaderboard_tab.dart';
 import '../widgets/study_group_tab.dart';
 
-/// Tab Cộng đồng với 3 tab con — mục 5.6 của `UI_SPEC.md`.
+/// Tab Cộng đồng với 3 tab con — mục 5.6 của `docs/UI_SPEC.md`.
 class CommunityPage extends StatelessWidget {
   const CommunityPage({super.key});
 

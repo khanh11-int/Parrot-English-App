@@ -13,7 +13,7 @@ import '../providers/shop_providers.dart';
 import '../widgets/purchase_sheet.dart';
 import '../widgets/shop_item_row.dart';
 
-/// Cửa hàng — mục 5.7 của `UI_SPEC.md`.
+/// Cửa hàng — mục 5.7 của `docs/UI_SPEC.md`.
 class ShopPage extends ConsumerWidget {
   const ShopPage({super.key});
 

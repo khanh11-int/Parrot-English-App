@@ -772,7 +772,7 @@ dùng trong **chat nhóm** và **bình luận** ở Cộng đồng. Cần thêm 
    `items/` (bỏ tiền tố khi đã có thư mục).
 3. ~~Xoá phần chữ tiếng Việt bị nướng trong ảnh.~~ **✅ Đã làm.** Cả 43 ảnh đã
    được xoá caption, xoá nền (trắng + thẻ nền gradient) thành trong suốt, và
-   crop sát vào hình. Script tại [tools/strip_assets.py](tools/strip_assets.py),
+   crop sát vào hình. Script tại [tools/strip_assets.py](../tools/strip_assets.py),
    bản gốc giữ ở `assets/images_original/`.
 
    > **Còn sót:** 4 ảnh `ring/*` vẫn có số (`9/15`, `1/30`, `5/15`, `10/20`) vì

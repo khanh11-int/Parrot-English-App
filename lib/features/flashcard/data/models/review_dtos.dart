@@ -2,7 +2,7 @@ import '../../../../core/network/api_client.dart';
 import '../../../../core/network/json_reader.dart';
 import '../../domain/entities/review_deck.dart';
 
-/// DTO của một phần tử trong `GET /me/decks`. Xem `API_SPEC.md`.
+/// DTO của một phần tử trong `GET /me/decks`. Xem `docs/API_SPEC.md`.
 class ReviewDeckDto {
   const ReviewDeckDto({
     required this.topic,

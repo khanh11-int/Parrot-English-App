@@ -11,7 +11,7 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/secondary_button.dart';
 import '../providers/scan_providers.dart';
 
-/// Chụp / chọn ảnh để nhận diện từ vựng — mục 5.2 của `UI_SPEC.md`.
+/// Chụp / chọn ảnh để nhận diện từ vựng — mục 5.2 của `docs/UI_SPEC.md`.
 ///
 /// Chưa gắn camera thật (cần `camera` / `image_picker`), nên bản này dựng đủ
 /// bố cục và luồng trạng thái: bấm chụp → đang xử lý (huỷ được) → sang trang

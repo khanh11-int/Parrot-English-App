@@ -16,7 +16,7 @@ import '../widgets/home_skeleton.dart';
 import '../widgets/quest_card.dart';
 import '../widgets/scan_banner.dart';
 
-/// Trang chủ — mục 5.1 của `UI_SPEC.md`.
+/// Trang chủ — mục 5.1 của `docs/UI_SPEC.md`.
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 

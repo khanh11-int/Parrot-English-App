@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
 
-/// Kiểu chữ của app. Xem mục 2.4 của `UI_SPEC.md`.
+/// Kiểu chữ của app. Xem mục 2.4 của `docs/UI_SPEC.md`.
 ///
 /// Không đặt `fontSize` trực tiếp trong widget — dùng các style ở đây rồi
 /// `copyWith` nếu cần đổi màu.

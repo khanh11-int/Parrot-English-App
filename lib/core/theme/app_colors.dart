@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Bảng màu của app — chủ đề **rừng rậm nhiệt đới**.
 ///
-/// Xem mục 2.1 của `UI_SPEC.md`. Mọi widget phải lấy màu từ đây, không viết
+/// Xem mục 2.1 của `docs/UI_SPEC.md`. Mọi widget phải lấy màu từ đây, không viết
 /// `Color(0x...)` rải rác, để đổi bảng màu chỉ cần sửa một chỗ.
 abstract final class AppColors {
   // --- Thương hiệu ------------------------------------------------------

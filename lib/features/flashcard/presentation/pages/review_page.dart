@@ -14,7 +14,7 @@ import '../../../../shared/widgets/section_header.dart';
 import '../../domain/entities/review_deck.dart';
 import '../providers/review_providers.dart';
 
-/// Tab Ôn tập — danh sách bộ từ đến hạn ôn theo SRS (mục 5.5 `UI_SPEC.md`).
+/// Tab Ôn tập — danh sách bộ từ đến hạn ôn theo SRS (mục 5.5 `docs/UI_SPEC.md`).
 class ReviewPage extends ConsumerWidget {
   const ReviewPage({super.key});
 

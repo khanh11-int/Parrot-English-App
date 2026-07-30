@@ -1,7 +1,7 @@
 # Dữ liệu mẫu cần nhập vào Firestore
 
 Hai collection `topics` và `shopItems` là **dữ liệu dùng chung, chỉ đọc** —
-[firestore.rules](firestore.rules) chặn client ghi vào chúng, nên phải nhập qua
+[firestore.rules](../firestore.rules) chặn client ghi vào chúng, nên phải nhập qua
 Firebase Console.
 
 Mở: https://console.firebase.google.com/project/parrot-english-app/firestore
