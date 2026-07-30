@@ -1,3 +1,4 @@
+import '../../../../core/error/failure.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/network/api_endpoints.dart';
 import '../../domain/entities/community_entities.dart';
@@ -69,4 +70,49 @@ class CommunityRemoteRepository implements CommunityRepository {
       },
     );
   }
+
+  // --- Nhom hoc tap & chat ---------------------------------------------
+  //
+  // Backend REST (docs/API_SPEC.md) chua bao gio co cac endpoint nay: nhom va
+  // chat duoc lam sau khi du an da chuyen sang Firebase. Bao loi ro rang thay
+  // vi tra du lieu rong, de khong ai tuong la da chay duoc.
+
+  static const _notInRestApi = UnknownFailure(
+    'Tinh nang nay chi co ban Firebase, backend REST chua ho tro.',
+  );
+
+  @override
+  Future<List<StudyGroupSummary>> getJoinableGroups() async =>
+      throw _notInRestApi;
+
+  @override
+  Future<void> createGroup(String name) async => throw _notInRestApi;
+
+  @override
+  Future<void> joinGroup(String groupId) async => throw _notInRestApi;
+
+  @override
+  Future<void> leaveGroup() async => throw _notInRestApi;
+
+  @override
+  Stream<List<ChatMessage>> watchGroupMessages(String groupId) =>
+      Stream.error(_notInRestApi);
+
+  @override
+  Future<void> sendGroupMessage(
+    String groupId, {
+    String? text,
+    String? stickerAsset,
+  }) async => throw _notInRestApi;
+
+  @override
+  Stream<List<ChatMessage>> watchPostComments(String postId) =>
+      Stream.error(_notInRestApi);
+
+  @override
+  Future<void> sendPostComment(
+    String postId, {
+    String? text,
+    String? stickerAsset,
+  }) async => throw _notInRestApi;
 }

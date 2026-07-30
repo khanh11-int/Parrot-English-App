@@ -133,6 +133,7 @@ class CommunityMockRepository implements CommunityRepository {
     await Future<void>.delayed(_mockDelay);
 
     return const StudyGroup(
+      id: 'neu',
       name: 'neu',
       memberCount: 8,
       leaderName: 'Hoang Duyen',
@@ -175,5 +176,76 @@ class CommunityMockRepository implements CommunityRepository {
   Future<void> createPost({
     required SharedWord word,
     required String detectedLabel,
+  }) async {}
+
+  // --- Nhom hoc tap ----------------------------------------------------
+  // Ban mock chi tra du lieu co dinh; cac thao tac ghi la ham rong.
+
+  @override
+  Future<List<StudyGroupSummary>> getJoinableGroups() async {
+    await Future<void>.delayed(_mockDelay);
+    return const [
+      StudyGroupSummary(
+        id: 'neu',
+        name: 'neu',
+        leaderName: 'Hoang Duyen',
+        memberCount: 8,
+      ),
+      StudyGroupSummary(
+        id: 'k64',
+        name: 'K64 - NEU',
+        leaderName: 'Minh Anh',
+        memberCount: 12,
+      ),
+    ];
+  }
+
+  @override
+  Future<void> createGroup(String name) async {}
+
+  @override
+  Future<void> joinGroup(String groupId) async {}
+
+  @override
+  Future<void> leaveGroup() async {}
+
+  // --- Chat nhom & binh luan -------------------------------------------
+
+  @override
+  Stream<List<ChatMessage>> watchGroupMessages(String groupId) =>
+      Stream.value(const [
+        ChatMessage(
+          id: 'm1',
+          authorId: 'sample-hoang-duyen',
+          authorName: 'Hoang Duyen',
+          timeAgo: '5 phut truoc',
+          text: 'Ca nha hom nay hoc duoc bao nhieu tu roi?',
+        ),
+        ChatMessage(
+          id: 'm2',
+          authorId: 'test-uid',
+          authorName: 'Cong Tinh',
+          timeAgo: 'vua xong',
+          text: 'Minh xong 8 tu chu de Suc khoe!',
+          isMine: true,
+        ),
+      ]);
+
+  @override
+  Future<void> sendGroupMessage(
+    String groupId, {
+    String? text,
+    String? stickerAsset,
+  }) async {}
+
+  @override
+  Stream<List<ChatMessage>> watchPostComments(String postId) =>
+      Stream.value(const []);
+
+  @override
+  Future<void> sendPostComment(
+    String postId, {
+    String? text,
+    String? stickerAsset,
   }) async {}
 }

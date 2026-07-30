@@ -260,8 +260,11 @@ vì cần quyết định hoặc phụ thuộc bên ngoài:
 - [ ] Xuất `@2x` / `@3x` (hoặc SVG cho nhóm icon)
 
 ### Chức năng còn trống
-- [ ] Chat nhóm & bình luận — nơi dùng `StickerPicker` đã viết
-- [ ] Tạo nhóm / tham gia nhóm
+- [x] Chat nhóm & bình luận — cùng một `MessageThreadPage`, dùng
+      `StickerPicker` đã viết từ trước. `Stream` nên thấy tin người khác ngay.
+- [x] Tạo nhóm / tham gia nhóm / rời nhóm — thành viên là
+      `users/{uid}.groupId`, số liệu nhóm tính bằng aggregate `count()`/`sum()`
+      nên không cần mở quyền ghi vào document nhóm
 - [ ] Trang chi tiết nhiệm vụ tháng
 - [ ] Các mục con trong Cài đặt (đang `onTap: null`)
 - [ ] `/user/:id` — trang cá nhân của người khác

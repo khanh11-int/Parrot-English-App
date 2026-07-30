@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_labels.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -11,6 +13,7 @@ import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/badge_avatar.dart';
 import '../../../../shared/widgets/empty_state.dart';
 import '../../../../shared/widgets/secondary_button.dart';
+import 'group_join_sheet.dart';
 import '../../domain/entities/community_entities.dart';
 import '../providers/community_providers.dart';
 
@@ -32,10 +35,10 @@ class StudyGroupTab extends ConsumerWidget {
                   'Học cùng nhóm để cùng trồng cây từ vựng!',
               mascotAsset: AppAssets.stickerHello,
               actionLabel: 'Tạo nhóm',
-              onAction: () {},
+              onAction: () => showCreateGroupSheet(context, ref),
               secondaryAction: SecondaryButton(
                 label: 'Tham gia nhóm',
-                onPressed: () {},
+                onPressed: () => showJoinGroupSheet(context, ref),
                 isExpanded: false,
               ),
             )
@@ -44,13 +47,13 @@ class StudyGroupTab extends ConsumerWidget {
   }
 }
 
-class _GroupContent extends StatelessWidget {
+class _GroupContent extends ConsumerWidget {
   const _GroupContent({required this.group});
 
   final StudyGroup group;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
       padding: const EdgeInsets.all(AppSpacing.lg),
       children: [
@@ -63,13 +66,13 @@ class _GroupContent extends StatelessWidget {
   }
 }
 
-class _GroupHeaderCard extends StatelessWidget {
+class _GroupHeaderCard extends ConsumerWidget {
   const _GroupHeaderCard({required this.group});
 
   final StudyGroup group;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: AppSpacing.cardPadding,
       decoration: const BoxDecoration(
@@ -110,44 +113,96 @@ class _GroupHeaderCard extends StatelessWidget {
               ],
             ),
           ),
-          const _GroupActions(),
+          _GroupActions(group: group),
         ],
       ),
     );
   }
 }
 
-class _GroupActions extends StatelessWidget {
-  const _GroupActions();
+class _GroupActions extends ConsumerWidget {
+  const _GroupActions({required this.group});
+
+  final StudyGroup group;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(
-      children: const [
-        _GroupActionIcon(
+      children: [
+        // Thông báo nhóm chưa làm nên để `null`: người dùng thấy ngay là chưa
+        // bấm được thay vì bấm rồi không có gì xảy ra.
+        const _GroupActionIcon(
           icon: Icons.notifications_none_rounded,
-          tooltip: 'Thông báo',
+          tooltip: 'Thông báo (chưa có)',
         ),
         _GroupActionIcon(
           icon: Icons.chat_bubble_outline_rounded,
           tooltip: 'Chat nhóm',
+          onPressed: () => context.push(AppRoutes.groupChatOf(group.id)),
         ),
-        _GroupActionIcon(icon: Icons.logout_rounded, tooltip: 'Rời nhóm'),
+        _GroupActionIcon(
+          icon: Icons.logout_rounded,
+          tooltip: 'Rời nhóm',
+          onPressed: () => _confirmLeave(context, ref),
+        ),
       ],
     );
+  }
+
+  Future<void> _confirmLeave(BuildContext context, WidgetRef ref) async {
+    final shouldLeave = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text('Rời nhóm ${group.name}?'),
+        content: const Text(
+          'XP bạn đã kiếm vẫn giữ nguyên, chỉ không còn tính vào nhóm này nữa.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Huỷ'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(
+              'Rời nhóm',
+              style: AppTextStyles.button.copyWith(color: AppColors.danger),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (shouldLeave != true || !context.mounted) return;
+
+    final messenger = ScaffoldMessenger.of(context);
+    final error = await ref.read(groupActionsProvider).leave();
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(error ?? 'Đã rời nhóm ${group.name}.'),
+          backgroundColor: error == null ? null : AppColors.danger,
+          duration: AppDurations.snackBar,
+        ),
+      );
   }
 }
 
 class _GroupActionIcon extends StatelessWidget {
-  const _GroupActionIcon({required this.icon, required this.tooltip});
+  const _GroupActionIcon({
+    required this.icon,
+    required this.tooltip,
+    this.onPressed,
+  });
 
   final IconData icon;
   final String tooltip;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: null,
+      onPressed: onPressed,
       icon: Icon(icon, size: 20),
       tooltip: tooltip,
       color: AppColors.textOnPrimary,

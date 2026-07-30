@@ -8,6 +8,8 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/providers/auth_providers.dart';
 import '../../features/community/presentation/pages/community_page.dart';
+import '../../features/community/presentation/pages/message_thread_page.dart';
+import '../../features/community/presentation/providers/community_providers.dart';
 import '../../features/flashcard/presentation/pages/review_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/image_scan/presentation/pages/scan_page.dart';
@@ -101,6 +103,24 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const SessionPage(mode: SessionMode.review),
       ),
       GoRoute(path: AppRoutes.shop, builder: (_, _) => const ShopPage()),
+      GoRoute(
+        path: AppRoutes.groupChat,
+        builder: (_, state) => MessageThreadPage(
+          title: 'Chat nhóm',
+          emptyMessage: 'Chưa có tin nhắn nào.\nChào cả nhóm một câu đi!',
+          threadId: state.uri.queryParameters[AppRoutes.threadIdParam] ?? '',
+          kind: MessageThreadKind.group,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.postComments,
+        builder: (_, state) => MessageThreadPage(
+          title: 'Bình luận',
+          emptyMessage: 'Chưa có bình luận nào.\nViết câu đầu tiên nhé!',
+          threadId: state.uri.queryParameters[AppRoutes.threadIdParam] ?? '',
+          kind: MessageThreadKind.post,
+        ),
+      ),
       GoRoute(
         path: AppRoutes.savedWords,
         builder: (_, _) => const SavedWordsPage(),

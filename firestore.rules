@@ -82,11 +82,14 @@ service cloud.firestore {
       allow update, delete: if isSignedIn()
                             && request.auth.uid == resource.data.leaderId;
 
-      match /members/{uid} {
+      // Chat nhóm. Ai đăng nhập cũng đọc được (nhóm là công khai), nhưng chỉ
+      // gửi được tin đứng tên chính mình.
+      match /messages/{messageId} {
         allow read: if isSignedIn();
-        // Tự vào và tự rời nhóm được; kick người khác thì trưởng nhóm phải sửa
-        // qua document nhóm.
-        allow write: if isOwner(uid);
+        allow create: if isSignedIn()
+                      && request.auth.uid == request.resource.data.authorId;
+        // Không cho sửa hay xoá tin đã gửi: lịch sử chat phải giữ nguyên.
+        allow update, delete: if false;
       }
     }
 

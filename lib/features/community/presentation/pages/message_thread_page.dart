@@ -1,0 +1,108 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../core/constants/app_assets.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../shared/widgets/app_error_view.dart';
+import '../../../../shared/widgets/empty_state.dart';
+import '../../../../shared/widgets/message_composer.dart';
+import '../../domain/entities/community_entities.dart';
+import '../providers/community_providers.dart';
+
+/// Một luồng tin nhắn: dùng cho cả **chat nhóm** và **bình luận bài đăng**.
+///
+/// Hai chỗ khác nhau đúng ở nguồn tin và hàm gửi, nên truyền vào thay vì viết
+/// hai trang gần giống nhau.
+class MessageThreadPage extends ConsumerWidget {
+  const MessageThreadPage({
+    super.key,
+    required this.title,
+    required this.emptyMessage,
+    required this.threadId,
+    required this.kind,
+  });
+
+  final String title;
+  final String emptyMessage;
+
+  /// Id nhóm hoặc id bài đăng, tuỳ [kind].
+  final String threadId;
+  final MessageThreadKind kind;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final messagesAsync = ref.watch(
+      messageThreadProvider((kind: kind, id: threadId)),
+    );
+
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: SafeArea(
+        top: false,
+        child: Column(
+          children: [
+            Expanded(
+              child: switch (messagesAsync) {
+                AsyncValue(hasError: true) => AppErrorView(
+                  message: 'Không tải được tin nhắn.',
+                  onRetry: () => ref.invalidate(
+                    messageThreadProvider((kind: kind, id: threadId)),
+                  ),
+                ),
+                AsyncValue(:final valueOrNull?) =>
+                  valueOrNull.isEmpty
+                      ? EmptyState(
+                          message: emptyMessage,
+                          mascotAsset: AppAssets.stickerHello,
+                        )
+                      : _MessageList(messages: valueOrNull),
+                _ => const Center(child: CircularProgressIndicator()),
+              },
+            ),
+            MessageComposer(
+              hint: kind == MessageThreadKind.group
+                  ? 'Nhập tin nhắn...'
+                  : 'Viết bình luận...',
+              onSend: ({String? text, String? stickerAsset}) => ref
+                  .read(messageSenderProvider)
+                  .send(
+                    kind: kind,
+                    id: threadId,
+                    text: text,
+                    stickerAsset: stickerAsset,
+                  ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MessageList extends StatelessWidget {
+  const _MessageList({required this.messages});
+
+  final List<ChatMessage> messages;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      // Đảo ngược để tin mới nhất ở dưới và danh sách tự dính đáy khi có tin
+      // mới — không phải tự gọi cuộn xuống.
+      reverse: true,
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      itemCount: messages.length,
+      separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.md),
+      itemBuilder: (context, index) {
+        final message = messages[messages.length - 1 - index];
+        return MessageBubble(
+          authorName: message.authorName,
+          timeAgo: message.timeAgo,
+          isMine: message.isMine,
+          text: message.text,
+          stickerAsset: message.stickerAsset,
+        );
+      },
+    );
+  }
+}

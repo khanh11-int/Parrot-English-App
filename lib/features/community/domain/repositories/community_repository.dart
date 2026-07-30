@@ -27,4 +27,41 @@ abstract interface class CommunityRepository {
     required SharedWord word,
     required String detectedLabel,
   });
+
+  // --- Nhóm học tập ----------------------------------------------------
+
+  /// Các nhóm có thể tham gia.
+  Future<List<StudyGroupSummary>> getJoinableGroups();
+
+  /// Tạo nhóm mới và tự tham gia luôn với vai trò trưởng nhóm.
+  Future<void> createGroup(String name);
+
+  /// Tham gia một nhóm đã có.
+  Future<void> joinGroup(String groupId);
+
+  /// Rời nhóm hiện tại.
+  Future<void> leaveGroup();
+
+  // --- Chat nhóm & bình luận -------------------------------------------
+
+  /// Tin nhắn trong nhóm, cập nhật liên tục.
+  ///
+  /// Dùng `Stream` chứ không phải `Future`: chat cần thấy tin người khác gửi
+  /// ngay, không phải kéo để làm mới.
+  Stream<List<ChatMessage>> watchGroupMessages(String groupId);
+
+  Future<void> sendGroupMessage(
+    String groupId, {
+    String? text,
+    String? stickerAsset,
+  });
+
+  /// Bình luận dưới một bài đăng, cập nhật liên tục.
+  Stream<List<ChatMessage>> watchPostComments(String postId);
+
+  Future<void> sendPostComment(
+    String postId, {
+    String? text,
+    String? stickerAsset,
+  });
 }

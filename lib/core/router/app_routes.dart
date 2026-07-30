@@ -35,6 +35,21 @@ abstract final class AppRoutes {
   static const shop = '/shop';
 
   /// Sổ tay từ đã lưu từ ảnh chụp.
+  /// Chat của nhóm học tập.
+  static const groupChat = '/group-chat';
+
+  /// Bình luận của một bài đăng.
+  static const postComments = '/post-comments';
+
+  /// Tên tham số truy vấn mang id nhóm hoặc id bài đăng.
+  static const threadIdParam = 'id';
+
+  static String groupChatOf(String groupId) =>
+      '$groupChat?$threadIdParam=$groupId';
+
+  static String postCommentsOf(String postId) =>
+      '$postComments?$threadIdParam=$postId';
+
   static const savedWords = '/saved-words';
   static const settings = '/settings';
 }

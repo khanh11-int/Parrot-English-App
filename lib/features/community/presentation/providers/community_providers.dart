@@ -105,3 +105,99 @@ final studyGroupProvider = FutureProvider<StudyGroup?>((ref) {
   ref.watch(currentUserProvider);
   return ref.watch(communityRepositoryProvider).getStudyGroup();
 });
+
+/// Luong tin nhan: chat nhom hay binh luan bai dang.
+enum MessageThreadKind { group, post }
+
+/// Khoa cua mot luong tin nhan.
+typedef MessageThreadKey = ({MessageThreadKind kind, String id});
+
+/// Tin nhan cua mot luong, cap nhat lien tuc.
+///
+/// Dung `StreamProvider` chu khong phai `FutureProvider`: chat phai thay tin
+/// nguoi khac gui ngay, khong phai keo de lam moi.
+final messageThreadProvider =
+    StreamProvider.family<List<ChatMessage>, MessageThreadKey>((ref, key) {
+      final repository = ref.watch(communityRepositoryProvider);
+      return switch (key.kind) {
+        MessageThreadKind.group => repository.watchGroupMessages(key.id),
+        MessageThreadKind.post => repository.watchPostComments(key.id),
+      };
+    });
+
+/// Gui tin nhan / binh luan.
+class MessageSender {
+  const MessageSender(this._ref);
+
+  final Ref _ref;
+
+  /// Tra `null` neu gui thanh cong, hoac thong diep loi de UI hien.
+  Future<String?> send({
+    required MessageThreadKind kind,
+    required String id,
+    String? text,
+    String? stickerAsset,
+  }) async {
+    final repository = _ref.read(communityRepositoryProvider);
+    try {
+      switch (kind) {
+        case MessageThreadKind.group:
+          await repository.sendGroupMessage(
+            id,
+            text: text,
+            stickerAsset: stickerAsset,
+          );
+        case MessageThreadKind.post:
+          await repository.sendPostComment(
+            id,
+            text: text,
+            stickerAsset: stickerAsset,
+          );
+          // So binh luan vua tang, buoc dong thoi gian ve lai the bai dang.
+          _ref.invalidate(feedProvider);
+      }
+      return null;
+    } on Failure catch (failure) {
+      return failure.message;
+    }
+  }
+}
+
+final messageSenderProvider = Provider<MessageSender>(MessageSender.new);
+
+/// Danh sach nhom co the tham gia.
+final joinableGroupsProvider = FutureProvider<List<StudyGroupSummary>>((ref) {
+  return ref.watch(communityRepositoryProvider).getJoinableGroups();
+});
+
+/// Tao / tham gia / roi nhom.
+class GroupActions {
+  const GroupActions(this._ref);
+
+  final Ref _ref;
+
+  Future<String?> create(String name) =>
+      _run(() => _repository.createGroup(name));
+
+  Future<String?> join(String groupId) =>
+      _run(() => _repository.joinGroup(groupId));
+
+  Future<String?> leave() => _run(_repository.leaveGroup);
+
+  CommunityRepository get _repository => _ref.read(communityRepositoryProvider);
+
+  /// Tra `null` neu thanh cong, hoac thong diep loi.
+  Future<String?> _run(Future<void> Function() action) async {
+    try {
+      await action();
+      // Nhom doi thi ca tab Nhom va danh sach nhom deu phai tai lai.
+      _ref.invalidate(studyGroupProvider);
+      _ref.invalidate(joinableGroupsProvider);
+      return null;
+    } on Failure catch (failure) {
+      return failure.message;
+    }
+  }
+}
+
+final groupActionsProvider = Provider<GroupActions>(GroupActions.new);

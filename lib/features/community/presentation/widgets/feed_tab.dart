@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/empty_state.dart';
@@ -40,7 +42,8 @@ class FeedTab extends ConsumerWidget {
                     post: post,
                     onLike: () => controller.toggleLike(post.id),
                     onBookmark: () => controller.toggleBookmark(post.id),
-                    onComment: () => _showComingSoon(context, 'Bình luận'),
+                    onComment: () =>
+                        context.push(AppRoutes.postCommentsOf(post.id)),
                     onSaveWord: () =>
                         _showSaved(context, post.sharedWord.english),
                     onSpeak: () => _showComingSoon(context, 'Phát âm'),

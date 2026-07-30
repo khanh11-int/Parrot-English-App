@@ -187,6 +187,7 @@ class StudyGroupDto {
   );
 
   StudyGroup toEntity() => StudyGroup(
+    id: name,
     name: name,
     memberCount: memberCount,
     leaderName: leaderName,
