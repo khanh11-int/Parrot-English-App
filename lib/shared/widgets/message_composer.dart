@@ -44,7 +44,15 @@ class _MessageComposerState extends State<MessageComposer> {
     // Xoá ô nhập ngay để người dùng gõ tiếp được, nhưng giữ lại bản sao: gửi
     // thất bại thì trả nội dung về chứ không để họ mất công gõ lại.
     final draft = _controller.text;
-    if (text != null) _controller.clear();
+    if (text != null) {
+      // Kết thúc vùng đang soạn TRƯỚC khi xoá. Bàn phím tiếng Việt (Telex/VNI)
+      // gần như luôn có vùng soạn đang mở; xoá thẳng thì phía hệ điều hành vẫn
+      // giữ vùng soạn trỏ vào chuỗi cũ, lần cập nhật sau nó gửi về một khoảng
+      // vượt ra ngoài chuỗi mới và Flutter bắn assert
+      // "Range end N is out of text of length M".
+      _controller.clearComposing();
+      _controller.clear();
+    }
 
     final error = await widget.onSend(text: text, stickerAsset: stickerAsset);
 
@@ -52,7 +60,12 @@ class _MessageComposerState extends State<MessageComposer> {
     setState(() => _isSending = false);
 
     if (error == null) return;
-    if (text != null) _controller.text = draft;
+    // Chỉ trả nháp về khi ô vẫn đang trống. Gửi mất một lúc, người dùng có thể
+    // đã gõ tin tiếp theo — ghi đè lên đó là xoá mất chữ họ vừa gõ.
+    if (text != null && _controller.text.isEmpty) {
+      _controller.clearComposing();
+      _controller.text = draft;
+    }
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
