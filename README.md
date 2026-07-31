@@ -6,6 +6,11 @@
 </p>
 
 <p align="center">
+  <img src="docs/screenshots/demo.gif" width="330" alt="Demo: học từ mới, chat nhóm, hồ sơ">
+</p>
+
+
+<p align="center">
   <img alt="Flutter" src="https://img.shields.io/badge/Flutter-3.44-02569B?logo=flutter&logoColor=white">
   <img alt="Dart" src="https://img.shields.io/badge/Dart-3.12-0175C2?logo=dart&logoColor=white">
   <img alt="Firebase" src="https://img.shields.io/badge/Firebase-Auth%20%2B%20Firestore-FFCA28?logo=firebase&logoColor=black">
@@ -30,9 +35,7 @@
 | <img src="docs/screenshots/home.png" width="200" alt="Trang chủ"> | <img src="docs/screenshots/review.png" width="200" alt="Ôn tập"> | <img src="docs/screenshots/community.png" width="200" alt="Cộng đồng"> | <img src="docs/screenshots/profile.png" width="200" alt="Hồ sơ"> |
 | Lời chào, ví, hai lối học, nhiệm vụ ngày, tiến độ giáo trình | Bộ từ đến hạn ôn, ôn riêng từng chủ đề | Nhóm học tập với 3 mốc cây, bảng xếp hạng | Avatar đổi theo hạng, tổng quan, tiến độ lên hạng |
 
-<p align="center">
-  <img src="docs/screenshots/demo.gif" width="330" alt="Demo: học từ mới, chat nhóm, hồ sơ">
-</p>
+
 
 <p align="center">
   <sub>
@@ -57,10 +60,6 @@
 | Chat nhóm | ✅ Firestore realtime (`Stream`) |
 | Bảng xếp hạng tuần | ✅ Ghim hàng của mình ở đáy |
 
-> [!NOTE]
-> **Đây là nhánh `lite`** — không có camera / nhận diện ảnh và không có dòng thời
-> gian (feed bài đăng). Hai mảng đó đã **xoá khỏi mã nguồn**, không phải ẩn đi.
-> Bản đầy đủ ở nhánh [`main`](../../tree/main).
 
 ## Cách chạy
 
