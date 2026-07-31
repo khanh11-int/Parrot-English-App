@@ -13,7 +13,6 @@ class UserDocument {
     required this.streakDays,
     required this.seeds,
     required this.gems,
-    required this.postCount,
     required this.followerCount,
     required this.followingCount,
     this.groupId,
@@ -62,7 +61,6 @@ class UserDocument {
   final int streakDays;
   final int seeds;
   final int gems;
-  final int postCount;
   final int followerCount;
   final int followingCount;
   final String? groupId;
@@ -77,7 +75,6 @@ class UserDocument {
       streakDays: 0,
       seeds: 0,
       gems: 0,
-      postCount: 0,
       followerCount: 0,
       followingCount: 0,
     );
@@ -108,7 +105,6 @@ class UserDocument {
       streakDays: readInt('streakDays'),
       seeds: readInt('seeds'),
       gems: readInt('gems'),
-      postCount: readInt('postCount'),
       followerCount: readInt('followerCount'),
       followingCount: readInt('followingCount'),
       groupId: readStringOrNull('groupId'),
@@ -123,7 +119,6 @@ class UserDocument {
     'streakDays': streakDays,
     'seeds': seeds,
     'gems': gems,
-    'postCount': postCount,
     'followerCount': followerCount,
     'followingCount': followingCount,
     'groupId': groupId,
@@ -133,13 +128,10 @@ class UserDocument {
   UserProfile toEntity() => UserProfile(
     name: name,
     avatarAsset: avatarUrl,
-    postCount: postCount,
     followerCount: followerCount,
     followingCount: followingCount,
     experience: experience,
     streakDays: streakDays,
     groupName: groupName,
-    // Lưới ảnh lấy từ collection `posts`, không nằm trong document này.
-    recentPostCount: 0,
   );
 }

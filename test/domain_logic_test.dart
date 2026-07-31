@@ -66,13 +66,11 @@ void main() {
     const profile = UserProfile(
       name: 'Công Tình',
       avatarAsset: 'a.png',
-      postCount: 18,
       followerCount: 1,
       followingCount: 5,
       experience: 568,
       streakDays: 1,
       groupName: 'neu',
-      recentPostCount: 9,
     );
 
     test('hạng suy ra từ XP nên không lệch với dữ liệu', () {

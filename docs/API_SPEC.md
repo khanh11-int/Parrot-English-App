@@ -357,13 +357,11 @@ trả `422` kèm `message`.
 {
   "name": "Công Tình",
   "avatar_url": "...",
-  "post_count": 18,
   "follower_count": 1,
   "following_count": 5,
   "experience": 568,
   "streak_days": 1,
-  "group_name": "neu",
-  "recent_post_count": 9
+  "group_name": "neu"
 }
 ```
 

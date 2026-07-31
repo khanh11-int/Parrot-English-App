@@ -620,9 +620,9 @@ Sticker vẹt, Vé Giải Đấu — đã xoá khỏi `shopItems` trên Firestor
 Trang cá nhân                        ⟳
 ╭──────────────────────────────────────╮
 │      🦜   Công Tình             ⚙️   │
-│   18        1          5             │
-│ Ảnh đăng  Người      Đang            │
-│           theo dõi   theo dõi        │
+│        1              5              │
+│      Người          Đang             │
+│      theo dõi       theo dõi         │
 ╰──────────────────────────────────────╯
 Tổng quan
 ╭────────────────╮ ╭────────────────╮
@@ -633,20 +633,22 @@ Tổng quan
 │ 🌳 Nhóm        │ │ 🌿 Kinh nghiệm │
 │ Nhóm học...    │ │ 568            │
 ╰────────────────╯ ╰────────────────╯
-
-Các bài đăng gần đây
-[ảnh] [ảnh] [ảnh]
-[ảnh] [ảnh] [ảnh]
 ```
 - Thẻ đầu trang có **nền hoạ tiết lá cây mờ**, avatar tròn, tên đậm,
   bánh răng mở `/settings`, nút làm mới ở góc phải trên.
 - Avatar là **huy hiệu hạng**, đổi theo XP — xem `RankAvatar` ở mục 11.2.
-- 3 số liệu xã hội chia đều theo chiều ngang, bấm được (mở danh sách).
+- 2 số liệu xã hội chia đều theo chiều ngang.
 - **Tổng quan**: `GridView` 2×2, mỗi ô là `StatTile` (icon + nhãn nhỏ mờ + giá
   trị đậm). Nhãn dài thì cắt bằng `…`.
-- **Bài đăng gần đây**: grid 3 cột, ảnh vuông, khoảng cách 2px; bấm mở bài đăng.
+- **Không có mục "Các bài đăng gần đây"** và không có ô `Ảnh đăng`: nhánh này
+  không có dòng thời gian nên không có bài đăng nào để hiện. Lưới cũ chỉ vẽ N ô
+  xám rỗng theo `recentPostCount`, mà con số đó luôn là `0`.
 - Trang của người khác (`/user/:id`): thay bánh răng bằng nút
   "Theo dõi / Đang theo dõi".
+
+> **Còn hai số liệu chết:** `Người theo dõi` / `Đang theo dõi` luôn là `0` vì
+> chưa có chỗ nào để theo dõi ai (không có trang cá nhân người khác, không có nút
+> Theo dõi). Giữ lại vì theo dõi không phụ thuộc bài đăng.
 
 ### 5.9b Cài đặt — `/settings`
 

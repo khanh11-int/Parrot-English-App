@@ -61,9 +61,6 @@ class _ProfileContent extends StatelessWidget {
         const SectionHeader(title: 'Tổng quan'),
         _OverviewGrid(profile: profile),
         const SizedBox(height: AppSpacing.xl),
-        const SectionHeader(title: 'Các bài đăng gần đây'),
-        _RecentPostsGrid(count: profile.recentPostCount),
-        const SizedBox(height: AppSpacing.xl),
       ],
     );
   }
@@ -116,9 +113,6 @@ class _ProfileHeaderCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.lg),
           Row(
             children: [
-              Expanded(
-                child: _SocialStat(label: 'Ảnh đăng', value: profile.postCount),
-              ),
               Expanded(
                 child: _SocialStat(
                   label: 'Người theo dõi',
@@ -255,38 +249,6 @@ class _NextRankCard extends StatelessWidget {
             color: AppColors.leaf,
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// Lưới ảnh bài đăng, 3 cột, ô vuông.
-class _RecentPostsGrid extends StatelessWidget {
-  const _RecentPostsGrid({required this.count});
-
-  final int count;
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      // Nằm trong `ListView` nên phải tắt cuộn riêng và tự co theo nội dung.
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        mainAxisSpacing: 2,
-        crossAxisSpacing: 2,
-      ),
-      itemCount: count,
-      itemBuilder: (context, index) => const ColoredBox(
-        color: AppColors.neutral,
-        child: Center(
-          child: Icon(
-            Icons.image_outlined,
-            color: AppColors.textDisabled,
-            size: 24,
-          ),
-        ),
       ),
     );
   }
