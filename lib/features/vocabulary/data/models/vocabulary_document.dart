@@ -46,11 +46,11 @@ abstract final class WordProgressDocument {
     );
   }
 
-  /// Dữ liệu ghi khi người dùng trả lời một từ.
+  /// Dữ liệu ghi **lần đầu** gặp một từ.
   ///
   /// Ghi kèm chữ và nghĩa để phiên ôn tập đọc được nội dung từ chỉ bằng một
   /// truy vấn, không phải tra lại trong giáo trình từng chủ đề.
-  static Map<String, dynamic> toMap({
+  static Map<String, dynamic> toCreateMap({
     required TopicWord word,
     required int reviewIntervalDays,
     required DateTime dueAt,
@@ -59,6 +59,21 @@ abstract final class WordProgressDocument {
     'english': word.english,
     'vietnamese': word.vietnamese,
     'phonetic': word.phonetic,
+    ...toScheduleMap(reviewIntervalDays: reviewIntervalDays, dueAt: dueAt),
+  };
+
+  /// Dữ liệu ghi ở **các lần trả lời sau**: chỉ lịch ôn, không có gì khác.
+  ///
+  /// Cố tình không nhắc tới `topicId` / `english` / `vietnamese` / `phonetic`.
+  /// `SetOptions(merge: true)` chỉ giữ nguyên field **không xuất hiện** trong
+  /// map; field nào có mặt là bị ghi đè. Phiên ôn tập trộn nhiều chủ đề nên
+  /// không biết `topicId` của từng từ — nếu vẫn ghi lại thì nó ghi chuỗi rỗng,
+  /// xoá mất liên kết chủ đề, và `FirebaseReviewRepository.getDecks` (bỏ qua
+  /// tiến độ có `topicId` rỗng) sẽ báo bộ từ tụt về `Đã học 0/8`.
+  static Map<String, dynamic> toScheduleMap({
+    required int reviewIntervalDays,
+    required DateTime dueAt,
+  }) => {
     'reviewIntervalDays': reviewIntervalDays,
     'dueAt': Timestamp.fromDate(dueAt),
   };

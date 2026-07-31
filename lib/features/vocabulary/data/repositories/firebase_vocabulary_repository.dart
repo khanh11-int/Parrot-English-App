@@ -124,14 +124,22 @@ class FirebaseVocabularyRepository implements VocabularyRepository {
         isFirstTime: isFirstTime,
       );
 
+      final dueAt = DateTime.now().add(Duration(days: nextDays));
       final batch = _firestore.batch();
+      // Lần đầu ghi đủ nội dung từ; các lần sau chỉ ghi lịch ôn, vì lúc đó
+      // người gọi (phiên ôn tập) không biết `topicId` thật của từng từ.
       batch.set(
         doc,
-        WordProgressDocument.toMap(
-          word: word,
-          reviewIntervalDays: nextDays,
-          dueAt: DateTime.now().add(Duration(days: nextDays)),
-        ),
+        isFirstTime
+            ? WordProgressDocument.toCreateMap(
+                word: word,
+                reviewIntervalDays: nextDays,
+                dueAt: dueAt,
+              )
+            : WordProgressDocument.toScheduleMap(
+                reviewIntervalDays: nextDays,
+                dueAt: dueAt,
+              ),
         SetOptions(merge: true),
       );
 
