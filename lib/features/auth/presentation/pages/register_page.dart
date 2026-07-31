@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/constants/app_assets.dart';
@@ -64,7 +65,11 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             duration: AppDurations.snackBar,
           ),
         );
+      return;
     }
+
+    // Chốt ngữ cảnh autofill — xem ghi chú ở `LoginPage._submit`.
+    TextInput.finishAutofillContext();
   }
 
   @override
@@ -83,63 +88,68 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                 constraints: const BoxConstraints(maxWidth: 420),
                 child: Form(
                   key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Image.asset(AppAssets.stickerAwesome, height: 100),
-                      const SizedBox(height: AppSpacing.md),
-                      Text(
-                        'Bắt đầu học cùng vẹt!',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyles.titleMedium,
-                      ),
-                      const SizedBox(height: AppSpacing.xl),
-                      AppTextField(
-                        controller: _nameController,
-                        label: 'Tên của bạn',
-                        icon: Icons.person_outline_rounded,
-                        textInputAction: TextInputAction.next,
-                        validator: AuthValidators.displayName,
-                        autofillHints: const [AutofillHints.name],
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                      AppTextField(
-                        controller: _emailController,
-                        label: 'Email',
-                        icon: Icons.mail_outline_rounded,
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next,
-                        validator: AuthValidators.email,
-                        autofillHints: const [AutofillHints.email],
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                      AppTextField(
-                        controller: _passwordController,
-                        label: 'Mật khẩu',
-                        hint: 'Ít nhất 6 ký tự',
-                        icon: Icons.lock_outline_rounded,
-                        isPassword: true,
-                        textInputAction: TextInputAction.next,
-                        validator: AuthValidators.password,
-                        autofillHints: const [AutofillHints.newPassword],
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                      AppTextField(
-                        controller: _confirmController,
-                        label: 'Nhập lại mật khẩu',
-                        icon: Icons.lock_outline_rounded,
-                        isPassword: true,
-                        textInputAction: TextInputAction.done,
-                        validator: _validateConfirm,
-                        onSubmitted: _submit,
-                      ),
-                      const SizedBox(height: AppSpacing.xl),
-                      PrimaryButton(
-                        label: 'Tạo tài khoản',
-                        isLoading: isBusy,
-                        onPressed: _submit,
-                      ),
-                    ],
+                  // Bắt buộc khi ô có `autofillHints` — xem ghi chú ở
+                  // `LoginPage`. Nhóm cả 4 ô lại thành một biểu mẫu để trình
+                  // quản lý mật khẩu hiểu đây là form tạo tài khoản.
+                  child: AutofillGroup(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Image.asset(AppAssets.stickerAwesome, height: 100),
+                        const SizedBox(height: AppSpacing.md),
+                        Text(
+                          'Bắt đầu học cùng vẹt!',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.titleMedium,
+                        ),
+                        const SizedBox(height: AppSpacing.xl),
+                        AppTextField(
+                          controller: _nameController,
+                          label: 'Tên của bạn',
+                          icon: Icons.person_outline_rounded,
+                          textInputAction: TextInputAction.next,
+                          validator: AuthValidators.displayName,
+                          autofillHints: const [AutofillHints.name],
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        AppTextField(
+                          controller: _emailController,
+                          label: 'Email',
+                          icon: Icons.mail_outline_rounded,
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          validator: AuthValidators.email,
+                          autofillHints: const [AutofillHints.email],
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        AppTextField(
+                          controller: _passwordController,
+                          label: 'Mật khẩu',
+                          hint: 'Ít nhất 6 ký tự',
+                          icon: Icons.lock_outline_rounded,
+                          isPassword: true,
+                          textInputAction: TextInputAction.next,
+                          validator: AuthValidators.password,
+                          autofillHints: const [AutofillHints.newPassword],
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        AppTextField(
+                          controller: _confirmController,
+                          label: 'Nhập lại mật khẩu',
+                          icon: Icons.lock_outline_rounded,
+                          isPassword: true,
+                          textInputAction: TextInputAction.done,
+                          validator: _validateConfirm,
+                          onSubmitted: _submit,
+                        ),
+                        const SizedBox(height: AppSpacing.xl),
+                        PrimaryButton(
+                          label: 'Tạo tài khoản',
+                          isLoading: isBusy,
+                          onPressed: _submit,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -46,7 +47,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (result case AuthRejected(:final message)) {
       if (!mounted) return;
       _showError(message);
+      return;
     }
+
+    // Chốt ngữ cảnh autofill để trình duyệt / hệ điều hành hỏi lưu mật khẩu.
+    // Không gọi thì thông tin vừa nhập không bao giờ được đề nghị lưu, và ngữ
+    // cảnh cũ còn treo lại sang lần sau.
+    TextInput.finishAutofillContext();
   }
 
   void _showError(String message) {
@@ -77,56 +84,64 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 constraints: const BoxConstraints(maxWidth: 420),
                 child: Form(
                   key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Image.asset(AppAssets.stickerHello, height: 120),
-                      const SizedBox(height: AppSpacing.lg),
-                      Text(
-                        'Chào mừng trở lại!',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyles.titleLarge,
-                      ),
-                      const SizedBox(height: AppSpacing.xs),
-                      Text(
-                        'Đăng nhập để tiếp tục học từ vựng',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyles.caption,
-                      ),
-                      const SizedBox(height: AppSpacing.xl),
-                      AppTextField(
-                        controller: _emailController,
-                        label: 'Email',
-                        icon: Icons.mail_outline_rounded,
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next,
-                        validator: AuthValidators.email,
-                        autofillHints: const [AutofillHints.email],
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                      AppTextField(
-                        controller: _passwordController,
-                        label: 'Mật khẩu',
-                        icon: Icons.lock_outline_rounded,
-                        isPassword: true,
-                        textInputAction: TextInputAction.done,
-                        validator: AuthValidators.password,
-                        autofillHints: const [AutofillHints.password],
-                        onSubmitted: _submit,
-                      ),
-                      const SizedBox(height: AppSpacing.lg),
-                      PrimaryButton(
-                        label: 'Đăng nhập',
-                        isLoading: isBusy,
-                        onPressed: _submit,
-                      ),
-                      const SizedBox(height: AppSpacing.lg),
-                      _RegisterPrompt(
-                        onPressed: isBusy
-                            ? null
-                            : () => context.push(AppRoutes.register),
-                      ),
-                    ],
+                  // `AutofillGroup` là bắt buộc khi ô có `autofillHints`: nó gom
+                  // email + mật khẩu thành một biểu mẫu để trình quản lý mật
+                  // khẩu điền cả hai cùng lúc. Thiếu nó thì mỗi ô là một ngữ
+                  // cảnh riêng — trên web, trình duyệt điền thẳng vào phần tử
+                  // input rồi báo về một vùng chọn tính theo chuỗi cũ, khiến
+                  // Flutter bắn assert "Range end N is out of text of length M".
+                  child: AutofillGroup(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Image.asset(AppAssets.stickerHello, height: 120),
+                        const SizedBox(height: AppSpacing.lg),
+                        Text(
+                          'Chào mừng trở lại!',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.titleLarge,
+                        ),
+                        const SizedBox(height: AppSpacing.xs),
+                        Text(
+                          'Đăng nhập để tiếp tục học từ vựng',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.caption,
+                        ),
+                        const SizedBox(height: AppSpacing.xl),
+                        AppTextField(
+                          controller: _emailController,
+                          label: 'Email',
+                          icon: Icons.mail_outline_rounded,
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          validator: AuthValidators.email,
+                          autofillHints: const [AutofillHints.email],
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        AppTextField(
+                          controller: _passwordController,
+                          label: 'Mật khẩu',
+                          icon: Icons.lock_outline_rounded,
+                          isPassword: true,
+                          textInputAction: TextInputAction.done,
+                          validator: AuthValidators.password,
+                          autofillHints: const [AutofillHints.password],
+                          onSubmitted: _submit,
+                        ),
+                        const SizedBox(height: AppSpacing.lg),
+                        PrimaryButton(
+                          label: 'Đăng nhập',
+                          isLoading: isBusy,
+                          onPressed: _submit,
+                        ),
+                        const SizedBox(height: AppSpacing.lg),
+                        _RegisterPrompt(
+                          onPressed: isBusy
+                              ? null
+                              : () => context.push(AppRoutes.register),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
