@@ -9,7 +9,6 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_linear_progress.dart';
 import '../../../../shared/widgets/async_value_view.dart';
-import '../../../../shared/widgets/jungle_card.dart';
 import '../../../../shared/widgets/primary_button.dart';
 import '../../../../shared/widgets/section_header.dart';
 import '../../domain/entities/review_deck.dart';
@@ -149,7 +148,12 @@ class _DueSummaryCard extends StatelessWidget {
       ),
     };
 
-    return JungleCard(
+    return Container(
+      padding: AppSpacing.cardPadding,
+      decoration: const BoxDecoration(
+        gradient: AppColors.canopyGradient,
+        borderRadius: AppRadius.cardLargeBorder,
+      ),
       child: Row(
         children: [
           Expanded(

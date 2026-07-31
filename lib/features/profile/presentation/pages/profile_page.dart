@@ -10,7 +10,6 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/rank_avatar.dart';
 import '../../../../shared/widgets/app_linear_progress.dart';
 import '../../../../shared/widgets/async_value_view.dart';
-import '../../../../shared/widgets/jungle_card.dart';
 import '../../../../shared/widgets/section_header.dart';
 import '../../../../shared/widgets/stat_tile.dart';
 import '../../domain/entities/user_profile.dart';
@@ -74,17 +73,18 @@ class _ProfileHeaderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return JungleCard(
-      gradient: const LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [AppColors.leafLight, AppColors.bgBase],
+    return Container(
+      padding: AppSpacing.cardPadding,
+      decoration: const BoxDecoration(
+        // Chỗ này theo spec là nền hoạ tiết lá mờ; tạm dùng gradient nhạt cho
+        // tới khi có asset hoạ tiết riêng.
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.leafLight, AppColors.bgBase],
+        ),
+        borderRadius: AppRadius.cardLargeBorder,
       ),
-      // Thẻ này nền sáng nên nhuộm xanh đậm; nhuộm trắng sẽ mất hút.
-      decorColor: AppColors.leafDark,
-      decorOpacity: 0.14,
-      decorWidth: 104,
-      decorHeight: 148,
       child: Row(
         children: [
           RankAvatar(

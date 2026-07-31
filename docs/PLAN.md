@@ -259,8 +259,9 @@ vì cần quyết định hoặc phụ thuộc bên ngoài:
 - [ ] Xoá nền cho bộ ảnh mới bằng `tools/strip_assets.py` — nhiều ảnh còn khung
       nền bo góc, đặt cạnh ảnh cũ thấy lệch
 - [ ] Nối `assets/images/topics/` vào `TopicDocument.iconAssetFor`
-- [x] 3 huy hiệu mốc nhóm — `assets/images/milestones/`, cây lớn dần theo mốc
-- [x] Hoạ tiết cây rừng cho thẻ lớn — `assets/images/decor/` + `JungleCard`
+- [ ] 3 huy hiệu mốc nhóm — **ảnh đã có** ở `assets/images/milestones/`, chưa
+      nối vào UI (đã thử một lần rồi quay lại giao diện cũ)
+- [ ] Hoạ tiết cây rừng cho thẻ lớn — ảnh đã có ở `assets/images/decor/`
 - [ ] Icon **hạt** riêng (hiện dùng `items/coin.png`). XP tạm dùng
       `Icons.eco_rounded` — trước đây dùng ảnh kim cương, người học tưởng vừa
       nhận được ngọc

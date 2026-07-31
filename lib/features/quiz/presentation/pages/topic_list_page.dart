@@ -37,7 +37,7 @@ class TopicListPage extends ConsumerWidget {
                   message:
                       'Chưa có chủ đề nào trong giáo trình.\n'
                       'Liên hệ quản trị viên để bổ sung nhé!',
-                  mascotAsset: AppAssets.mascotExplore,
+                  mascotAsset: AppAssets.stickerThinking,
                 )
               : _TopicList(topics: topics),
         ),
