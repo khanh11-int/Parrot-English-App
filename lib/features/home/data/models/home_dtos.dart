@@ -12,9 +12,8 @@ class HomeSummaryDto {
     required this.streakDays,
     required this.gemCount,
     required this.seedCount,
-    required this.learnGoal,
-    required this.reviewGoal,
-    required this.monthlyQuest,
+    required this.learnedWordCount,
+    required this.totalWordCount,
     required this.dailyQuests,
   });
 
@@ -22,9 +21,8 @@ class HomeSummaryDto {
   final int streakDays;
   final int gemCount;
   final int seedCount;
-  final DailyGoalDto learnGoal;
-  final DailyGoalDto reviewGoal;
-  final QuestGroupDto monthlyQuest;
+  final int learnedWordCount;
+  final int totalWordCount;
   final QuestGroupDto dailyQuests;
 
   factory HomeSummaryDto.fromJson(JsonMap json) {
@@ -33,9 +31,8 @@ class HomeSummaryDto {
       streakDays: json.readIntOr('streak_days', 0),
       gemCount: json.readIntOr('gem_count', 0),
       seedCount: json.readIntOr('seed_count', 0),
-      learnGoal: DailyGoalDto.fromJson(json.readObject('learn_goal')),
-      reviewGoal: DailyGoalDto.fromJson(json.readObject('review_goal')),
-      monthlyQuest: QuestGroupDto.fromJson(json.readObject('monthly_quest')),
+      learnedWordCount: json.readIntOr('learned_word_count', 0),
+      totalWordCount: json.readIntOr('total_word_count', 0),
       dailyQuests: QuestGroupDto.fromJson(json.readObject('daily_quests')),
     );
   }
@@ -46,35 +43,11 @@ class HomeSummaryDto {
       streakDays: streakDays,
       gemCount: gemCount,
       seedCount: seedCount,
-      learnGoal: learnGoal.toEntity(),
-      reviewGoal: reviewGoal.toEntity(),
-      monthlyQuest: monthlyQuest.toEntity(),
+      learnedWordCount: learnedWordCount,
+      totalWordCount: totalWordCount,
       dailyQuests: dailyQuests.toEntity(),
     );
   }
-}
-
-class DailyGoalDto {
-  const DailyGoalDto({
-    required this.title,
-    required this.completed,
-    required this.target,
-  });
-
-  final String title;
-  final int completed;
-  final int target;
-
-  factory DailyGoalDto.fromJson(JsonMap json) {
-    return DailyGoalDto(
-      title: json.readString('title'),
-      completed: json.readIntOr('completed', 0),
-      target: json.readIntOr('target', 0),
-    );
-  }
-
-  DailyGoal toEntity() =>
-      DailyGoal(title: title, completed: completed, target: target);
 }
 
 class QuestGroupDto {

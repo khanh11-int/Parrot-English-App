@@ -38,9 +38,8 @@ void main() {
         'streak_days': 3,
         'gem_count': 2,
         'seed_count': 15,
-        'learn_goal': {'title': 'Học từ mới', 'completed': 9, 'target': 15},
-        'review_goal': {'title': 'Ôn tập ngay', 'completed': 1, 'target': 30},
-        'monthly_quest': {'title': 'Tháng Chín', 'quests': <dynamic>[]},
+        'learned_word_count': 16,
+        'total_word_count': 56,
         'daily_quests': {
           'title': 'Hằng ngày',
           'quests': [
@@ -51,7 +50,7 @@ void main() {
 
       final entity = dto.toEntity();
       expect(entity.streakDays, 3);
-      expect(entity.learnGoal.progress, closeTo(0.6, 0.001));
+      expect(entity.curriculumPercent, 29);
       expect(entity.dailyQuests.quests.single.percent, 60);
     });
   });

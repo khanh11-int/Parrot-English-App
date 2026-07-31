@@ -15,6 +15,11 @@ abstract final class AppLabels {
   static const navProfile = 'Hồ sơ';
 
   // --- Hành động chung --------------------------------------------------
+  static const learnNewWords = 'Học từ mới';
+
+  /// Nhãn thẻ ở trang chủ. Cố tình khác [navReview] để không có hai chữ "Ôn tập"
+  /// giống nhau trên cùng một màn hình (thẻ ở giữa trang và tab ở thanh dưới).
+  static const reviewNow = 'Ôn tập ngay';
   static const retry = 'Thử lại';
   static const continueAction = 'Tiếp tục';
   static const check = 'Kiểm tra';

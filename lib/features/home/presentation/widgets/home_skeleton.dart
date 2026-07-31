@@ -59,11 +59,15 @@ class HomeSkeleton extends StatelessWidget {
           ],
         ),
         SizedBox(height: AppSpacing.xl),
-        SkeletonBox(width: 120, height: 22),
+        // "Hôm nay" + thẻ nhiệm vụ ngày.
+        SkeletonBox(width: 100, height: 22),
         SizedBox(height: AppSpacing.md),
-        SkeletonBox(height: 46, borderRadius: AppRadius.cardBorder),
-        SizedBox(height: AppSpacing.cardGap),
         SkeletonBox(height: 190, borderRadius: AppRadius.cardBorder),
+        SizedBox(height: AppSpacing.xl),
+        // "Hành trình" + thẻ tiến độ giáo trình.
+        SkeletonBox(width: 110, height: 22),
+        SizedBox(height: AppSpacing.md),
+        SkeletonBox(height: 74, borderRadius: AppRadius.cardBorder),
       ],
     );
   }

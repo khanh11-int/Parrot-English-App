@@ -267,18 +267,21 @@ Quy tắc:
 │ │      🦜       │ │      🦜       │  │  chỉ mascot + nhãn
 │ │  Học từ mới   │ │  Ôn tập ngay  │  │
 │ ╰───────────────╯ ╰───────────────╯  │
-│  nền primary        nền trắng        │
+│  nền primary        nền leafLight    │
 │                                      │
-│ Nhiệm vụ                             │
+│ Hôm nay                              │
 │ ╭──────────────────────────────────╮ │
-│ │ 📅 Nhiệm vụ tháng Chín    15% ›  │ │  dải 1 dòng, nền leafLight
-│ ╰──────────────────────────────────╯ │
-│ ╭──────────────────────────────────╮ │
-│ │ ○ Lưu 5 từ mới qua hình ảnh  3/5 │ │
-│ │   ▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░░░░  │ │  thanh full width
+│ │ ○ Học 5 từ mới               0/5 │ │
+│ │   ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  │ │  thanh full width
 │ │ ─────────────────────────────────│ │
-│ │ ○ Ôn tập 30 từ vựng         0/30 │ │
+│ │ ○ Ôn tập 10 từ              0/10 │ │
 │ │   ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  │ │
+│ ╰──────────────────────────────────╯ │
+│                                      │
+│ Hành trình                           │
+│ ╭──────────────────────────────────╮ │
+│ │ 🌳 16/56 từ trong giáo trình 29%›│ │  nền leafLight, bấm → /learn
+│ │ ▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░░░░░  │ │
 │ ╰──────────────────────────────────╯ │
 └──────────────────────────────────────┘
 ```
@@ -296,18 +299,31 @@ Chi tiết:
   - Lý do: trang chủ chỉ cần trả lời "bấm vào đâu để học". Tiến độ chi tiết đã
     có ở trang chọn chủ đề (5.4); nhắc lại ở đây làm thẻ rối mà không giúp người
     dùng quyết định nhanh hơn.
-  - Thẻ "Học từ mới" nền `primary` (việc chính), thẻ "Ôn tập" nền trắng viền
-    nhạt (việc phụ) → mắt biết bấm cái nào trước.
-  - Bấm thẻ 1 → **`/learn` (danh sách chủ đề)**, không vào thẳng phiên học.
-    Bấm thẻ 2 → phiên ôn tập.
-  - Nhãn lấy từ `learnGoal.title` / `reviewGoal.title`. Hai entity này vẫn mang
-    `completed`/`target` từ API (dùng ở nơi khác về sau) nhưng trang chủ không
-    hiển thị.
-- **Nhiệm vụ tháng**: một dải gọn nền `leafLight`, có `%` và mũi chevron.
-- **Nhiệm vụ hằng ngày**: mỗi nhiệm vụ gồm hàng `icon + nhãn + x/y`, rồi thanh
-  tiến độ **chiếm hết chiều ngang** ở dòng dưới. Tên nhiệm vụ tiếng Việt khá
-  dài; nhồi thanh tiến độ cùng hàng với nhãn sẽ bóp nó còn vài chục pixel.
-  Nhiệm vụ xong: gạch ngang mờ + dấu ✓ xanh.
+  - Thẻ "Học từ mới" nền `primary` (việc chính), thẻ "Ôn tập ngay" nền `leafLight`
+    (việc phụ) → mắt biết bấm cái nào trước. **Cả hai đều có màu**: thẻ phụ từng
+    là nền trắng viền xám, đứng cạnh thẻ xanh đậm trông như ô trống chưa tải xong.
+  - Bấm thẻ 1 → **`/learn`** (danh sách chủ đề), bấm thẻ 2 → **tab `/review`**.
+    Cả hai đều dừng ở trang chọn, không nhảy thẳng vào phiên: tab Ôn tập mới cho
+    thấy bộ nào đến hạn và cho ôn riêng từng chủ đề (5.6).
+  - Nhãn là hằng số trong `AppLabels`, không lấy từ dữ liệu — đây là tên hai chỗ
+    đi tới, không phải số liệu. Nhãn thẻ là `Ôn tập ngay`, khác nhãn tab
+    `Ôn tập`, để không có hai chữ giống nhau trên cùng màn hình.
+- **Hôm nay**: mỗi nhiệm vụ gồm hàng `icon + nhãn + x/y`, rồi thanh tiến độ
+  **chiếm hết chiều ngang** ở dòng dưới. Tên nhiệm vụ tiếng Việt khá dài; nhồi
+  thanh tiến độ cùng hàng với nhãn sẽ bóp nó còn vài chục pixel. Nhiệm vụ xong:
+  gạch ngang mờ + dấu ✓ xanh. Thẻ **không bấm được** — trang chi tiết nhiệm vụ
+  chưa có, nên không bọc `InkWell` để khỏi hiện hiệu ứng chạm rồi không đi đâu.
+- **Hành trình**: tiến độ cả giáo trình dạng `16/56 từ` + thanh + `%`, nền
+  `leafLight`, bấm → `/learn`.
+  - Thay cho dải một dòng cũ "📅 Nhiệm vụ tháng Chín 15% ›": hai con số bị nhồi
+    vào **chuỗi tiêu đề** của một `Quest` ("Học hết 56 từ trong giáo trình") nên
+    UI không tách ra được, chỉ hiện được `%`. Nay là hai field riêng
+    (`learnedWordCount` / `totalWordCount`).
+  - Chevron cũ dẫn tới trang chi tiết chưa tồn tại; nay dẫn sang `/learn`.
+  - Nền thanh tiến độ là **trắng** chứ không phải `neutral` xám — trên `leafLight`
+    thì xám gần như trùng màu, không thấy phần chưa đạt.
+- Hai mục tách tên riêng thay vì gộp dưới một chữ "Nhiệm vụ": việc hôm nay và
+  tiến độ dài hạn là hai chuyện, đọc theo hai kiểu khác nhau.
 - Kéo xuống để làm mới (`RefreshIndicator`).
 
 ### 5.2 Chụp / chọn ảnh — `/scan`

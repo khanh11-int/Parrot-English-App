@@ -46,14 +46,8 @@ hiển thị đúng câu đó.
   "streak_days": 1,
   "gem_count": 2,
   "seed_count": 15,
-  "learn_goal":  { "title": "Học từ mới",  "completed": 9, "target": 15 },
-  "review_goal": { "title": "Ôn tập ngay", "completed": 1, "target": 30 },
-  "monthly_quest": {
-    "title": "Nhiệm vụ tháng Chín",
-    "quests": [
-      { "title": "Học 300 từ trong tháng", "completed": 45, "target": 300 }
-    ]
-  },
+  "learned_word_count": 45,
+  "total_word_count": 152,
   "daily_quests": {
     "title": "Nhiệm vụ hằng ngày",
     "quests": [
@@ -65,7 +59,12 @@ hiển thị đúng câu đó.
 }
 ```
 
-`target` bằng `0` được app xử lý an toàn (tiến độ = 0), không crash.
+`target` bằng `0` được app xử lý an toàn (tiến độ = 0), không crash. Tương tự
+`total_word_count` bằng `0`.
+
+`learned_word_count` / `total_word_count` là **hai số riêng**, không phải một
+`Quest` có tiêu đề "Học hết N từ": trang chủ hiện `45/152 từ` nên cần tách số ra,
+không thể lấy từ chuỗi tiêu đề.
 
 ---
 

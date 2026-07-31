@@ -25,9 +25,31 @@ void main() {
     expect(find.text('Học từ mới'), findsOneWidget);
     expect(find.text('Ôn tập ngay'), findsOneWidget);
     expect(find.textContaining('9/15'), findsNothing);
+    // Mục nhiệm vụ ngày có tên riêng, không gộp dưới một chữ "Nhiệm vụ".
+    expect(find.text('Hôm nay'), findsOneWidget);
     // Nhiệm vụ hằng ngày hiện từng dòng chứ không còn tiêu đề nhóm.
     expect(find.text('Lưu 5 từ mới qua hình ảnh'), findsOneWidget);
     expect(find.text('3/5'), findsOneWidget);
+  });
+
+  testWidgets('Thẻ Hành trình hiện số từ đã học, không chỉ phần trăm', (
+    tester,
+  ) async {
+    await pumpParrotApp(tester);
+
+    // Thẻ nằm cuối trang, ngoài khung 600dp của test nên phải cuộn tới —
+    // `ListView` không dựng phần tử chưa lọt vào khung nhìn.
+    await tester.scrollUntilVisible(
+      find.text('Hành trình'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+
+    // Mock: 45/152 từ. Trước đây hai số này bị nhồi vào chuỗi tiêu đề của một
+    // `Quest` nên trang chủ chỉ hiện được `30%`.
+    expect(find.text('45/152 từ trong giáo trình'), findsOneWidget);
+    expect(find.text('30%'), findsOneWidget);
   });
 
   testWidgets('Bấm tab Cộng đồng thì chuyển trang', (tester) async {

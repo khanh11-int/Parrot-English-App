@@ -20,14 +20,8 @@ class HomeMockRepository implements HomeRepository {
       streakDays: 1,
       gemCount: 2,
       seedCount: 15,
-      learnGoal: DailyGoal(title: 'Học từ mới', completed: 9, target: 15),
-      reviewGoal: DailyGoal(title: 'Ôn tập ngay', completed: 1, target: 30),
-      monthlyQuest: QuestGroup(
-        title: 'Nhiệm vụ tháng Chín',
-        quests: [
-          Quest(title: 'Học 300 từ trong tháng', completed: 45, target: 300),
-        ],
-      ),
+      learnedWordCount: 45,
+      totalWordCount: 152,
       dailyQuests: QuestGroup(
         title: 'Nhiệm vụ hằng ngày',
         quests: [

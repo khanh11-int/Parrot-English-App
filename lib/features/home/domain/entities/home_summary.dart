@@ -1,23 +1,3 @@
-/// Một mục tiêu có tiến độ dạng "đã làm / cần làm".
-class DailyGoal {
-  const DailyGoal({
-    required this.title,
-    required this.completed,
-    required this.target,
-  });
-
-  final String title;
-  final int completed;
-  final int target;
-
-  /// Tỉ lệ hoàn thành trong khoảng 0..1.
-  ///
-  /// Chặn chia cho 0 để mục tiêu cấu hình sai không làm crash UI.
-  double get progress => target <= 0 ? 0 : (completed / target).clamp(0.0, 1.0);
-
-  bool get isCompleted => completed >= target;
-}
-
 /// Một nhiệm vụ trong danh sách nhiệm vụ hằng ngày / hằng tháng.
 class Quest {
   const Quest({
@@ -30,6 +10,10 @@ class Quest {
   final int completed;
   final int target;
 
+  /// Tỉ lệ hoàn thành trong khoảng 0..1.
+  ///
+  /// Chặn chia cho 0 để nhiệm vụ cấu hình sai không làm crash UI, và kẹp ở 1 để
+  /// làm vượt mục tiêu không đẩy thanh tiến độ tràn ra ngoài.
   double get progress => target <= 0 ? 0 : (completed / target).clamp(0.0, 1.0);
 
   bool get isCompleted => completed >= target;
@@ -62,9 +46,8 @@ class HomeSummary {
     required this.streakDays,
     required this.gemCount,
     required this.seedCount,
-    required this.learnGoal,
-    required this.reviewGoal,
-    required this.monthlyQuest,
+    required this.learnedWordCount,
+    required this.totalWordCount,
     required this.dailyQuests,
   });
 
@@ -73,8 +56,21 @@ class HomeSummary {
   final int streakDays;
   final int gemCount;
   final int seedCount;
-  final DailyGoal learnGoal;
-  final DailyGoal reviewGoal;
-  final QuestGroup monthlyQuest;
+
+  /// Số từ đã học trên tổng số từ của giáo trình — thẻ "Hành trình".
+  ///
+  /// Trước đây hai số này bị nhồi vào **chuỗi tiêu đề** của một `Quest`
+  /// ("Học hết 56 từ trong giáo trình"), nên UI không thể hiện `16/56` mà chỉ
+  /// hiện được `%`.
+  final int learnedWordCount;
+  final int totalWordCount;
+
   final QuestGroup dailyQuests;
+
+  /// Tỉ lệ hoàn thành giáo trình, 0..1.
+  double get curriculumProgress => totalWordCount <= 0
+      ? 0
+      : (learnedWordCount / totalWordCount).clamp(0.0, 1.0);
+
+  int get curriculumPercent => (curriculumProgress * 100).round();
 }

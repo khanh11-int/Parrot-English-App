@@ -6,6 +6,9 @@ import '../../../../core/theme/app_text_styles.dart';
 
 /// Hai kiểu màu cho thẻ hành động: việc chính (học từ mới) nổi hơn việc phụ
 /// (ôn tập), để mắt biết nên bấm cái nào trước.
+///
+/// Cả hai đều **có màu**. Trước đây thẻ phụ là nền trắng viền xám nên đứng cạnh
+/// thẻ xanh đậm nó trông như một ô trống chưa tải xong, chứ không ra một cặp.
 enum GoalCardStyle {
   primary(
     background: AppColors.primary,
@@ -13,9 +16,9 @@ enum GoalCardStyle {
     border: AppColors.primary,
   ),
   leaf(
-    background: AppColors.bgBase,
-    foreground: AppColors.textPrimary,
-    border: AppColors.divider,
+    background: AppColors.leafLight,
+    foreground: AppColors.leafDark,
+    border: AppColors.leafLight,
   );
 
   const GoalCardStyle({

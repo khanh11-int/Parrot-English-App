@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/constants/app_labels.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
@@ -71,22 +72,35 @@ class _HomeContent extends StatelessWidget {
         const SizedBox(height: AppSpacing.lg),
         ScanBanner(onPressed: () => context.push(AppRoutes.scan)),
         const SizedBox(height: AppSpacing.lg),
-        _GoalRow(summary: summary),
+        const _GoalRow(),
         const SizedBox(height: AppSpacing.xl),
-        const SectionHeader(title: 'Nhiệm vụ'),
-        MonthlyQuestBar(group: summary.monthlyQuest),
-        const SizedBox(height: AppSpacing.cardGap),
+        // Hai mục tách tên rõ ràng thay vì gộp dưới một chữ "Nhiệm vụ": việc
+        // hôm nay và tiến độ dài hạn là hai chuyện, người dùng đọc theo hai kiểu
+        // khác nhau.
+        const SectionHeader(title: 'Hôm nay'),
         QuestCard(group: summary.dailyQuests),
+        const SizedBox(height: AppSpacing.xl),
+        const SectionHeader(title: 'Hành trình'),
+        JourneyCard(
+          learnedCount: summary.learnedWordCount,
+          totalCount: summary.totalWordCount,
+          percent: summary.curriculumPercent,
+          progress: summary.curriculumProgress,
+          onTap: () => context.push(AppRoutes.learnTopics),
+        ),
       ],
     );
   }
 }
 
-/// Hai thẻ mục tiêu xếp cạnh nhau, chia đều chiều ngang.
+/// Hai thẻ hành động xếp cạnh nhau, chia đều chiều ngang.
+///
+/// Nhãn là hằng số, không lấy từ dữ liệu: đây là tên hai chỗ đi tới, không phải
+/// số liệu. Trước đây chúng đọc `summary.learnGoal.title` / `reviewGoal.title` —
+/// server trả về hai chuỗi cố định, còn phần số của hai mục tiêu đó thì bị bỏ
+/// (trùng với hai nhiệm vụ trong mục "Hôm nay").
 class _GoalRow extends StatelessWidget {
-  const _GoalRow({required this.summary});
-
-  final HomeSummary summary;
+  const _GoalRow();
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +113,7 @@ class _GoalRow extends StatelessWidget {
         children: [
           Expanded(
             child: GoalCard(
-              label: summary.learnGoal.title,
+              label: AppLabels.learnNewWords,
               mascotAsset: AppAssets.mascotReading,
               style: GoalCardStyle.primary,
               // Không vào thẳng phiên học: mở danh sách chủ đề để người học tự
@@ -110,10 +124,13 @@ class _GoalRow extends StatelessWidget {
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: GoalCard(
-              label: summary.reviewGoal.title,
+              label: AppLabels.reviewNow,
               mascotAsset: AppAssets.mascotPhone,
               style: GoalCardStyle.leaf,
-              onTap: () => context.push(AppRoutes.reviewSession),
+              // Sang **tab** Ôn tập, không nhảy thẳng vào phiên — đối xứng với
+              // thẻ bên cạnh. Tab đó mới cho thấy bộ nào đến hạn và cho ôn riêng
+              // từng chủ đề; nhảy thẳng vào phiên là bỏ qua hết.
+              onTap: () => context.go(AppRoutes.review),
             ),
           ),
         ],

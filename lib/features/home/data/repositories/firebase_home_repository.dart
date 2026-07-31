@@ -69,26 +69,8 @@ class FirebaseHomeRepository implements HomeRepository {
         streakDays: _readInt(userData['streakDays']),
         gemCount: _readInt(userData['gems']),
         seedCount: _readInt(userData['seeds']),
-        learnGoal: DailyGoal(
-          title: 'Học từ mới',
-          completed: learnedToday,
-          target: dailyLearnGoal,
-        ),
-        reviewGoal: DailyGoal(
-          title: 'Ôn tập ngay',
-          completed: reviewedToday,
-          target: dailyReviewGoal,
-        ),
-        monthlyQuest: QuestGroup(
-          title: 'Hành trình từ vựng',
-          quests: [
-            Quest(
-              title: 'Học hết $totalWords từ trong giáo trình',
-              completed: totalLearned,
-              target: totalWords,
-            ),
-          ],
-        ),
+        learnedWordCount: totalLearned,
+        totalWordCount: totalWords,
         dailyQuests: QuestGroup(
           title: 'Nhiệm vụ hằng ngày',
           quests: [

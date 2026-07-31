@@ -6,22 +6,45 @@ import 'package:parrot/features/profile/domain/entities/user_profile.dart';
 import 'package:parrot/features/shop/domain/entities/shop_item.dart';
 
 void main() {
-  group('DailyGoal', () {
+  group('Quest', () {
     test('tính đúng tỉ lệ hoàn thành', () {
-      const goal = DailyGoal(title: 'Học từ mới', completed: 9, target: 15);
-      expect(goal.progress, closeTo(0.6, 0.001));
-      expect(goal.isCompleted, isFalse);
+      const quest = Quest(title: 'Học từ mới', completed: 9, target: 15);
+      expect(quest.progress, closeTo(0.6, 0.001));
+      expect(quest.percent, 60);
+      expect(quest.isCompleted, isFalse);
     });
 
     test('mục tiêu bằng 0 không gây chia cho 0', () {
-      const goal = DailyGoal(title: 'Rỗng', completed: 0, target: 0);
-      expect(goal.progress, 0);
+      const quest = Quest(title: 'Rỗng', completed: 0, target: 0);
+      expect(quest.progress, 0);
     });
 
     test('kẹp tỉ lệ ở 1 khi làm vượt mục tiêu', () {
-      const goal = DailyGoal(title: 'Vượt', completed: 20, target: 15);
-      expect(goal.progress, 1);
-      expect(goal.isCompleted, isTrue);
+      const quest = Quest(title: 'Vượt', completed: 20, target: 15);
+      expect(quest.progress, 1);
+      expect(quest.isCompleted, isTrue);
+    });
+  });
+
+  group('HomeSummary.curriculumProgress', () {
+    HomeSummary summaryWith({required int learned, required int total}) =>
+        HomeSummary(
+          userName: 'bạn',
+          streakDays: 0,
+          gemCount: 0,
+          seedCount: 0,
+          learnedWordCount: learned,
+          totalWordCount: total,
+          dailyQuests: const QuestGroup(title: 'Hôm nay', quests: []),
+        );
+
+    test('tính đúng phần trăm giáo trình', () {
+      final summary = summaryWith(learned: 16, total: 56);
+      expect(summary.curriculumPercent, 29);
+    });
+
+    test('giáo trình rỗng không gây chia cho 0', () {
+      expect(summaryWith(learned: 0, total: 0).curriculumProgress, 0);
     });
   });
 
