@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../domain/entities/saved_word.dart';
 import '../../domain/entities/topic_word.dart';
 
 /// Ánh xạ `topics/{topicId}/words/{wordId}` — giáo trình dùng chung.
@@ -92,35 +91,6 @@ abstract final class WordProgressDocument {
   }) => {
     'reviewIntervalDays': reviewIntervalDays,
     'dueAt': Timestamp.fromDate(dueAt),
-  };
-
-  static String _readString(Object? value) =>
-      value is String ? value.trim() : '';
-}
-
-/// Ánh xạ `users/{uid}/savedWords/{wordId}` — bộ từ lưu từ ảnh chụp.
-abstract final class SavedWordDocument {
-  static const collection = 'savedWords';
-
-  static SavedWord toEntity(String id, Map<String, dynamic> map) {
-    final rawTopicId = map['topicId'];
-    return SavedWord(
-      id: id,
-      english: _readString(map['english']),
-      vietnamese: _readString(map['vietnamese']),
-      phonetic: _readString(map['phonetic']),
-      topicId: rawTopicId is String && rawTopicId.isNotEmpty
-          ? rawTopicId
-          : null,
-    );
-  }
-
-  static Map<String, dynamic> toMap(SavedWord word) => {
-    'english': word.english.trim(),
-    'vietnamese': word.vietnamese.trim(),
-    'phonetic': word.phonetic.trim(),
-    'topicId': word.topicId,
-    'savedAt': FieldValue.serverTimestamp(),
   };
 
   static String _readString(Object? value) =>

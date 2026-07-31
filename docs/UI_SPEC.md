@@ -168,20 +168,20 @@ riêng, tầng càng cao thì nền càng nhiều ánh nắng.
 
 ## 3. Khung điều hướng
 
-### 3.1 Bottom navigation (5 khe, khe giữa là nút nổi)
+### 3.1 Bottom navigation (4 khe chia đều)
 
 ```
 ┌──────────────────────────────────────────────┐
-│  🏠        📖       ( 📷 )      👥       👤   │
-│ Trang chủ  Ôn tập    FAB     Cộng đồng  Hồ sơ │
+│    🏠         📖         👥          👤       │
+│ Trang chủ   Ôn tập    Cộng đồng    Hồ sơ     │
 └──────────────────────────────────────────────┘
 ```
 
-- Nút giữa: **FAB tròn màu xanh, icon camera**, nổi cao hơn thanh nav
-  → mở luồng *Nhận diện ảnh → sinh từ vựng* (tính năng cốt lõi của app).
 - Tab đang chọn: icon + nhãn màu `primary`; tab khác `textSecondary`.
-- Thanh nav luôn hiện ở 5 tab gốc, **ẩn** trong các luồng học/quiz và các trang
-  con push toàn màn hình (Cửa hàng, Kết quả nhận diện...).
+- Thanh nav luôn hiện ở 4 tab gốc, **ẩn** trong các luồng học/ôn tập và các trang
+  con push toàn màn hình (Cửa hàng, Cài đặt, Chat nhóm).
+- Nhánh `main` có thêm **FAB camera** ở khe giữa (5 khe); nhánh `lite` không có
+  camera nên bỏ FAB, 4 khe chia đều chiều ngang.
 
 ### 3.2 Sơ đồ route — `core/router/app_router.dart`
 
@@ -189,20 +189,18 @@ riêng, tầng càng cao thì nền càng nhiều ánh nắng.
 /                       ShellRoute (bottom nav)
 ├── /home               Trang chủ
 ├── /review             Ôn tập
-├── /community          Cộng đồng   (3 tab con)
-│   ├── ?tab=feed       Dòng thời gian
-│   ├── ?tab=group      Nhóm học tập
-│   └── ?tab=rank       Bảng xếp hạng
+├── /community          Cộng đồng   (2 tab con)
+│   ├── Nhóm học tập
+│   └── Bảng xếp hạng
 └── /profile            Hồ sơ
 
-/scan                   Chụp / chọn ảnh            (fullscreen)
-/scan/result            Kết quả nhận diện          (fullscreen)
+/login /register        Xác thực                    (chưa đăng nhập)
 /learn                  Chọn chủ đề để học          (fullscreen)
-/learn/session?topic=   Phiên học từ mới             (fullscreen, ẩn nav)
-/review/:sessionId      Phiên ôn tập SRS            (fullscreen, ẩn nav)
+/learn/session?topic=   Phiên học từ mới            (fullscreen, ẩn nav)
+/review-session?topic=  Phiên ôn tập SRS            (fullscreen, ẩn nav)
 /shop                   Cửa hàng
+/group-chat?id=         Chat nhóm
 /settings               Cài đặt
-/user/:id               Trang cá nhân người khác
 ```
 
 ---
@@ -326,55 +324,9 @@ Chi tiết:
   tiến độ dài hạn là hai chuyện, đọc theo hai kiểu khác nhau.
 - Kéo xuống để làm mới (`RefreshIndicator`).
 
-### 5.2 Chụp / chọn ảnh — `/scan`
-
-- Toàn màn hình camera, nút chụp tròn to ở giữa dưới.
-- Bên trái nút chụp: mở thư viện ảnh. Bên phải: đổi camera trước/sau.
-- Sau khi chụp: hiện ảnh xem trước + nút "Nhận diện" / "Chụp lại".
-- Trong lúc gọi AI: overlay mờ + mascot + chữ "Đang đọc ảnh...". **Phải có nút
-  Huỷ** vì gọi AI có thể lâu.
-
-### 5.3 Kết quả nhận diện — `/scan/result`
-
-*(ảnh 1)*
-
-```
-┌──────────────────────────────────────┐
-│ ←  Kết quả nhận diện                 │
-├──────────────────────────────────────┤
-│ ╭──────────────────────────────────╮ │
-│ │  [ảnh]        👁 Ẩn khung        │ │
-│ │   ┌────┐ chair 0.98              │ │  khung + nhãn + độ tin cậy
-│ │   │    │  ┌──────┐ laptop 0.92   │ │
-│ │   └────┘  └──────┘               │ │
-│ ╰──────────────────────────────────╯ │
-│ Chọn chủ đề cho tất cả: [chọn chủ đề]│
-│                                      │
-│ ◯ chair  /tʃeə(r)/ – cái ghế     🔊 │
-│    Chủ đề: [chọn chủ đề]             │
-│ ◯ laptop /ˈlæptɒp/ – máy tính... 🔊 │
-│    Chủ đề: [chọn chủ đề]             │
-├──────────────────────────────────────┤
-│ [ Lưu từ vựng ] [ Lưu và đăng tải ]  │  bottom bar cố định
-└──────────────────────────────────────┘
-```
-
-Chi tiết:
-- **Vùng ảnh**: ảnh gốc + các `BoundingBox` vẽ đè (`CustomPaint` hoặc `Stack` +
-  `Positioned`). Nhãn dạng `từ  điểm` (ví dụ `chair 0.98`), nền tím/xanh mờ,
-  chữ trắng nhỏ. Nút **"Ẩn khung"** (icon mắt) bật/tắt toàn bộ overlay.
-- Toạ độ khung lưu theo **tỉ lệ 0..1** so với kích thước ảnh → tự co giãn theo
-  khung hiển thị, không phụ thuộc kích thước gốc.
-- Bấm vào một khung → cuộn tới và làm nổi thẻ từ tương ứng bên dưới (và ngược
-  lại). Đây là điểm nhấn UX của màn hình này.
-- **"Chọn chủ đề cho tất cả"**: đặt chủ đề cho mọi từ đang chọn trong một lần.
-- **Danh sách từ**: `VocabCard.selectable`. Mặc định **chọn hết**; người dùng bỏ
-  tick từ không muốn lưu.
-- **Bottom bar**: 2 nút cạnh nhau.
-  - `Lưu từ vựng` (primary) → lưu vào bộ từ cá nhân → về trang chủ + snackbar
-    "Đã lưu N từ".
-  - `Lưu và đăng tải` (secondary) → lưu **và** tạo bài đăng lên Cộng đồng.
-  - Cả hai **disabled** khi không có từ nào được chọn.
+> Mục 5.2 (chụp / chọn ảnh) và 5.3 (kết quả nhận diện) **không có ở nhánh
+> `lite`** — xem nhánh `main` nếu cần. Số mục giữ nguyên để không phải đánh số
+> lại toàn bộ tài liệu.
 
 ### 5.4 Chọn chủ đề để học — `/learn`
 
@@ -537,30 +489,12 @@ Dùng lại toàn bộ widget của mục 5.5, chỉ khác:
 
 ### 5.7 Cộng đồng — `/community`
 
-3 tab trên cùng (`TabBar` chữ, gạch chân màu `primary`):
-**Dòng thời gian · Nhóm học tập · Bảng xếp hạng**
+2 tab trên cùng (`TabBar` chữ, gạch chân màu `primary`):
+**Nhóm học tập · Bảng xếp hạng**
 
-#### Tab 1 — Dòng thời gian *(ảnh 4)*
-
-Danh sách bài đăng, mỗi bài là một thẻ:
-```
-┌──────────────────────────────────────┐
-│ 🦜 K64 - NEU              ⋮          │  avatar, tên, menu
-│    5 tháng trước                     │
-│ ╭──────────────────────────────────╮ │
-│ │ [ảnh có khung nhận diện]         │ │  chip "chair - cái ghế 1.00"
-│ ╰──────────────────────────────────╯ │
-│ ◯ person  /pɜː.sən/ – người      🔊 │  VocabCard.compact
-│    Chủ đề: [chọn chủ đề ˅]           │
-│    [      Lưu từ vựng      ]         │  ← lưu từ của người khác về bộ mình
-│ ❤️ 4      💬 0      🔖 0             │
-└──────────────────────────────────────┘
-```
-- Hàng tương tác dưới cùng: **thích / bình luận / lưu bài**, mỗi cái icon + số.
-  Đã thích → icon tô đỏ.
-- Nút "Lưu từ vựng" trong bài cho phép **học từ của người khác** — đây là giá trị
-  chính của feed.
-- Cuộn vô hạn + kéo làm mới.
+> Nhánh `main` có thêm tab **Dòng thời gian** ở đầu. Nhánh `lite` không có nên
+> Cộng đồng chỉ còn 2 tab; số hiệu "Tab 2 / Tab 3" giữ nguyên để khớp với
+> `main`.
 
 #### Tab 2 — Nhóm học tập *(ảnh 6)*
 

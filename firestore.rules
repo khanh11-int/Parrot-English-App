@@ -33,44 +33,12 @@ service cloud.firestore {
       match /topicProgress/{topicId} {
         allow read, write: if isOwner(uid);
       }
-      // Bộ từ người dùng tự lưu từ ảnh chụp — tách biệt với phần học.
-      match /savedWords/{wordId} {
-        allow read, write: if isOwner(uid);
-      }
       // Thống kê theo ngày, nuôi streak và nhiệm vụ hằng ngày.
       match /dailyStats/{date} {
         allow read, write: if isOwner(uid);
       }
       match /inventory/{itemId} {
         allow read, write: if isOwner(uid);
-      }
-    }
-
-    // --- Bài đăng ------------------------------------------------------
-    match /posts/{postId} {
-      allow read: if isSignedIn();
-      // Chỉ tạo được bài đứng tên chính mình — chặn việc mạo danh người khác.
-      allow create: if isSignedIn()
-                    && request.auth.uid == request.resource.data.authorId;
-      allow update, delete: if isSignedIn()
-                            && request.auth.uid == resource.data.authorId;
-
-      // Thích là subcollection, mỗi người một document id = uid. Cách này
-      // không vỡ khi bài có nhiều nghìn lượt thích, khác với mảng `likedBy`.
-      match /likes/{uid} {
-        allow read: if isSignedIn();
-        allow write: if isOwner(uid);
-      }
-      match /bookmarks/{uid} {
-        allow read: if isSignedIn();
-        allow write: if isOwner(uid);
-      }
-      match /comments/{commentId} {
-        allow read: if isSignedIn();
-        allow create: if isSignedIn()
-                      && request.auth.uid == request.resource.data.authorId;
-        allow update, delete: if isSignedIn()
-                              && request.auth.uid == resource.data.authorId;
       }
     }
 

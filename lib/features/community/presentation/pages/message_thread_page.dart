@@ -9,31 +9,22 @@ import '../../../../shared/widgets/message_composer.dart';
 import '../../domain/entities/community_entities.dart';
 import '../providers/community_providers.dart';
 
-/// Một luồng tin nhắn: dùng cho cả **chat nhóm** và **bình luận bài đăng**.
-///
-/// Hai chỗ khác nhau đúng ở nguồn tin và hàm gửi, nên truyền vào thay vì viết
-/// hai trang gần giống nhau.
+/// Chat của một nhóm học tập.
 class MessageThreadPage extends ConsumerWidget {
   const MessageThreadPage({
     super.key,
     required this.title,
     required this.emptyMessage,
     required this.threadId,
-    required this.kind,
   });
 
   final String title;
   final String emptyMessage;
-
-  /// Id nhóm hoặc id bài đăng, tuỳ [kind].
   final String threadId;
-  final MessageThreadKind kind;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final messagesAsync = ref.watch(
-      messageThreadProvider((kind: kind, id: threadId)),
-    );
+    final messagesAsync = ref.watch(messageThreadProvider((id: threadId)));
 
     return Scaffold(
       appBar: AppBar(title: Text(title)),
@@ -45,9 +36,8 @@ class MessageThreadPage extends ConsumerWidget {
               child: switch (messagesAsync) {
                 AsyncValue(hasError: true) => AppErrorView(
                   message: 'Không tải được tin nhắn.',
-                  onRetry: () => ref.invalidate(
-                    messageThreadProvider((kind: kind, id: threadId)),
-                  ),
+                  onRetry: () =>
+                      ref.invalidate(messageThreadProvider((id: threadId))),
                 ),
                 AsyncValue(:final valueOrNull?) =>
                   valueOrNull.isEmpty
@@ -60,17 +50,9 @@ class MessageThreadPage extends ConsumerWidget {
               },
             ),
             MessageComposer(
-              hint: kind == MessageThreadKind.group
-                  ? 'Nhập tin nhắn...'
-                  : 'Viết bình luận...',
               onSend: ({String? text, String? stickerAsset}) => ref
                   .read(messageSenderProvider)
-                  .send(
-                    kind: kind,
-                    id: threadId,
-                    text: text,
-                    stickerAsset: stickerAsset,
-                  ),
+                  .send(id: threadId, text: text, stickerAsset: stickerAsset),
             ),
           ],
         ),

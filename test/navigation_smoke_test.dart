@@ -38,8 +38,6 @@ void main() {
     for (final route in [
       AppRoutes.shop,
       AppRoutes.settings,
-      AppRoutes.savedWords,
-      AppRoutes.scan,
       AppRoutes.learnSession,
       AppRoutes.reviewSession,
     ]) {

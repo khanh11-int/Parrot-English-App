@@ -5,6 +5,10 @@ App học tiếng Anh theo chủ đề, ôn tập bằng thuật toán SRS, game
 
 Dữ liệu thật trên **Firebase** (Authentication + Cloud Firestore).
 
+> **Nhánh `lite`.** Bản này **không có camera / nhận diện ảnh** và **không có
+> dòng thời gian** (feed bài đăng). Toàn bộ hai mảng đó đã được xoá khỏi mã
+> nguồn, không phải ẩn đi. Bản đầy đủ nằm ở nhánh [`main`](../../tree/main).
+
 ## Tính năng
 
 | Mảng | Trạng thái |
@@ -12,12 +16,12 @@ Dữ liệu thật trên **Firebase** (Authentication + Cloud Firestore).
 | Đăng nhập / đăng ký bằng email | ✅ Firebase Auth, chặn route khi chưa đăng nhập |
 | 7 chủ đề × 8 từ (giáo trình dùng chung) | ✅ Firestore |
 | Học từ mới: nối cặp + trắc nghiệm | ✅ Sinh từ các từ chưa học của chủ đề |
-| Ôn tập theo SRS (1/3/7/21/60 ngày) | ✅ Firestore |
+| Ôn tập theo SRS (0/1/3/7/21/60 ngày) | ✅ Firestore, ôn riêng từng chủ đề |
 | Thưởng XP + hạt, streak, nhiệm vụ ngày | ✅ Firestore |
 | Cửa hàng vật phẩm | ✅ Mua bằng transaction |
 | Hồ sơ, 6 hạng theo tầng rừng | ✅ Suy từ XP |
-| Cộng đồng: feed, xếp hạng, nhóm | ✅ Firestore (chưa có chức năng tạo bài đăng) |
-| Nhận diện vật thể trong ảnh | ⚠️ Dữ liệu giả — cần dịch vụ AI, xem bên dưới |
+| Cộng đồng: nhóm học tập + xếp hạng | ✅ Firestore, tạo / tham gia / rời nhóm |
+| Chat nhóm | ✅ Firestore realtime |
 
 ## Chạy thử
 
@@ -96,19 +100,17 @@ flutter test
 topics/{topicId}                    name, wordCount, order
 topics/{topicId}/words/{wordId}     giáo trình: english, phonetic, vietnamese
 shopItems/{itemId}                  vật phẩm cửa hàng
-posts/{postId}                      bài đăng cộng đồng
 groups/{groupId}                    nhóm học tập
 
 users/{uid}                         hồ sơ, XP, hạt, ngọc, streak
 users/{uid}/wordProgress/{wordId}   từ nào đã học + lịch ôn SRS
 users/{uid}/topicProgress/{topicId} số từ đã học của từng chủ đề
-users/{uid}/savedWords/{wordId}     từ lưu từ ảnh chụp (tách khỏi phần học)
 users/{uid}/dailyStats/{yyyy-MM-dd} nuôi streak và nhiệm vụ hằng ngày
 users/{uid}/inventory/{itemId}      vật phẩm đang có
 ```
 
-Ba thứ dễ lẫn: **giáo trình** (`topics/*/words`, admin soạn) ≠ **tiến độ học**
-(`wordProgress`) ≠ **từ lưu từ ảnh** (`savedWords`).
+Hai thứ dễ lẫn: **giáo trình** (`topics/*/words`, admin soạn) ≠ **tiến độ học**
+(`wordProgress`, của riêng từng người).
 
 ## Hai giới hạn đã biết
 

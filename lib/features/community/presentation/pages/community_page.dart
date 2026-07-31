@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/feed_tab.dart';
 import '../widgets/leaderboard_tab.dart';
 import '../widgets/study_group_tab.dart';
 
@@ -11,7 +10,7 @@ class CommunityPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         // Trong suốt để thấy gradient nền của vỏ app.
         backgroundColor: Colors.transparent,
@@ -19,15 +18,12 @@ class CommunityPage extends StatelessWidget {
           title: const Text('Cộng đồng'),
           bottom: const TabBar(
             tabs: [
-              Tab(text: 'Dòng thời gian'),
               Tab(text: 'Nhóm học tập'),
               Tab(text: 'Bảng xếp hạng'),
             ],
           ),
         ),
-        body: const TabBarView(
-          children: [FeedTab(), StudyGroupTab(), LeaderboardTab()],
-        ),
+        body: const TabBarView(children: [StudyGroupTab(), LeaderboardTab()]),
       ),
     );
   }

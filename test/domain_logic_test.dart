@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:parrot/core/constants/app_labels.dart';
 import 'package:parrot/features/home/domain/entities/home_summary.dart';
-import 'package:parrot/features/image_scan/domain/entities/recognized_word.dart';
 import 'package:parrot/features/profile/domain/entities/user_profile.dart';
 import 'package:parrot/features/shop/domain/entities/shop_item.dart';
 
@@ -83,18 +82,6 @@ void main() {
     test('tiến độ lên hạng kế tiếp nằm trong 0..1', () {
       // 568 XP: đã qua mốc 500 (Bụi Rậm), đang tiến tới 1500 (Tán Thấp).
       expect(profile.progressToNextRank, closeTo(68 / 1000, 0.001));
-    });
-  });
-
-  group('BoundingBox', () {
-    test('đổi tỉ lệ 0..1 sang pixel theo kích thước hiển thị', () {
-      const box = BoundingBox(left: 0.5, top: 0.25, width: 0.2, height: 0.4);
-      final scaled = box.scaleTo(400, 300);
-
-      expect(scaled.left, 200);
-      expect(scaled.top, 75);
-      expect(scaled.width, 80);
-      expect(scaled.height, 120);
     });
   });
 

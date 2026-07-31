@@ -12,14 +12,6 @@ class CommunityRemoteRepository implements CommunityRepository {
   final ApiClient _client;
 
   @override
-  Future<List<CommunityPost>> getFeed() async {
-    final items = await _client.getList(ApiEndpoints.feed);
-    return items
-        .map((json) => CommunityPostDto.fromJson(json).toEntity())
-        .toList(growable: false);
-  }
-
-  @override
   Future<Leaderboard> getLeaderboard() async {
     final json = await _client.getObject(ApiEndpoints.leaderboard);
     return LeaderboardDto.fromJson(json).toEntity();
@@ -32,43 +24,6 @@ class CommunityRemoteRepository implements CommunityRepository {
     final group = json.isEmpty ? null : json['group'];
     if (group is! JsonMap) return null;
     return StudyGroupDto.fromJson(group).toEntity();
-  }
-
-  @override
-  Future<CommunityPost> setLiked(String postId, {required bool isLiked}) {
-    // Thích là POST, bỏ thích là DELETE trên cùng một tài nguyên con.
-    return _toggle(ApiEndpoints.postLike(postId), isOn: isLiked);
-  }
-
-  @override
-  Future<CommunityPost> setBookmarked(
-    String postId, {
-    required bool isBookmarked,
-  }) {
-    return _toggle(ApiEndpoints.postBookmark(postId), isOn: isBookmarked);
-  }
-
-  Future<CommunityPost> _toggle(String path, {required bool isOn}) async {
-    final json = isOn ? await _client.post(path) : await _client.delete(path);
-    return CommunityPostDto.fromJson(json).toEntity();
-  }
-
-  @override
-  Future<void> createPost({
-    required SharedWord word,
-    required String detectedLabel,
-  }) async {
-    await _client.post(
-      ApiEndpoints.posts,
-      body: {
-        'detected_label': detectedLabel,
-        'shared_word': {
-          'english': word.english,
-          'vietnamese': word.vietnamese,
-          'phonetic': word.phonetic,
-        },
-      },
-    );
   }
 
   // --- Nhom hoc tap & chat ---------------------------------------------
@@ -101,17 +56,6 @@ class CommunityRemoteRepository implements CommunityRepository {
   @override
   Future<void> sendGroupMessage(
     String groupId, {
-    String? text,
-    String? stickerAsset,
-  }) async => throw _notInRestApi;
-
-  @override
-  Stream<List<ChatMessage>> watchPostComments(String postId) =>
-      Stream.error(_notInRestApi);
-
-  @override
-  Future<void> sendPostComment(
-    String postId, {
     String? text,
     String? stickerAsset,
   }) async => throw _notInRestApi;

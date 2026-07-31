@@ -14,23 +14,17 @@ class BottomNavItem {
   final String iconAsset;
 }
 
-/// Thanh điều hướng 5 khe, khe giữa là nút camera nổi.
-///
-/// Nút camera không phải một tab (không giữ trạng thái chọn) mà mở luồng nhận
-/// diện ảnh dạng toàn màn hình — đây là tính năng cốt lõi nên được đặt ở vị trí
-/// dễ bấm nhất.
+/// Thanh điều hướng 4 khe chia đều.
 class AppBottomNav extends StatelessWidget {
   const AppBottomNav({
     super.key,
     required this.currentIndex,
     required this.onSelected,
-    required this.onScanPressed,
   });
 
-  /// Chỉ số tab đang chọn trong 4 tab (không tính nút camera).
+  /// Chỉ số tab đang chọn.
   final int currentIndex;
   final ValueChanged<int> onSelected;
-  final VoidCallback onScanPressed;
 
   static const items = <BottomNavItem>[
     BottomNavItem(label: AppLabels.navHome, iconAsset: AppAssets.iconHome),
@@ -46,46 +40,28 @@ class AppBottomNav extends StatelessWidget {
   ];
 
   static const _barHeight = 64.0;
-  static const _fabSize = 56.0;
 
   @override
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.viewPaddingOf(context).bottom;
 
-    return SizedBox(
-      // Chừa chỗ cho nửa trên của FAB nhô ra khỏi thanh nav.
-      height: _barHeight + bottomInset + _fabSize / 2,
-      child: Stack(
-        alignment: Alignment.bottomCenter,
+    return Container(
+      height: _barHeight + bottomInset,
+      decoration: const BoxDecoration(
+        color: AppColors.bgBase,
+        border: Border(top: BorderSide(color: AppColors.divider)),
+      ),
+      padding: EdgeInsets.only(bottom: bottomInset),
+      child: Row(
         children: [
-          Container(
-            height: _barHeight + bottomInset,
-            decoration: const BoxDecoration(
-              color: AppColors.bgBase,
-              border: Border(top: BorderSide(color: AppColors.divider)),
+          for (var i = 0; i < items.length; i++)
+            Expanded(
+              child: _NavSlot(
+                item: items[i],
+                isSelected: i == currentIndex,
+                onTap: () => onSelected(i),
+              ),
             ),
-            padding: EdgeInsets.only(bottom: bottomInset),
-            child: Row(
-              children: [
-                for (var i = 0; i < items.length; i++) ...[
-                  // Khe trống ở giữa dành cho FAB.
-                  if (i == items.length ~/ 2)
-                    const SizedBox(width: _fabSize + AppSpacing.lg),
-                  Expanded(
-                    child: _NavSlot(
-                      item: items[i],
-                      isSelected: i == currentIndex,
-                      onTap: () => onSelected(i),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: bottomInset + _barHeight - _fabSize / 2 - 4,
-            child: _ScanFab(onPressed: onScanPressed),
-          ),
         ],
       ),
     );
@@ -132,29 +108,6 @@ class _NavSlot extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ScanFab extends StatelessWidget {
-  const _ScanFab({required this.onPressed});
-
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: AppBottomNav._fabSize,
-      height: AppBottomNav._fabSize,
-      child: FloatingActionButton(
-        onPressed: onPressed,
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.textOnPrimary,
-        elevation: 4,
-        shape: const CircleBorder(),
-        tooltip: 'Chụp ảnh học từ mới',
-        child: const Icon(Icons.photo_camera_rounded, size: 26),
       ),
     );
   }

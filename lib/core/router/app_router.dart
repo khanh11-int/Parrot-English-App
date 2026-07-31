@@ -9,18 +9,14 @@ import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/providers/auth_providers.dart';
 import '../../features/community/presentation/pages/community_page.dart';
 import '../../features/community/presentation/pages/message_thread_page.dart';
-import '../../features/community/presentation/providers/community_providers.dart';
 import '../../features/flashcard/presentation/pages/review_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
-import '../../features/image_scan/presentation/pages/scan_page.dart';
-import '../../features/image_scan/presentation/pages/scan_result_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/profile/presentation/pages/settings_page.dart';
 import '../../features/quiz/presentation/pages/session_page.dart';
 import '../../features/quiz/presentation/pages/topic_list_page.dart';
 import '../../features/quiz/presentation/providers/learn_providers.dart';
 import '../../features/shop/presentation/pages/shop_page.dart';
-import '../../features/vocabulary/presentation/pages/saved_words_page.dart';
 import '../../shared/widgets/app_shell.dart';
 import 'app_routes.dart';
 
@@ -82,11 +78,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           _branch(AppRoutes.profile, (_, _) => const ProfilePage()),
         ],
       ),
-      GoRoute(path: AppRoutes.scan, builder: (_, _) => const ScanPage()),
-      GoRoute(
-        path: AppRoutes.scanResult,
-        builder: (_, _) => const ScanResultPage(),
-      ),
       GoRoute(
         path: AppRoutes.learnTopics,
         builder: (_, _) => const TopicListPage(),
@@ -112,21 +103,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           title: 'Chat nhóm',
           emptyMessage: 'Chưa có tin nhắn nào.\nChào cả nhóm một câu đi!',
           threadId: state.uri.queryParameters[AppRoutes.threadIdParam] ?? '',
-          kind: MessageThreadKind.group,
         ),
-      ),
-      GoRoute(
-        path: AppRoutes.postComments,
-        builder: (_, state) => MessageThreadPage(
-          title: 'Bình luận',
-          emptyMessage: 'Chưa có bình luận nào.\nViết câu đầu tiên nhé!',
-          threadId: state.uri.queryParameters[AppRoutes.threadIdParam] ?? '',
-          kind: MessageThreadKind.post,
-        ),
-      ),
-      GoRoute(
-        path: AppRoutes.savedWords,
-        builder: (_, _) => const SavedWordsPage(),
       ),
       GoRoute(
         path: AppRoutes.settings,

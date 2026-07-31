@@ -13,60 +13,6 @@ class CommunityMockRepository implements CommunityRepository {
   static const _mockDelay = Duration(milliseconds: 500);
 
   @override
-  Future<List<CommunityPost>> getFeed() async {
-    await Future<void>.delayed(_mockDelay);
-
-    return const [
-      CommunityPost(
-        id: 'post-1',
-        authorName: 'K64 - NEU',
-        authorAvatarAsset: AppAssets.stickerHello,
-        timeAgo: '5 tháng trước',
-        sharedWord: SharedWord(
-          english: 'person',
-          vietnamese: 'người',
-          phonetic: '/ˈpɜː.sən/',
-        ),
-        detectedLabel: 'chair - cái ghế 1.00',
-        likeCount: 4,
-        commentCount: 0,
-        bookmarkCount: 0,
-      ),
-      CommunityPost(
-        id: 'post-2',
-        authorName: 'Hoang Duyen',
-        authorAvatarAsset: AppAssets.stickerHappy,
-        timeAgo: '2 ngày trước',
-        sharedWord: SharedWord(
-          english: 'kitchen',
-          vietnamese: 'nhà bếp',
-          phonetic: '/ˈkɪtʃ.ən/',
-        ),
-        detectedLabel: 'sink - bồn rửa 0.96',
-        likeCount: 12,
-        commentCount: 3,
-        bookmarkCount: 2,
-        isLiked: true,
-      ),
-      CommunityPost(
-        id: 'post-3',
-        authorName: 'Công Tình',
-        authorAvatarAsset: AppAssets.stickerAwesome,
-        timeAgo: '1 tuần trước',
-        sharedWord: SharedWord(
-          english: 'backpack',
-          vietnamese: 'ba lô',
-          phonetic: '/ˈbæk.pæk/',
-        ),
-        detectedLabel: 'backpack - ba lô 0.99',
-        likeCount: 7,
-        commentCount: 1,
-        bookmarkCount: 5,
-      ),
-    ];
-  }
-
-  @override
   Future<Leaderboard> getLeaderboard() async {
     await Future<void>.delayed(_mockDelay);
 
@@ -143,41 +89,6 @@ class CommunityMockRepository implements CommunityRepository {
     );
   }
 
-  // Bản mock không lưu trạng thái giữa các lần gọi, nên chỉ dựng lại bài đăng
-  // với cờ mới. Provider giữ state thật trong bộ nhớ.
-  @override
-  Future<CommunityPost> setLiked(String postId, {required bool isLiked}) async {
-    final post = await _findPost(postId);
-    return post.copyWith(
-      isLiked: isLiked,
-      likeCount: post.likeCount + (isLiked ? 1 : -1),
-    );
-  }
-
-  @override
-  Future<CommunityPost> setBookmarked(
-    String postId, {
-    required bool isBookmarked,
-  }) async {
-    final post = await _findPost(postId);
-    return post.copyWith(
-      isBookmarked: isBookmarked,
-      bookmarkCount: post.bookmarkCount + (isBookmarked ? 1 : -1),
-    );
-  }
-
-  Future<CommunityPost> _findPost(String postId) async {
-    final posts = await getFeed();
-    return posts.firstWhere((post) => post.id == postId);
-  }
-
-  /// Bản mock không có nơi để đăng — bỏ qua một cách tường minh.
-  @override
-  Future<void> createPost({
-    required SharedWord word,
-    required String detectedLabel,
-  }) async {}
-
   // --- Nhom hoc tap ----------------------------------------------------
   // Ban mock chi tra du lieu co dinh; cac thao tac ghi la ham rong.
 
@@ -234,17 +145,6 @@ class CommunityMockRepository implements CommunityRepository {
   @override
   Future<void> sendGroupMessage(
     String groupId, {
-    String? text,
-    String? stickerAsset,
-  }) async {}
-
-  @override
-  Stream<List<ChatMessage>> watchPostComments(String postId) =>
-      Stream.value(const []);
-
-  @override
-  Future<void> sendPostComment(
-    String postId, {
     String? text,
     String? stickerAsset,
   }) async {}

@@ -20,7 +20,8 @@ void main() {
     await pumpParrotApp(tester);
 
     expect(find.text('Chào Công Tình 👋'), findsOneWidget);
-    expect(find.text('Gửi ảnh học từ mới!'), findsOneWidget);
+    // Bản này không có camera nên trang chủ không còn banner gửi ảnh.
+    expect(find.text('Gửi ảnh học từ mới!'), findsNothing);
     // Hai thẻ hành động chỉ có nhãn, không hiện tiến độ.
     expect(find.text('Học từ mới'), findsOneWidget);
     expect(find.text('Ôn tập ngay'), findsOneWidget);

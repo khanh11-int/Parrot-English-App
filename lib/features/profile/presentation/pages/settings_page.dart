@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../../core/router/app_routes.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 
 import '../../../../core/constants/app_assets.dart';
@@ -11,18 +9,14 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 
 /// Một mục trong danh sách Cài đặt.
+///
+/// Chưa mục nào có trang riêng, nên chưa cần field đường dẫn — thêm khi dựng
+/// trang đầu tiên.
 class _SettingsEntry {
-  const _SettingsEntry({
-    required this.label,
-    required this.iconAsset,
-    this.route,
-  });
+  const _SettingsEntry({required this.label, required this.iconAsset});
 
   final String label;
   final String iconAsset;
-
-  /// Đường dẫn mở khi bấm; `null` là trang chưa dựng nên mục bị vô hiệu hoá.
-  final String? route;
 }
 
 /// Trang Cài đặt — dùng lại bộ `assets/images/icons/`.
@@ -30,11 +24,6 @@ class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
 
   static const _entries = [
-    _SettingsEntry(
-      label: 'Từ đã lưu từ ảnh',
-      iconAsset: AppAssets.iconStudy,
-      route: AppRoutes.savedWords,
-    ),
     _SettingsEntry(label: 'Thông báo', iconAsset: AppAssets.iconNotification),
     _SettingsEntry(label: 'Tin nhắn', iconAsset: AppAssets.iconMessage),
     _SettingsEntry(label: 'Thống kê học tập', iconAsset: AppAssets.iconStats),
@@ -155,15 +144,13 @@ class _SettingsRow extends StatelessWidget {
     return ListTile(
       leading: Image.asset(entry.iconAsset, width: 24, height: 24),
       title: Text(entry.label, style: AppTextStyles.body),
-      trailing: Icon(
+      trailing: const Icon(
         Icons.chevron_right_rounded,
-        color: entry.route == null
-            ? AppColors.textDisabled
-            : AppColors.textSecondary,
+        color: AppColors.textDisabled,
       ),
-      // Mục chưa có trang thì để `null`: người dùng thấy ngay là chưa bấm
-      // được, thay vì bấm rồi không có gì xảy ra.
-      onTap: entry.route == null ? null : () => context.push(entry.route!),
+      // Mọi mục đều chưa có trang nên `onTap` để `null`: người dùng thấy ngay
+      // là chưa bấm được, thay vì bấm rồi không có gì xảy ra.
+      onTap: null,
     );
   }
 }

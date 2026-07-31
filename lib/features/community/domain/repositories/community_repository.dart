@@ -1,32 +1,14 @@
 import '../entities/community_entities.dart';
 
-/// Nguồn dữ liệu Cộng đồng: dòng thời gian, xếp hạng, nhóm học tập.
+/// Nguồn dữ liệu Cộng đồng: xếp hạng và nhóm học tập.
+///
+/// Bản này **không có dòng thời gian**, nên không có bài đăng, thích, lưu bài
+/// hay bình luận — chỉ còn nhóm học tập và bảng xếp hạng.
 abstract interface class CommunityRepository {
-  /// Dòng thời gian. Ném `Failure` nếu thất bại.
-  Future<List<CommunityPost>> getFeed();
-
   Future<Leaderboard> getLeaderboard();
 
   /// Nhóm học tập của người dùng; `null` nếu chưa tham gia nhóm nào.
   Future<StudyGroup?> getStudyGroup();
-
-  /// Bật/tắt thích một bài đăng, trả về bài đăng sau khi cập nhật.
-  Future<CommunityPost> setLiked(String postId, {required bool isLiked});
-
-  /// Bật/tắt lưu một bài đăng, trả về bài đăng sau khi cập nhật.
-  Future<CommunityPost> setBookmarked(
-    String postId, {
-    required bool isBookmarked,
-  });
-
-  /// Đăng một từ vựng lên dòng thời gian.
-  ///
-  /// [detectedLabel] là nhãn AI đọc được từ ảnh, ví dụ `chair - cái ghế 0.98`.
-  /// Chưa gửi ảnh kèm vì chưa dùng Cloud Storage.
-  Future<void> createPost({
-    required SharedWord word,
-    required String detectedLabel,
-  });
 
   // --- Nhóm học tập ----------------------------------------------------
 
@@ -42,7 +24,7 @@ abstract interface class CommunityRepository {
   /// Rời nhóm hiện tại.
   Future<void> leaveGroup();
 
-  // --- Chat nhóm & bình luận -------------------------------------------
+  // --- Chat nhóm -------------------------------------------------------
 
   /// Tin nhắn trong nhóm, cập nhật liên tục.
   ///
@@ -52,15 +34,6 @@ abstract interface class CommunityRepository {
 
   Future<void> sendGroupMessage(
     String groupId, {
-    String? text,
-    String? stickerAsset,
-  });
-
-  /// Bình luận dưới một bài đăng, cập nhật liên tục.
-  Stream<List<ChatMessage>> watchPostComments(String postId);
-
-  Future<void> sendPostComment(
-    String postId, {
     String? text,
     String? stickerAsset,
   });

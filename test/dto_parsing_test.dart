@@ -4,7 +4,6 @@ import 'package:parrot/core/error/failure.dart';
 import 'package:parrot/core/network/json_reader.dart';
 import 'package:parrot/features/community/data/models/community_dtos.dart';
 import 'package:parrot/features/home/data/models/home_dtos.dart';
-import 'package:parrot/features/image_scan/data/models/scan_dtos.dart';
 import 'package:parrot/features/quiz/data/models/learn_dtos.dart';
 import 'package:parrot/features/shop/data/models/shop_dtos.dart';
 
@@ -52,68 +51,6 @@ void main() {
       expect(entity.streakDays, 3);
       expect(entity.curriculumPercent, 29);
       expect(entity.dailyQuests.quests.single.percent, 60);
-    });
-  });
-
-  group('ScanResultDto', () {
-    test('lúc đang xử lý thì chưa có words', () {
-      final dto = ScanResultDto.fromJson({
-        'id': 'scan_1',
-        'status': 'processing',
-      });
-
-      expect(dto.status, ScanStatus.processing);
-      expect(dto.words, isEmpty);
-    });
-
-    test('trạng thái lạ được coi là chưa xong để client hỏi lại', () {
-      final dto = ScanResultDto.fromJson({'id': 'scan_1', 'status': 'queued'});
-      expect(dto.status, ScanStatus.processing);
-    });
-
-    test('giữ toạ độ khung theo tỉ lệ 0..1', () {
-      final dto = ScanResultDto.fromJson({
-        'id': 'scan_1',
-        'status': 'completed',
-        'words': [
-          {
-            'id': 'chair',
-            'english': 'chair',
-            'vietnamese': 'cái ghế',
-            'phonetic': '/tʃeə(r)/',
-            'confidence': 0.98,
-            'bounding_box': {
-              'left': 0.06,
-              'top': 0.42,
-              'width': 0.30,
-              'height': 0.46,
-            },
-          },
-        ],
-      });
-
-      final word = dto.toEntity(localImagePath: '/tmp/a.jpg').words.single;
-      expect(word.overlayLabel, 'chair 0.98');
-      expect(word.boundingBox.left, closeTo(0.06, 0.0001));
-
-      // Đổi sang pixel theo kích thước hiển thị thật.
-      final scaled = word.boundingBox.scaleTo(400, 300);
-      expect(scaled.left, closeTo(24, 0.01));
-    });
-
-    test('ưu tiên ảnh local hơn ảnh trên server để hiện ngay', () {
-      final dto = ScanResultDto.fromJson({
-        'id': 'scan_1',
-        'status': 'completed',
-        'image_url': 'https://cdn/a.jpg',
-        'words': <dynamic>[],
-      });
-
-      expect(
-        dto.toEntity(localImagePath: '/tmp/a.jpg').imagePath,
-        '/tmp/a.jpg',
-      );
-      expect(dto.toEntity().imagePath, 'https://cdn/a.jpg');
     });
   });
 
@@ -190,21 +127,6 @@ void main() {
       expect(data.wallet.seeds, 150);
       expect(data.ownedItems, hasLength(1));
       expect(data.wallet.canAfford(data.items.single), isTrue);
-    });
-  });
-
-  group('CommunityPostDto', () {
-    test('field thiếu dùng giá trị an toàn', () {
-      final post = CommunityPostDto.fromJson({
-        'id': 'p1',
-        'author_name': 'Ai đó',
-        'shared_word': {'english': 'person', 'vietnamese': 'người'},
-      }).toEntity();
-
-      expect(post.likeCount, 0);
-      expect(post.isLiked, isFalse);
-      expect(post.sharedWord.phonetic, '');
-      expect(post.timeAgo, '');
     });
   });
 

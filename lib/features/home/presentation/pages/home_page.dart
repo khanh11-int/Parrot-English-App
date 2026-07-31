@@ -15,7 +15,6 @@ import '../widgets/currency_header.dart';
 import '../widgets/goal_card.dart';
 import '../widgets/home_skeleton.dart';
 import '../widgets/quest_card.dart';
-import '../widgets/scan_banner.dart';
 
 /// Trang chủ — mục 5.1 của `docs/UI_SPEC.md`.
 class HomePage extends ConsumerWidget {
@@ -69,8 +68,6 @@ class _HomeContent extends StatelessWidget {
           seedCount: summary.seedCount,
           onShopPressed: () => context.push(AppRoutes.shop),
         ),
-        const SizedBox(height: AppSpacing.lg),
-        ScanBanner(onPressed: () => context.push(AppRoutes.scan)),
         const SizedBox(height: AppSpacing.lg),
         const _GoalRow(),
         const SizedBox(height: AppSpacing.xl),

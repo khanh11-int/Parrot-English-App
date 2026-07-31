@@ -11,7 +11,6 @@ abstract final class AppAssets {
   static const _items = 'assets/images/items';
 
   // --- Mascot con vẹt ---------------------------------------------------
-  static const mascotCamera = '$_mascot/camera.png';
   static const mascotReading = '$_mascot/reading.png';
   static const mascotPhone = '$_mascot/phone.png';
   static const mascotTeacher = '$_mascot/teacher.png';

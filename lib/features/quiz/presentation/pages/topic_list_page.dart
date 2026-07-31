@@ -31,13 +31,13 @@ class TopicListPage extends ConsumerWidget {
           value: topicsAsync,
           onRetry: () => ref.invalidate(learnTopicsProvider),
           data: (topics) => topics.isEmpty
-              ? EmptyState(
+              // Giáo trình do admin soạn, người dùng không tự thêm chủ đề được
+              // nên trạng thái rỗng chỉ báo tin, không có hành động nào.
+              ? const EmptyState(
                   message:
-                      'Bạn chưa có chủ đề nào.\n'
-                      'Chụp ảnh để tạo bộ từ đầu tiên nhé!',
-                  mascotAsset: AppAssets.mascotCamera,
-                  actionLabel: 'Gửi ảnh',
-                  onAction: () => context.push(AppRoutes.scan),
+                      'Chưa có chủ đề nào trong giáo trình.\n'
+                      'Liên hệ quản trị viên để bổ sung nhé!',
+                  mascotAsset: AppAssets.stickerThinking,
                 )
               : _TopicList(topics: topics),
         ),

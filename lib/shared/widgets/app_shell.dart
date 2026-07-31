@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../core/router/app_routes.dart';
 import '../../core/theme/app_colors.dart';
 import 'app_bottom_nav.dart';
 
@@ -30,7 +29,6 @@ class AppShell extends StatelessWidget {
           index,
           initialLocation: index == navigationShell.currentIndex,
         ),
-        onScanPressed: () => context.push(AppRoutes.scan),
       ),
     );
   }

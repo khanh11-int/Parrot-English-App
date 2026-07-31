@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/error/failure.dart';
@@ -18,83 +17,6 @@ final communityRepositoryProvider = Provider<CommunityRepository>((ref) {
   );
 });
 
-/// Dòng thời gian, kèm các thao tác thích / lưu bài.
-class FeedController extends AsyncNotifier<List<CommunityPost>> {
-  @override
-  Future<List<CommunityPost>> build() {
-    return ref.read(communityRepositoryProvider).getFeed();
-  }
-
-  /// Đổi trạng thái thích.
-  ///
-  /// Cập nhật state trước rồi mới gọi API (optimistic update): người dùng thấy
-  /// tim đổi màu ngay. Nếu API lỗi thì **hoàn tác** để UI không nói dối về
-  /// trạng thái đã lưu trên server.
-  Future<void> toggleLike(String postId) async {
-    final post = _find(postId);
-    if (post == null) return;
-
-    final target = !post.isLiked;
-    _replace(
-      post.copyWith(
-        isLiked: target,
-        likeCount: post.likeCount + (target ? 1 : -1),
-      ),
-    );
-
-    try {
-      final updated = await ref
-          .read(communityRepositoryProvider)
-          .setLiked(postId, isLiked: target);
-      _replace(updated);
-    } on Failure catch (failure) {
-      debugPrint('Không thích được bài đăng: ${failure.message}');
-      _replace(post);
-    }
-  }
-
-  /// Đổi trạng thái lưu bài, cùng cách làm như [toggleLike].
-  Future<void> toggleBookmark(String postId) async {
-    final post = _find(postId);
-    if (post == null) return;
-
-    final target = !post.isBookmarked;
-    _replace(
-      post.copyWith(
-        isBookmarked: target,
-        bookmarkCount: post.bookmarkCount + (target ? 1 : -1),
-      ),
-    );
-
-    try {
-      final updated = await ref
-          .read(communityRepositoryProvider)
-          .setBookmarked(postId, isBookmarked: target);
-      _replace(updated);
-    } on Failure catch (failure) {
-      debugPrint('Không lưu được bài đăng: ${failure.message}');
-      _replace(post);
-    }
-  }
-
-  CommunityPost? _find(String postId) =>
-      state.valueOrNull?.where((post) => post.id == postId).firstOrNull;
-
-  void _replace(CommunityPost updated) {
-    final posts = state.valueOrNull;
-    if (posts == null) return;
-
-    state = AsyncData([
-      for (final post in posts)
-        if (post.id == updated.id) updated else post,
-    ]);
-  }
-}
-
-final feedProvider = AsyncNotifierProvider<FeedController, List<CommunityPost>>(
-  FeedController.new,
-);
-
 final leaderboardProvider = FutureProvider<Leaderboard>((ref) {
   // Đổi người đăng nhập thì tải lại: hàng "của tôi" trên bảng phải đúng người.
   ref.watch(currentUserProvider);
@@ -106,11 +28,8 @@ final studyGroupProvider = FutureProvider<StudyGroup?>((ref) {
   return ref.watch(communityRepositoryProvider).getStudyGroup();
 });
 
-/// Luong tin nhan: chat nhom hay binh luan bai dang.
-enum MessageThreadKind { group, post }
-
-/// Khoa cua mot luong tin nhan.
-typedef MessageThreadKey = ({MessageThreadKind kind, String id});
+/// Khoa cua mot luong tin nhan. Ban nay chi co chat nhom.
+typedef MessageThreadKey = ({String id});
 
 /// Tin nhan cua mot luong, cap nhat lien tuc.
 ///
@@ -118,11 +37,7 @@ typedef MessageThreadKey = ({MessageThreadKind kind, String id});
 /// nguoi khac gui ngay, khong phai keo de lam moi.
 final messageThreadProvider =
     StreamProvider.family<List<ChatMessage>, MessageThreadKey>((ref, key) {
-      final repository = ref.watch(communityRepositoryProvider);
-      return switch (key.kind) {
-        MessageThreadKind.group => repository.watchGroupMessages(key.id),
-        MessageThreadKind.post => repository.watchPostComments(key.id),
-      };
+      return ref.watch(communityRepositoryProvider).watchGroupMessages(key.id);
     });
 
 /// Gui tin nhan / binh luan.
@@ -133,29 +48,14 @@ class MessageSender {
 
   /// Tra `null` neu gui thanh cong, hoac thong diep loi de UI hien.
   Future<String?> send({
-    required MessageThreadKind kind,
     required String id,
     String? text,
     String? stickerAsset,
   }) async {
-    final repository = _ref.read(communityRepositoryProvider);
     try {
-      switch (kind) {
-        case MessageThreadKind.group:
-          await repository.sendGroupMessage(
-            id,
-            text: text,
-            stickerAsset: stickerAsset,
-          );
-        case MessageThreadKind.post:
-          await repository.sendPostComment(
-            id,
-            text: text,
-            stickerAsset: stickerAsset,
-          );
-          // So binh luan vua tang, buoc dong thoi gian ve lai the bai dang.
-          _ref.invalidate(feedProvider);
-      }
+      await _ref
+          .read(communityRepositoryProvider)
+          .sendGroupMessage(id, text: text, stickerAsset: stickerAsset);
       return null;
     } on Failure catch (failure) {
       return failure.message;

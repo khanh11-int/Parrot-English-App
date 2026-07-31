@@ -14,10 +14,6 @@ abstract final class AppRoutes {
   static const community = '/community';
   static const profile = '/profile';
 
-  // Luồng nhận diện ảnh
-  static const scan = '/scan';
-  static const scanResult = '/scan/result';
-
   // Phiên học & ôn tập (toàn màn hình, ẩn thanh nav)
   /// Danh sách chủ đề để chọn học — bước trước khi vào phiên học.
   static const learnTopics = '/learn';
@@ -38,22 +34,14 @@ abstract final class AppRoutes {
   // Trang con
   static const shop = '/shop';
 
-  /// Sổ tay từ đã lưu từ ảnh chụp.
   /// Chat của nhóm học tập.
   static const groupChat = '/group-chat';
 
-  /// Bình luận của một bài đăng.
-  static const postComments = '/post-comments';
-
-  /// Tên tham số truy vấn mang id nhóm hoặc id bài đăng.
+  /// Tên tham số truy vấn mang id nhóm.
   static const threadIdParam = 'id';
 
   static String groupChatOf(String groupId) =>
       '$groupChat?$threadIdParam=$groupId';
 
-  static String postCommentsOf(String postId) =>
-      '$postComments?$threadIdParam=$postId';
-
-  static const savedWords = '/saved-words';
   static const settings = '/settings';
 }
