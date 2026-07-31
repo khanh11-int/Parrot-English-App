@@ -454,6 +454,18 @@ nút "Hoàn thành" về trang chủ.
 
 Dùng lại toàn bộ widget của mục 5.4, chỉ khác:
 - Nguồn từ là các từ **đến hạn ôn** theo thuật toán SRS (spaced repetition).
+  Mốc lặp lại: `0 → 1 → 3 → 7 → 21 → 60` ngày (`AppRewards.reviewIntervalDays`).
+  Mốc đầu **0 ngày** để từ vừa học ôn lại được ngay trong ngày; trả lời sai thì
+  về mốc đầu.
+- Khi **không còn từ đến hạn** mà người dùng đã học ít nhất một từ: vẫn cho ôn
+  lại, nguồn từ là toàn bộ từ đã học (xáo trộn). Lịch SRS là gợi ý, không phải
+  cái khoá — chặn lại thì học xong một chủ đề là tab Ôn tập đứng im tới hôm sau.
+  Chỉ khi **chưa học từ nào** thì nút mới bị vô hiệu hoá.
+- Thẻ tổng kết ở đầu tab có 3 trạng thái: `N từ đến hạn ôn` →
+  `Không còn từ nào đến hạn / Ôn lại từ đã học` → `Chưa có gì để ôn`.
+- Thẻ mỗi bộ từ đo theo **số từ đã học** (khớp trang Học từ mới), phụ đề
+  `Đã học 8/8 từ · thuộc 2`. Đo theo "đã thuộc" thì bộ từ vừa học xong vẫn hiện
+  thanh rỗng, vì thuộc một từ cần ôn đúng vài lần trải qua ba tuần.
 - AppBar: `← Ôn tập` + `còn N từ`.
 - Sau mỗi từ, kết quả đúng/sai cập nhật khoảng lặp lại của từ đó ở tầng domain.
 

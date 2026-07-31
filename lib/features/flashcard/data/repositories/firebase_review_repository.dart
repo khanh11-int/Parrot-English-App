@@ -65,6 +65,7 @@ class FirebaseReviewRepository implements ReviewRepository {
             return ReviewDeck(
               topic: topic.name,
               totalCount: topic.wordCount,
+              learnedCount: learnedPerTopic[doc.id] ?? 0,
               // "Đã thuộc" là từ có khoảng lặp lại đủ dài, không phải mọi từ đã
               // gặp — tính cả từ mới học thì thanh tiến độ sẽ đầy một cách giả.
               masteredCount: masteredPerTopic[doc.id] ?? 0,

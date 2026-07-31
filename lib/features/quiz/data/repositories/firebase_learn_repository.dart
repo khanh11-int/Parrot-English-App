@@ -64,13 +64,27 @@ class FirebaseLearnRepository implements LearnRepository {
   Future<LearnSession> getReviewSession() async {
     final due = await _vocabularyRepository.getDueProgress();
 
-    if (due.isEmpty) {
+    // Hết từ đến hạn thì ôn lại từ đã học, **không** chặn người dùng lại.
+    //
+    // Lịch SRS là gợi ý "nên ôn lúc nào cho nhớ lâu", không phải cái khoá. Nếu
+    // chặn thì học xong một chủ đề là tab Ôn tập đứng im tới hôm sau, người học
+    // muốn luyện thêm cũng không được.
+    // Từ đến hạn đã sắp theo `dueAt` nên quá hạn lâu nhất lên trước. Còn khi ôn
+    // lại tự do thì xáo, không thì lần nào cũng đúng bốn từ đầu bảng.
+    final List<WordProgress> source;
+    if (due.isNotEmpty) {
+      source = due;
+    } else {
+      source = [...await _vocabularyRepository.getProgress()]..shuffle();
+    }
+
+    if (source.isEmpty) {
       throw const ValidationFailure(
-        'Chưa có từ nào đến hạn ôn. Học thêm từ mới trước nhé!',
+        'Bạn chưa học từ nào cả. Sang tab Học từ mới trước nhé!',
       );
     }
 
-    final words = due
+    final words = source
         .map(
           (item) => TopicWord(
             id: item.wordId,

@@ -40,6 +40,10 @@ class _ReviewContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dueCount = decks.fold<int>(0, (sum, deck) => sum + deck.dueCount);
+    final learnedCount = decks.fold<int>(
+      0,
+      (sum, deck) => sum + deck.learnedCount,
+    );
 
     return ListView(
       padding: AppSpacing.pagePadding,
@@ -47,7 +51,10 @@ class _ReviewContent extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
         _DueSummaryCard(
           dueCount: dueCount,
-          onStart: dueCount > 0
+          learnedCount: learnedCount,
+          // Chỉ chặn khi thật sự chưa học từ nào. Học rồi mà chưa tới hạn thì
+          // vẫn cho ôn lại — xem `FirebaseLearnRepository.getReviewSession`.
+          onStart: learnedCount > 0
               ? () => context.push(AppRoutes.reviewSession)
               : null,
         ),
@@ -65,15 +72,43 @@ class _ReviewContent extends StatelessWidget {
 
 /// Thẻ tổng số từ đến hạn ôn + nút bắt đầu phiên.
 class _DueSummaryCard extends StatelessWidget {
-  const _DueSummaryCard({required this.dueCount, required this.onStart});
+  const _DueSummaryCard({
+    required this.dueCount,
+    required this.learnedCount,
+    required this.onStart,
+  });
 
   final int dueCount;
 
-  /// `null` khi không còn từ nào đến hạn → nút bị vô hiệu hoá.
+  /// Tổng số từ đã học. Còn từ đã học là còn ôn lại được, dù chưa tới hạn.
+  final int learnedCount;
+
+  /// `null` khi chưa học từ nào → nút bị vô hiệu hoá.
   final VoidCallback? onStart;
 
   @override
   Widget build(BuildContext context) {
+    // Ba trạng thái, mỗi trạng thái phải nói rõ việc tiếp theo là gì. Trước đây
+    // hết từ đến hạn là hiện "Quay lại vào ngày mai nhé" kèm nút xám, người học
+    // vừa học xong hai chủ đề vẫn không ôn được gì.
+    final (title, subtitle, buttonLabel) = switch ((dueCount, learnedCount)) {
+      (0, 0) => (
+        'Chưa có gì để ôn',
+        'Sang tab Học từ mới để bắt đầu',
+        'Ôn tập ngay',
+      ),
+      (0, _) => (
+        'Không còn từ nào đến hạn',
+        'Ôn lại $learnedCount từ đã học cho nhớ lâu',
+        'Ôn lại từ đã học',
+      ),
+      _ => (
+        '$dueCount từ đến hạn ôn',
+        'Ôn ngay để giữ chuỗi streak',
+        'Ôn tập ngay',
+      ),
+    };
+
     return Container(
       padding: AppSpacing.cardPadding,
       decoration: const BoxDecoration(
@@ -87,25 +122,21 @@ class _DueSummaryCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  dueCount > 0
-                      ? '$dueCount từ đến hạn ôn'
-                      : 'Không còn từ nào đến hạn',
+                  title,
                   style: AppTextStyles.titleMedium.copyWith(
                     color: AppColors.textOnPrimary,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
-                  dueCount > 0
-                      ? 'Ôn ngay để giữ chuỗi streak'
-                      : 'Quay lại vào ngày mai nhé',
+                  subtitle,
                   style: AppTextStyles.caption.copyWith(
                     color: AppColors.textOnPrimary,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.md),
                 PrimaryButton(
-                  label: 'Ôn tập ngay',
+                  label: buttonLabel,
                   onPressed: onStart,
                   isExpanded: false,
                 ),
@@ -149,10 +180,14 @@ class _DeckCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.sm),
-          AppLinearProgress(value: deck.masteryProgress, color: AppColors.leaf),
+          // Thanh đo theo số từ **đã học** để khớp với trang Học từ mới. Nếu đo
+          // theo "đã thuộc" thì chủ đề vừa học xong vẫn hiện thanh rỗng, vì
+          // thuộc một từ cần ôn đúng vài lần trải qua ba tuần.
+          AppLinearProgress(value: deck.learnedProgress, color: AppColors.leaf),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Đã thuộc ${deck.masteredCount}/${deck.totalCount} từ',
+            'Đã học ${deck.learnedCount}/${deck.totalCount} từ'
+            ' · thuộc ${deck.masteredCount}',
             style: AppTextStyles.caption,
           ),
         ],

@@ -18,24 +18,28 @@ class ReviewMockRepository implements ReviewRepository {
       ReviewDeck(
         topic: 'Đồ nội thất',
         totalCount: 24,
+        learnedCount: 21,
         masteredCount: 15,
         dueCount: 6,
       ),
       ReviewDeck(
         topic: 'Sức khoẻ',
         totalCount: 18,
+        learnedCount: 13,
         masteredCount: 4,
         dueCount: 9,
       ),
       ReviewDeck(
         topic: 'Gia đình',
         totalCount: 12,
+        learnedCount: 12,
         masteredCount: 12,
         dueCount: 0,
       ),
       ReviewDeck(
         topic: 'Công nghệ',
         totalCount: 30,
+        learnedCount: 23,
         masteredCount: 8,
         dueCount: 15,
       ),

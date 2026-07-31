@@ -27,9 +27,12 @@ import 'package:parrot/features/quiz/presentation/providers/learn_providers.dart
 /// `main()` nên trong test sẽ ném lỗi "No Firebase App has been created".
 ///
 /// Trả về [GoRouter] để test tự điều hướng tới route cần kiểm.
+/// [extraOverrides] được áp **sau** danh sách mặc định nên ghi đè được chúng —
+/// dùng khi một test cần dữ liệu khác bản mock chung.
 Future<GoRouter> pumpParrotApp(
   WidgetTester tester, {
   bool isSignedIn = true,
+  List<Override> extraOverrides = const [],
 }) async {
   final container = ProviderContainer(
     overrides: [
@@ -51,6 +54,7 @@ Future<GoRouter> pumpParrotApp(
       communityRepositoryProvider.overrideWithValue(
         const CommunityMockRepository(),
       ),
+      ...extraOverrides,
     ],
   );
   addTearDown(container.dispose);

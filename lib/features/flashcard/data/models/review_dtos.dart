@@ -7,12 +7,14 @@ class ReviewDeckDto {
   const ReviewDeckDto({
     required this.topic,
     required this.totalCount,
+    required this.learnedCount,
     required this.masteredCount,
     required this.dueCount,
   });
 
   final String topic;
   final int totalCount;
+  final int learnedCount;
   final int masteredCount;
   final int dueCount;
 
@@ -20,6 +22,7 @@ class ReviewDeckDto {
     return ReviewDeckDto(
       topic: json.readString('topic'),
       totalCount: json.readIntOr('total_count', 0),
+      learnedCount: json.readIntOr('learned_count', 0),
       masteredCount: json.readIntOr('mastered_count', 0),
       dueCount: json.readIntOr('due_count', 0),
     );
@@ -28,6 +31,7 @@ class ReviewDeckDto {
   ReviewDeck toEntity() => ReviewDeck(
     topic: topic,
     totalCount: totalCount,
+    learnedCount: learnedCount,
     masteredCount: masteredCount,
     dueCount: dueCount,
   );
