@@ -30,7 +30,16 @@
 | <img src="docs/screenshots/home.png" width="200" alt="Trang chủ"> | <img src="docs/screenshots/review.png" width="200" alt="Ôn tập"> | <img src="docs/screenshots/community.png" width="200" alt="Cộng đồng"> | <img src="docs/screenshots/profile.png" width="200" alt="Hồ sơ"> |
 | Lời chào, ví, hai lối học, nhiệm vụ ngày, tiến độ giáo trình | Bộ từ đến hạn ôn, ôn riêng từng chủ đề | Nhóm học tập với 3 mốc cây, bảng xếp hạng | Avatar đổi theo hạng, tổng quan, tiến độ lên hạng |
 
-▶️ **[Xem video demo](docs/screenshots/demo.mp4)** (2 MB, tải về để xem)
+<p align="center">
+  <img src="docs/screenshots/demo.gif" width="330" alt="Demo: học từ mới, chat nhóm, hồ sơ">
+</p>
+
+<p align="center">
+  <sub>
+    Học từ mới (nối cặp) → chat nhóm với sticker → hồ sơ ·
+    <a href="docs/screenshots/demo.mp4">bản MP4 nét hơn</a>
+  </sub>
+</p>
 
 ## Tính năng
 
