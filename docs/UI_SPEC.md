@@ -587,7 +587,37 @@ Danh sách bài đăng, mỗi bài là một thẻ:
   lớn dần: mầm → cây con → đại thụ. **Chưa đạt hiện dạng xám + dấu `?`**; đạt
   rồi thì hiện màu và có hiệu ứng sáng nhẹ. Ngưỡng ghi bằng XP kèm icon lá.
 - Chip đếm ngược thời gian còn lại của mùa/mốc.
-- Nếu **chưa có nhóm** → `EmptyState` với 2 nút "Tạo nhóm" / "Tham gia nhóm".
+
+**Chưa ở nhóm nào** (mới vào app, hoặc vừa rời nhóm):
+
+```
+╭──────────────────────────────────────╮
+│ Bạn chưa ở nhóm nào             🦜   │  gradient canopy → leaf
+│ Học cùng nhóm để cùng trồng cây      │
+│ [ Tạo nhóm mới ]                     │
+╰──────────────────────────────────────╯
+Nhóm có thể tham gia
+╭──────────────────────────────────────╮
+│ (👥) neu                 [Tham gia]  │
+│      8 thành viên · Trưởng nhóm ...  │
+╰──────────────────────────────────────╯
+╭──────────────────────────────────────╮
+│ (👥) K64 - NEU           [Tham gia]  │
+│      12 thành viên · Trưởng nhóm ... │
+╰──────────────────────────────────────╯
+```
+
+- Danh sách nhóm hiện **ngay trên trang**, không nằm trong bottom sheet. Trước đây
+  chỗ này là `EmptyState` với 2 nút "Tạo nhóm" / "Tham gia nhóm", danh sách nhóm
+  phải bấm nút thứ hai mới thấy — người vừa rời nhóm mở tab lên chỉ thấy một
+  trang trống, không biết có nhóm nào để vào hay không.
+- Nút **"Tham gia" nằm trên từng thẻ**, không phải cả thẻ bấm được: vào nhóm là
+  việc khó lùi (rời ra rồi vào lại là mất chỗ trong bảng xếp hạng nhóm) nên phải
+  cố ý bấm, không chạm nhầm.
+- Kéo xuống để làm mới danh sách.
+- Skeleton của danh sách này **không cuộn** (`Column` các `SkeletonBox`): nó nằm
+  trong `ListView` của trang, dùng skeleton mặc định dạng `ListView` sẽ thành hai
+  vùng cuộn lồng nhau và ném "unbounded height".
 
 #### Tab 3 — Bảng xếp hạng *(ảnh 5)*
 

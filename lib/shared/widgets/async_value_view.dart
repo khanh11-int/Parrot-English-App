@@ -39,7 +39,12 @@ class AsyncValueView<T> extends StatelessWidget {
         // dạng) thì ẩn nút thử lại — bấm lại chỉ ra đúng lỗi đó.
         onRetry: _isRetryable(error) ? onRetry : null,
       ),
-      AsyncValue(:final valueOrNull?) => data(valueOrNull),
+      // `hasValue` chứ không phải `valueOrNull?`: với provider kiểu nullable
+      // (`FutureProvider<StudyGroup?>`) thì dữ liệu **là** `null` một cách hợp
+      // lệ — "chưa vào nhóm nào". Khớp theo `valueOrNull?` làm trường hợp đó
+      // trượt xuống nhánh cuối và quay vòng tải mãi, nên trạng thái rỗng của
+      // trang không bao giờ hiện ra.
+      AsyncValue(hasValue: true) => data(value.requireValue),
       _ => loading ?? const AppLoading(),
     };
   }

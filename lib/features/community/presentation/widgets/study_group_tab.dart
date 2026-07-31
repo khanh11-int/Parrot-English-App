@@ -9,13 +9,15 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_image.dart';
+import '../../../../shared/widgets/app_loading.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/badge_avatar.dart';
-import '../../../../shared/widgets/empty_state.dart';
-import '../../../../shared/widgets/secondary_button.dart';
-import 'group_join_sheet.dart';
+import '../../../../shared/widgets/primary_button.dart';
+import '../../../../shared/widgets/section_header.dart';
 import '../../domain/entities/community_entities.dart';
 import '../providers/community_providers.dart';
+import 'group_join_sheet.dart';
+import 'joinable_group_card.dart';
 
 /// Tab 2 — Nhóm học tập.
 class StudyGroupTab extends ConsumerWidget {
@@ -28,21 +30,137 @@ class StudyGroupTab extends ConsumerWidget {
     return AsyncValueView(
       value: groupAsync,
       onRetry: () => ref.invalidate(studyGroupProvider),
-      data: (group) => group == null
-          ? EmptyState(
-              message:
-                  'Bạn chưa tham gia nhóm nào.\n'
-                  'Học cùng nhóm để cùng trồng cây từ vựng!',
-              mascotAsset: AppAssets.stickerHello,
-              actionLabel: 'Tạo nhóm',
-              onAction: () => showCreateGroupSheet(context, ref),
-              secondaryAction: SecondaryButton(
-                label: 'Tham gia nhóm',
-                onPressed: () => showJoinGroupSheet(context, ref),
-                isExpanded: false,
-              ),
-            )
-          : _GroupContent(group: group),
+      data: (group) =>
+          group == null ? const _NoGroupContent() : _GroupContent(group: group),
+    );
+  }
+}
+
+/// Chưa vào nhóm nào: lời mời + nút tạo nhóm + **danh sách nhóm có thể tham gia
+/// ngay trên trang**.
+///
+/// Trước đây chỗ này là `EmptyState` với hai nút, danh sách nhóm nằm trong một
+/// bottom sheet phải bấm mới thấy. Người vừa rời nhóm mở tab lên thấy một trang
+/// trống, không biết có nhóm nào để vào hay không.
+class _NoGroupContent extends ConsumerWidget {
+  const _NoGroupContent();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final groupsAsync = ref.watch(joinableGroupsProvider);
+
+    return RefreshIndicator(
+      onRefresh: () => ref.refresh(joinableGroupsProvider.future),
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        children: [
+          const _InviteCard(),
+          const SizedBox(height: AppSpacing.xl),
+          const SectionHeader(title: 'Nhóm có thể tham gia'),
+          AsyncValueView(
+            value: groupsAsync,
+            onRetry: () => ref.invalidate(joinableGroupsProvider),
+            // Skeleton mặc định là một `ListView`; đặt trong `ListView` ngoài
+            // này thì thành hai vùng cuộn lồng nhau và ném "unbounded height".
+            // Bản này chỉ là mấy khối xếp dọc, không cuộn.
+            loading: const _JoinableSkeleton(),
+            data: (groups) => groups.isEmpty
+                ? const _NoJoinableGroupsNote()
+                : Column(
+                    children: [
+                      for (final group in groups) ...[
+                        JoinableGroupCard(group: group),
+                        const SizedBox(height: AppSpacing.cardGap),
+                      ],
+                    ],
+                  ),
+          ),
+          const SizedBox(height: AppSpacing.xl),
+        ],
+      ),
+    );
+  }
+}
+
+/// Thẻ mời tạo nhóm, đặt trên đầu trang khi chưa vào nhóm nào.
+class _InviteCard extends ConsumerWidget {
+  const _InviteCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      padding: AppSpacing.cardPadding,
+      decoration: const BoxDecoration(
+        gradient: AppColors.canopyGradient,
+        borderRadius: AppRadius.cardLargeBorder,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Bạn chưa ở nhóm nào',
+                  style: AppTextStyles.titleMedium.copyWith(
+                    color: AppColors.textOnPrimary,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  'Học cùng nhóm để cùng trồng cây từ vựng',
+                  style: AppTextStyles.caption.copyWith(
+                    color: AppColors.textOnPrimary,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                PrimaryButton(
+                  label: 'Tạo nhóm mới',
+                  isExpanded: false,
+                  onPressed: () => showCreateGroupSheet(context, ref),
+                ),
+              ],
+            ),
+          ),
+          Image.asset(AppAssets.stickerHello, width: 80),
+        ],
+      ),
+    );
+  }
+}
+
+/// Skeleton của danh sách nhóm — **không cuộn**, để lồng được trong `ListView`.
+class _JoinableSkeleton extends StatelessWidget {
+  const _JoinableSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      children: [
+        SkeletonBox(height: 72, borderRadius: AppRadius.cardBorder),
+        SizedBox(height: AppSpacing.cardGap),
+        SkeletonBox(height: 72, borderRadius: AppRadius.cardBorder),
+      ],
+    );
+  }
+}
+
+class _NoJoinableGroupsNote extends StatelessWidget {
+  const _NoJoinableGroupsNote();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: AppSpacing.cardPadding,
+      decoration: const BoxDecoration(
+        color: AppColors.bgBase,
+        borderRadius: AppRadius.cardBorder,
+      ),
+      child: Text(
+        'Chưa có nhóm nào để tham gia. Tạo nhóm đầu tiên đi!',
+        style: AppTextStyles.body,
+      ),
     );
   }
 }
