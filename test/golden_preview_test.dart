@@ -11,7 +11,12 @@ import 'helpers/test_app.dart';
 /// đoán từ code.
 ///
 /// Không phải golden test dùng để so sánh — chỉ tạo ảnh. Chạy bằng:
-/// `flutter test --update-goldens --tags preview test/golden_preview_test.dart`
+///
+/// ```
+/// flutter test --update-goldens --run-skipped --tags preview ///   test/golden_preview_test.dart
+/// ```
+///
+/// Thiếu `--run-skipped` thì `dart_test.yaml` bỏ qua hết, không sinh ảnh nào.
 void main() {
   Future<void> shoot(
     WidgetTester tester,

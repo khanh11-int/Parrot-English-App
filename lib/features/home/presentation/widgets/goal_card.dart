@@ -17,8 +17,14 @@ enum GoalCardStyle {
   ),
   leaf(
     background: AppColors.leafLight,
-    foreground: AppColors.leafDark,
-    border: AppColors.leafLight,
+    // `canopy` chứ không `leafDark`: trên nền `leafLight`, `leafDark` chỉ đạt
+    // 4.59:1 — vừa đủ ngưỡng AA cho chữ thường mà không còn dư, và nhãn ở đây
+    // là 14px w600 nên đọc ra rất nhạt. `canopy` cho 6.90:1.
+    foreground: AppColors.canopy,
+    // Viền phải **thấy được**. Nền thẻ `leafLight` (#E7F6E3) gần trùng nền trang
+    // (#EAF7E6) — chênh 1.01:1 — nên để viền cùng màu nền thẻ thì thẻ tan hẳn
+    // vào trang, không còn ra hình một thẻ bấm được.
+    border: AppColors.leaf,
   );
 
   const GoalCardStyle({

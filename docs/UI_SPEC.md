@@ -305,9 +305,16 @@ Chi tiết:
   - Lý do: trang chủ chỉ cần trả lời "bấm vào đâu để học". Tiến độ chi tiết đã
     có ở trang chọn chủ đề (5.4); nhắc lại ở đây làm thẻ rối mà không giúp người
     dùng quyết định nhanh hơn.
-  - Thẻ "Học từ mới" nền `primary` (việc chính), thẻ "Ôn tập ngay" nền `leafLight`
-    (việc phụ) → mắt biết bấm cái nào trước. **Cả hai đều có màu**: thẻ phụ từng
-    là nền trắng viền xám, đứng cạnh thẻ xanh đậm trông như ô trống chưa tải xong.
+  - Thẻ "Học từ mới" nền `primary` chữ trắng (việc chính); thẻ "Ôn tập ngay" nền
+    `leafLight`, **viền `leaf`**, chữ `canopy` (việc phụ) → mắt biết bấm cái nào
+    trước, một thẻ tô đầy một thẻ viền.
+  - Hai con số đo được, đừng đổi bừa:
+    - Chữ phải là `canopy` (6.90:1 trên `leafLight`). `leafDark` chỉ đạt
+      **4.59:1** — vừa qua ngưỡng AA cho chữ thường mà không còn dư, và nhãn ở
+      đây là 14px w600 nên đọc ra rất nhạt.
+    - Viền phải **thấy được**. Nền thẻ `leafLight` (#E7F6E3) gần trùng nền trang
+      (#EAF7E6) — chênh **1.01:1** — nên viền cùng màu nền thẻ làm thẻ tan hẳn
+      vào trang, không còn ra hình một thẻ bấm được.
   - Bấm thẻ 1 → **`/learn`** (danh sách chủ đề), bấm thẻ 2 → **tab `/review`**.
     Cả hai đều dừng ở trang chọn, không nhảy thẳng vào phiên: tab Ôn tập mới cho
     thấy bộ nào đến hạn và cho ôn riêng từng chủ đề (5.6).
