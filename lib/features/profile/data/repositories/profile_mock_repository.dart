@@ -13,7 +13,7 @@ class ProfileMockRepository implements ProfileRepository {
 
   // Ban mock khong co noi nao de ghi, nen day chi la ham rong.
   @override
-  Future<void> createProfileIfMissing(AppUser user) async {}
+  Future<void> ensureProfile(AppUser user) async {}
 
   @override
   Future<UserProfile> getProfile() async {

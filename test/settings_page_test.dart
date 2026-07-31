@@ -22,9 +22,46 @@ void main() {
       expect(find.text(label), findsNothing, reason: 'còn sót mục "$label"');
     }
 
-    // Thứ duy nhất trên trang này bấm được vẫn phải còn.
-    expect(find.text('Đang đăng nhập'), findsOneWidget);
+    // Ba mục thật vẫn phải còn.
+    expect(find.text('Tên hiển thị'), findsOneWidget);
+    expect(find.text('Email'), findsOneWidget);
     expect(find.text('Đăng xuất'), findsOneWidget);
+  });
+
+  testWidgets('đổi được tên hiển thị', (tester) async {
+    final router = await pumpParrotApp(tester);
+    router.push(AppRoutes.settings);
+    await settleMockData(tester);
+
+    // Mock đăng nhập sẵn với tên "Công Tình".
+    expect(find.text('Công Tình'), findsOneWidget);
+
+    await tester.tap(find.text('Tên hiển thị'));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(find.byType(TextFormField), 'Bánh Tráng Nướng');
+    await tester.tap(find.text('Lưu'));
+    await settleMockData(tester);
+
+    expect(find.text('Bánh Tráng Nướng'), findsOneWidget);
+    expect(find.text('Công Tình'), findsNothing);
+  });
+
+  testWidgets('tên trống bị chặn, không lưu', (tester) async {
+    final router = await pumpParrotApp(tester);
+    router.push(AppRoutes.settings);
+    await settleMockData(tester);
+
+    await tester.tap(find.text('Tên hiển thị'));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(find.byType(TextFormField), '  ');
+    await tester.tap(find.text('Lưu'));
+    await tester.pumpAndSettle();
+
+    // Hộp thoại vẫn mở và báo lỗi, tên cũ không bị ghi đè bằng chuỗi rỗng.
+    expect(find.text('Vui lòng nhập tên của bạn.'), findsOneWidget);
+    expect(find.byType(AlertDialog), findsOneWidget);
   });
 
   testWidgets('bấm Đăng xuất thì hỏi xác nhận trước', (tester) async {

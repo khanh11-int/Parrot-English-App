@@ -10,5 +10,11 @@ abstract interface class ProfileRepository {
   ///
   /// Gọi sau mỗi lần đăng nhập/đăng ký thành công, nên phải **idempotent**:
   /// đã có hồ sơ thì không ghi đè, tránh làm mất XP và streak.
-  Future<void> createProfileIfMissing(AppUser user);
+  /// Tạo `users/{uid}` nếu chưa có, **và** đồng bộ tên hiển thị vào đó.
+  ///
+  /// Phải làm cả hai vì `signUp` đặt tên **sau** khi tài khoản được tạo: lúc
+  /// document được ghi lần đầu, `displayName` còn rỗng nên tên lưu xuống là phần
+  /// trước `@` của email. Bảng xếp hạng đọc `users/{uid}.name` nên nếu không
+  /// đồng bộ lại thì cả bảng hiện email của nhau.
+  Future<void> ensureProfile(AppUser user);
 }

@@ -651,8 +651,31 @@ Tổng quan
 
 ### 5.9b Cài đặt — `/settings`
 
-Chỉ có **một thẻ**: email đang đăng nhập + nút Đăng xuất (có bước xác nhận, vì
-đăng xuất là việc khó lùi).
+Chỉ có **một thẻ**, ba dòng:
+
+| Dòng | Nội dung |
+|---|---|
+| **Tên hiển thị** | tên hiện tại, bấm mở hộp thoại sửa. Chưa đặt thì ghi thẳng "Chưa đặt — bấm để đặt tên" |
+| **Email** | chỉ đọc |
+| **Đăng xuất** | có bước xác nhận, vì đăng xuất là việc khó lùi |
+
+**Tên hiển thị là nguồn sự thật duy nhất của tên người học.** Đường đi:
+
+```
+Cài đặt → AuthRepository.updateDisplayName()   (ghi vào Firebase Auth)
+        → authStateChanges() phát lại           (dùng userChanges(), không phải
+                                                 authStateChanges() của SDK)
+        → profileBootstrapProvider.ensureProfile()
+                                                (đồng bộ xuống users/{uid}.name)
+        → userDataRevision.bump()
+        → trang chủ · Hồ sơ · Bảng xếp hạng tải lại
+```
+
+Vì sao phải qua Firestore: **bảng xếp hạng đọc `users/{uid}.name`** của người
+khác, không đọc được Firebase Auth của họ. Vì sao phải là `userChanges()`:
+`authStateChanges()` của SDK **không** phát khi hồ sơ đổi, nên `signUp` gọi
+`updateDisplayName` sau khi tài khoản đã tạo thì không chỗ nào biết để đồng bộ —
+đó chính là lý do tài khoản cũ hiện phần trước `@` của email thay vì tên.
 
 > Trước đây trên nó là danh sách 6 mục (Thông báo · Tin nhắn · Thống kê học tập ·
 > Thành tích · Nhiệm vụ · Hồ sơ của tôi). **Cả 6 đều `onTap: null`** vì chưa trang

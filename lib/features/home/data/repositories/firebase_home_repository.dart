@@ -64,8 +64,14 @@ class FirebaseHomeRepository implements HomeRepository {
         (total, doc) => total + _readInt(doc.data()['wordCount']),
       );
 
+      // Tên lấy từ document, không từ `user.greetingName`: đó là chỗ duy nhất
+      // bảng xếp hạng cũng đọc, nên hai nơi không thể hiện hai tên khác nhau.
+      // Document mới tạo có thể chưa kịp đồng bộ tên → lùi về `greetingName`.
+      final storedName = userData['name'];
       return HomeSummary(
-        userName: user.greetingName,
+        userName: storedName is String && storedName.trim().isNotEmpty
+            ? storedName.trim()
+            : user.greetingName,
         streakDays: _readInt(userData['streakDays']),
         gemCount: _readInt(userData['gems']),
         seedCount: _readInt(userData['seeds']),

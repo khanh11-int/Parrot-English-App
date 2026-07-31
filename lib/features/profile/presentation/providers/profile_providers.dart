@@ -37,7 +37,11 @@ final profileBootstrapProvider = Provider<void>((ref) {
     if (user == null) return;
 
     try {
-      await ref.read(profileRepositoryProvider).createProfileIfMissing(user);
+      await ref.read(profileRepositoryProvider).ensureProfile(user);
+      // Tên vừa được đồng bộ xuống `users/{uid}.name`. Hồ sơ, trang chủ và bảng
+      // xếp hạng đều đọc field đó nên phải bảo chúng tải lại — nếu không, đổi
+      // tên xong vẫn thấy tên cũ tới lần mở app sau.
+      ref.read(userDataRevisionProvider.notifier).bump();
     } on Failure catch (failure) {
       // Không đẩy lỗi ra UI: người dùng vừa đăng nhập xong, chặn họ lại vì một
       // lần ghi thất bại là vô lý. `getProfile` cũng tự tạo lại nếu còn thiếu.

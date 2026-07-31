@@ -17,4 +17,20 @@ class AppUser {
     if (name != null && name.isNotEmpty) return name;
     return email.split('@').first;
   }
+
+  /// So sánh **theo giá trị**, không theo tham chiếu.
+  ///
+  /// Cần thiết vì stream xác thực dùng `userChanges()` — nó phát cả khi token
+  /// được làm mới (mỗi giờ), mỗi lần tạo một `AppUser` mới. Không có `==` theo
+  /// giá trị thì Riverpod coi đó là dữ liệu đổi và mọi provider đọc người dùng
+  /// hiện tại sẽ tải lại, dù chẳng có gì khác.
+  @override
+  bool operator ==(Object other) =>
+      other is AppUser &&
+      other.id == id &&
+      other.email == email &&
+      other.displayName == displayName;
+
+  @override
+  int get hashCode => Object.hash(id, email, displayName);
 }

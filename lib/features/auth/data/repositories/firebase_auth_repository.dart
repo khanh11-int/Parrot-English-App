@@ -13,9 +13,10 @@ class FirebaseAuthRepository implements AuthRepository {
   @override
   AppUser? get currentUser => _toAppUser(_auth.currentUser);
 
+  /// `userChanges()` chứ không phải `authStateChanges()`: bản sau **không** phát
+  /// khi hồ sơ đổi, nên đổi tên hiển thị xong sẽ không ai hay biết.
   @override
-  Stream<AppUser?> authStateChanges() =>
-      _auth.authStateChanges().map(_toAppUser);
+  Stream<AppUser?> authStateChanges() => _auth.userChanges().map(_toAppUser);
 
   @override
   Future<void> signIn({required String email, required String password}) async {
@@ -48,6 +49,19 @@ class FirebaseAuthRepository implements AuthRepository {
 
   @override
   Future<void> signOut() => _guard(_auth.signOut);
+
+  @override
+  Future<void> updateDisplayName(String name) async {
+    await _guard(() async {
+      final user = _auth.currentUser;
+      if (user == null) throw const UnauthorizedFailure();
+
+      await user.updateDisplayName(name.trim());
+      // `updateDisplayName` không tự làm mới bản đang giữ trong bộ nhớ, nên
+      // `currentUser.displayName` vẫn là tên cũ nếu không nạp lại.
+      await user.reload();
+    });
+  }
 
   AppUser? _toAppUser(User? user) {
     if (user == null) return null;

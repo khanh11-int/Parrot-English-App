@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/error/failure.dart';
+import '../../../../core/providers/user_data_revision.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../data/repositories/firebase_community_repository.dart';
 import '../../domain/entities/community_entities.dart';
@@ -20,6 +21,9 @@ final communityRepositoryProvider = Provider<CommunityRepository>((ref) {
 final leaderboardProvider = FutureProvider<Leaderboard>((ref) {
   // Đổi người đăng nhập thì tải lại: hàng "của tôi" trên bảng phải đúng người.
   ref.watch(currentUserProvider);
+  // Học xong thì XP đổi, đổi tên thì `users/{uid}.name` đổi — cả hai đều là dữ
+  // liệu bảng này hiển thị.
+  ref.watch(userDataRevisionProvider);
   return ref.watch(communityRepositoryProvider).getLeaderboard();
 });
 

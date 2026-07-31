@@ -14,7 +14,7 @@ class ProfileRemoteRepository implements ProfileRepository {
   // Với backend REST, hồ sơ do server tự tạo lúc đăng ký nên client không phải
   // làm gì. Giữ hàm rỗng để thoả interface.
   @override
-  Future<void> createProfileIfMissing(AppUser user) async {}
+  Future<void> ensureProfile(AppUser user) async {}
 
   @override
   Future<UserProfile> getProfile() async {

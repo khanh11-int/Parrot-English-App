@@ -65,6 +65,13 @@ class AuthMockRepository implements AuthRepository {
   @override
   Future<void> signOut() async => _emit(null);
 
+  @override
+  Future<void> updateDisplayName(String name) async {
+    final user = _currentUser;
+    if (user == null) throw const UnauthorizedFailure();
+    _emit(AppUser(id: user.id, email: user.email, displayName: name.trim()));
+  }
+
   void _emit(AppUser? user) {
     _currentUser = user;
     _controller.add(user);

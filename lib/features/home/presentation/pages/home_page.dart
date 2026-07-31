@@ -23,9 +23,9 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final summaryAsync = ref.watch(homeSummaryProvider);
-    // Tên người đang đăng nhập là nguồn đáng tin nhất, ưu tiên hơn tên trong
-    // dữ liệu trang chủ: đổi tên trong hồ sơ là thấy đổi ngay ở đây.
-    final userName = ref.watch(currentUserProvider)?.greetingName;
+    // Đổi tên thì `authStateChanges` phát lại → hồ sơ đồng bộ xuống Firestore →
+    // bộ đếm `userDataRevision` được bump → lời chào ở đây tự đổi theo.
+    ref.watch(currentUserProvider);
 
     return SafeArea(
       child: RefreshIndicator(
@@ -34,7 +34,7 @@ class HomePage extends ConsumerWidget {
           value: summaryAsync,
           loading: const HomeSkeleton(),
           onRetry: () => ref.invalidate(homeSummaryProvider),
-          data: (summary) => _HomeContent(summary: summary, userName: userName),
+          data: (summary) => _HomeContent(summary: summary),
         ),
       ),
     );
@@ -42,12 +42,9 @@ class HomePage extends ConsumerWidget {
 }
 
 class _HomeContent extends StatelessWidget {
-  const _HomeContent({required this.summary, this.userName});
+  const _HomeContent({required this.summary});
 
   final HomeSummary summary;
-
-  /// Tên người đang đăng nhập; `null` thì dùng tên trong dữ liệu trang chủ.
-  final String? userName;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +59,7 @@ class _HomeContent extends StatelessWidget {
       ),
       children: [
         CurrencyHeader(
-          userName: userName ?? summary.userName,
+          userName: summary.userName,
           streakDays: summary.streakDays,
           gemCount: summary.gemCount,
           seedCount: summary.seedCount,

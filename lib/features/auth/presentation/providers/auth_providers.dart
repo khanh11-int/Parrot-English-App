@@ -67,6 +67,11 @@ class AuthController extends Notifier<bool> {
     );
   }
 
+  /// Đổi tên hiển thị. Hồ sơ tự đồng bộ xuống Firestore nhờ
+  /// `profileBootstrapProvider` lắng nghe `authStateChanges`.
+  Future<AuthResult> updateDisplayName(String name) =>
+      _run(() => ref.read(authRepositoryProvider).updateDisplayName(name));
+
   Future<AuthResult> signOut() =>
       _run(() => ref.read(authRepositoryProvider).signOut());
 

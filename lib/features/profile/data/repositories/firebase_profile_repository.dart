@@ -30,7 +30,7 @@ class FirebaseProfileRepository implements ProfileRepository {
       if (data == null) {
         // Hồ sơ chưa có (tài khoản tạo trước khi có bước tạo hồ sơ, hoặc lần
         // ghi đầu thất bại) → tạo rồi trả bản mặc định, không để trang lỗi.
-        await createProfileIfMissing(user);
+        await ensureProfile(user);
         return UserDocument.initialFor(user).toEntity();
       }
       return UserDocument.fromMap(data).toEntity();
@@ -40,13 +40,26 @@ class FirebaseProfileRepository implements ProfileRepository {
   }
 
   @override
-  Future<void> createProfileIfMissing(AppUser user) async {
+  Future<void> ensureProfile(AppUser user) async {
     try {
       final doc = _docFor(user.id);
       final snapshot = await doc.get();
-      if (snapshot.exists) return;
 
-      await doc.set(UserDocument.initialFor(user).toMap());
+      if (!snapshot.exists) {
+        await doc.set(UserDocument.initialFor(user).toMap());
+        return;
+      }
+
+      // Document đã có: chỉ cần soi lại tên. `greetingName` lùi về phần trước
+      // `@` của email khi chưa đặt tên, nên chỉ ghi khi có tên thật để không
+      // dán email lên một cái tên đang đúng.
+      final authName = user.displayName?.trim() ?? '';
+      if (authName.isEmpty) return;
+
+      final storedName = snapshot.data()?['name'];
+      if (storedName == authName) return;
+
+      await doc.set({'name': authName}, SetOptions(merge: true));
     } on FirebaseException catch (error) {
       throw _toFailure(error);
     }
