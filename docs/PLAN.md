@@ -246,12 +246,16 @@ vì cần quyết định hoặc phụ thuộc bên ngoài:
 - [ ] Đăng nhập + refresh token + lưu token bằng `flutter_secure_storage`
       (hiện token đọc từ `--dart-define`, chỉ để tiện phát triển)
 - [ ] Lưu offline (`isar` / `drift`) cho bộ từ và lịch ôn SRS
-- [ ] Thuật toán SRS thật — hiện chỉ có danh sách từ đến hạn dạng mock
+- [x] Thuật toán SRS thật — `AppRewards.nextIntervalDays`, mốc
+      `[0, 1, 3, 7, 21, 60]` ngày, ghi vào `users/{uid}/wordProgress`. Mốc đầu
+      **0 ngày** để từ vừa học ôn lại được ngay trong ngày
 
 ### Cần thiết kế thêm (xem mục 11.6 UI_SPEC)
 - [ ] 6 huy hiệu hạng tổ vết theo tầng rừng (đang tạm dùng icon vật phẩm)
 - [ ] 3 huy hiệu mốc nhóm: mầm → cây con → đại thụ
-- [ ] Icon **hạt** riêng (hiện dùng `items/coin.png`) và icon lá cho XP
+- [ ] Icon **hạt** riêng (hiện dùng `items/coin.png`). XP tạm dùng
+      `Icons.eco_rounded` — trước đây dùng ảnh kim cương, người học tưởng vừa
+      nhận được ngọc
 - [ ] Hoạ tiết nền lá cây `pattern/leaves.png`
 - [x] Cắt bỏ chữ tiếng Việt + xoá nền thành trong suốt + crop sát hình
       cho 43 ảnh — script `tools/strip_assets.py`, bản gốc ở

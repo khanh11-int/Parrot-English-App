@@ -1,3 +1,5 @@
+import '../../../../core/constants/app_rewards.dart';
+
 /// Một từ trong **giáo trình** của chủ đề.
 ///
 /// Dữ liệu dùng chung, admin soạn. Người dùng không thêm từ vào đây — từ họ tự
@@ -58,7 +60,7 @@ class WordProgress {
   bool isDue(DateTime now) => dueAt == null || !dueAt!.isAfter(now);
 
   /// Từ mức này trở lên coi là đã thuộc.
-  static const masteredIntervalDays = 21;
+  static const masteredIntervalDays = AppRewards.masteredIntervalDays;
 
   /// Tiến độ khởi tạo khi người dùng học từ này lần đầu.
   factory WordProgress.startedFrom(TopicWord word) {

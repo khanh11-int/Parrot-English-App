@@ -1,9 +1,12 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/constants/app_rewards.dart';
 import '../../../../core/error/failure.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
+import '../../../../core/providers/user_data_revision.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../vocabulary/domain/entities/topic_word.dart';
 import '../../../vocabulary/presentation/providers/vocabulary_providers.dart';
@@ -35,6 +38,8 @@ final topicRepositoryProvider = Provider<TopicRepository>((ref) {
 final learnTopicsProvider = FutureProvider<List<VocabularyTopic>>((ref) {
   // Đổi người đăng nhập thì tải lại: tiến độ là của riêng từng người.
   ref.watch(currentUserProvider);
+  // Học xong là vòng tiến độ của chủ đề vừa học phải nhích lên ngay.
+  ref.watch(userDataRevisionProvider);
   return ref.watch(topicRepositoryProvider).getTopics();
 });
 
@@ -96,13 +101,10 @@ class SessionProgress {
       learnedWordCount: totalRounds,
       correctCount: correctCount,
       wrongCount: wrongCount,
-      earnedExperience: correctCount * _experiencePerCorrect,
-      earnedSeeds: correctCount * _seedsPerCorrect,
+      earnedExperience: correctCount * AppRewards.experiencePerCorrectAnswer,
+      earnedSeeds: correctCount * AppRewards.seedsPerCorrectAnswer,
     );
   }
-
-  static const _experiencePerCorrect = 10;
-  static const _seedsPerCorrect = 2;
 }
 
 /// Điều khiển một phiên học: chuyển vòng, đếm đúng/sai, gửi kết quả lên server.
@@ -126,8 +128,8 @@ class SessionController
     if (current == null || current.isFinished) return;
 
     // Phải đọc bài tập TRƯỚC khi tăng chỉ số vòng, nếu không sẽ ghi lịch ôn cho
-    // vòng kế tiếp thay vì vòng vừa làm.
-    _recordReviews(current.currentExercise, isCorrect: isCorrect);
+    // vòng kế tiếp thay vì vòng vừa làm. Cố ý không `await`: ghi chạy nền.
+    unawaited(_recordReviews(current.currentExercise, isCorrect: isCorrect));
 
     final updated = current.copyWith(
       currentIndex: current.currentIndex + 1,
@@ -151,7 +153,13 @@ class SessionController
   ///
   /// Ghi ngay từng vòng thay vì đợi hết phiên: người học thoát giữa phiên vẫn
   /// giữ được tiến độ những vòng đã làm.
-  void _recordReviews(Exercise exercise, {required bool isCorrect}) {
+  ///
+  /// Không `await` ở [completeRound]: người học được sang vòng sau ngay, không
+  /// phải chờ mạng.
+  Future<void> _recordReviews(
+    Exercise exercise, {
+    required bool isCorrect,
+  }) async {
     final progress = state.valueOrNull;
     if (progress == null) return;
 
@@ -163,26 +171,35 @@ class SessionController
     // `arg` là khoá family mà provider được tạo với — chính là (mode, topicId).
     final topicId = arg.topicId;
     final repository = ref.read(vocabularyRepositoryProvider);
-    for (final pair in pairs) {
-      repository
-          .recordAnswer(
-            word: TopicWord(
-              id: pair.id,
-              // Phiên ôn tập trộn nhiều chủ đề nên không có `topicId` chung;
-              // lúc đó tiến độ chủ đề không cần tăng vì từ đã học rồi.
-              topicId: topicId ?? '',
-              english: pair.english,
-              vietnamese: pair.vietnamese,
-              phonetic: '',
+    await Future.wait([
+      for (final pair in pairs)
+        repository
+            .recordAnswer(
+              word: TopicWord(
+                id: pair.id,
+                // Phiên ôn tập trộn nhiều chủ đề nên không có `topicId` chung;
+                // lúc đó tiến độ chủ đề không cần tăng vì từ đã học rồi.
+                topicId: topicId ?? '',
+                english: pair.english,
+                vietnamese: pair.vietnamese,
+                phonetic: '',
+              ),
+              isCorrect: isCorrect,
+            )
+            .catchError(
+              // Không chặn người học vì một lần ghi thất bại; họ đã làm xong
+              // bài.
+              (Object error) =>
+                  debugPrint('Không ghi được tiến độ cho ${pair.id}: $error'),
             ),
-            isCorrect: isCorrect,
-          )
-          .catchError(
-            // Không chặn người học vì một lần ghi thất bại; họ đã làm xong bài.
-            (Object error) =>
-                debugPrint('Không ghi được tiến độ cho ${pair.id}: $error'),
-          );
-    }
+    ]);
+
+    // Ghi xong mới báo: XP / hạt / streak / tiến độ chủ đề / lịch ôn ở các tab
+    // khác tự tải lại. Nếu báo trước khi ghi xong thì chúng đọc lại đúng số cũ.
+    //
+    // `ref.read` thay vì `ref.watch` vì đây là lúc ghi, không phải phụ thuộc —
+    // và phiên học không được tự tải lại giữa lúc người ta đang làm bài.
+    ref.read(userDataRevisionProvider.notifier).bump();
   }
 
   /// Gửi kết quả lên server.

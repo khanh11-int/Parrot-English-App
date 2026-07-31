@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/error/failure.dart';
+import '../../../../core/providers/user_data_revision.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../data/repositories/firebase_shop_repository.dart';
 import '../../domain/entities/shop_item.dart';
@@ -36,6 +37,9 @@ class PurchaseFailed extends PurchaseOutcome {
 class ShopController extends AsyncNotifier<ShopData> {
   @override
   Future<ShopData> build() {
+    // Học xong được thưởng hạt: theo dõi bộ đếm để ví trong cửa hàng tự cập
+    // nhật, không phải mở lại app mới thấy số mới.
+    ref.watch(userDataRevisionProvider);
     return ref.read(shopRepositoryProvider).getShopData();
   }
 

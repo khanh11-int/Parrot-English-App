@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_labels.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -211,7 +210,9 @@ class _OverviewGrid extends StatelessWidget {
               child: StatTile(
                 label: AppLabels.experience,
                 value: '${profile.experience}',
-                iconAsset: AppAssets.itemCoin,
+                // Lá cho XP; xu vàng là hạt (tiền mềm) nên dùng ở đây sẽ lẫn.
+                icon: Icons.eco_rounded,
+                iconColor: AppColors.leaf,
               ),
             ),
           ],

@@ -25,14 +25,6 @@ class UserDocument {
   /// Subcollection thống kê theo ngày: `users/{uid}/dailyStats/{yyyy-MM-dd}`.
   static const dailyStatsCollection = 'dailyStats';
 
-  /// Thưởng cho mỗi câu trả lời đúng.
-  ///
-  /// Cộng theo từng câu thay vì theo phiên: người học thoát giữa phiên vẫn
-  /// giữ được phần thưởng đã kiếm, và không có nguy cơ cộng hai lần khi
-  /// màn hình tổng kết bị vẽ lại.
-  static const experiencePerCorrectAnswer = 10;
-  static const seedsPerCorrectAnswer = 2;
-
   /// Chuỗi ngày học liên tiếp mới, tính từ `lastActiveDate` trong hồ sơ.
   ///
   /// Ba trường hợp:

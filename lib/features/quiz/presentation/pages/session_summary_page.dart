@@ -54,7 +54,9 @@ class SessionSummaryPage extends StatelessWidget {
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: _RewardTile(
-                  asset: AppAssets.itemDiamond,
+                  // Lá, không phải kim cương: kim cương là ngọc (tiền cứng),
+                  // dùng cho XP sẽ khiến người học tưởng vừa nhận được ngọc.
+                  icon: Icons.eco_rounded,
                   label: AppLabels.experience,
                   amount: result.earnedExperience,
                   color: AppColors.leafDark,
@@ -78,13 +80,18 @@ class SessionSummaryPage extends StatelessWidget {
 
 class _RewardTile extends StatelessWidget {
   const _RewardTile({
-    required this.asset,
     required this.label,
     required this.amount,
     required this.color,
+    this.asset,
+    this.icon,
   });
 
-  final String asset;
+  /// Ảnh vật phẩm; dùng cho hạt và ngọc vì đã có sẵn asset.
+  final String? asset;
+
+  /// Icon hệ thống; dùng cho XP vì chưa có ảnh lá riêng.
+  final IconData? icon;
   final String label;
   final int amount;
   final Color color;
@@ -99,7 +106,10 @@ class _RewardTile extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Image.asset(asset, width: 32, height: 32),
+          if (asset case final assetPath?)
+            Image.asset(assetPath, width: 32, height: 32)
+          else
+            Icon(icon, size: 32, color: color),
           const SizedBox(height: AppSpacing.sm),
           Text(
             '+$amount',

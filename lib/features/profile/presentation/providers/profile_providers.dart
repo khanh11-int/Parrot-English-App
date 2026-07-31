@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/error/failure.dart';
+import '../../../../core/providers/user_data_revision.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../data/repositories/firebase_profile_repository.dart';
 import '../../domain/entities/user_profile.dart';
@@ -21,6 +22,8 @@ final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
 final userProfileProvider = FutureProvider<UserProfile>((ref) {
   // Đổi người đăng nhập thì tải lại hồ sơ, không hiện dữ liệu người trước.
   ref.watch(currentUserProvider);
+  // Học xong là XP / streak / hạng đổi ngay, không cần bấm Làm mới.
+  ref.watch(userDataRevisionProvider);
   return ref.watch(profileRepositoryProvider).getProfile();
 });
 

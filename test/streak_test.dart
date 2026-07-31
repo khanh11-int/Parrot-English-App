@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:parrot/core/constants/app_rewards.dart';
 import 'package:parrot/features/profile/data/models/user_document.dart';
 
 void main() {
@@ -54,8 +55,75 @@ void main() {
 
   group('Hằng số thưởng', () {
     test('mỗi câu đúng được 10 XP và 2 hạt', () {
-      expect(UserDocument.experiencePerCorrectAnswer, 10);
-      expect(UserDocument.seedsPerCorrectAnswer, 2);
+      expect(AppRewards.experiencePerCorrectAnswer, 10);
+      expect(AppRewards.seedsPerCorrectAnswer, 2);
+    });
+  });
+
+  group('Mốc ôn tập SRS', () {
+    test('từ vừa học lần đầu đến hạn ngay trong ngày', () {
+      // Đây là điểm mấu chốt: nếu mốc đầu là 1 ngày thì học xong hôm nay phải
+      // đợi tới mai mới ôn được, tab Ôn tập sẽ trống trơn.
+      expect(
+        AppRewards.nextIntervalDays(
+          currentDays: 0,
+          isCorrect: true,
+          isFirstTime: true,
+        ),
+        0,
+      );
+    });
+
+    test('trả lời đúng thì nhảy mốc tiếp theo', () {
+      expect(
+        AppRewards.nextIntervalDays(
+          currentDays: 0,
+          isCorrect: true,
+          isFirstTime: false,
+        ),
+        1,
+      );
+      expect(
+        AppRewards.nextIntervalDays(
+          currentDays: 7,
+          isCorrect: true,
+          isFirstTime: false,
+        ),
+        21,
+      );
+    });
+
+    test('mốc cuối thì giữ nguyên, không vượt ra ngoài danh sách', () {
+      expect(
+        AppRewards.nextIntervalDays(
+          currentDays: 60,
+          isCorrect: true,
+          isFirstTime: false,
+        ),
+        60,
+      );
+    });
+
+    test('trả lời sai thì về mốc đầu để gặp lại ngay', () {
+      expect(
+        AppRewards.nextIntervalDays(
+          currentDays: 21,
+          isCorrect: false,
+          isFirstTime: false,
+        ),
+        0,
+      );
+    });
+
+    test('mốc lạ (dữ liệu cũ) thì về mốc đầu thay vì làm sập', () {
+      expect(
+        AppRewards.nextIntervalDays(
+          currentDays: 999,
+          isCorrect: true,
+          isFirstTime: false,
+        ),
+        0,
+      );
     });
   });
 }

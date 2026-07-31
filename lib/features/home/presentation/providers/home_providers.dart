@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/providers/user_data_revision.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../data/repositories/firebase_home_repository.dart';
 import '../../domain/entities/home_summary.dart';
@@ -21,5 +22,7 @@ final homeRepositoryProvider = Provider<HomeRepository>((ref) {
 final homeSummaryProvider = FutureProvider<HomeSummary>((ref) {
   // Đổi người đăng nhập thì tải lại, không hiện dữ liệu người trước.
   ref.watch(currentUserProvider);
+  // Học xong là XP / hạt / streak đổi ngay trên trang chủ.
+  ref.watch(userDataRevisionProvider);
   return ref.watch(homeRepositoryProvider).getSummary();
 });

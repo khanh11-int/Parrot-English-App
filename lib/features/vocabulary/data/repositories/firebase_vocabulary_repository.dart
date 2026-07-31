@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../../core/constants/app_rewards.dart';
 import '../../../../core/error/failure.dart';
 import '../../../auth/domain/repositories/auth_repository.dart';
 import '../../../profile/data/models/user_document.dart';
@@ -14,12 +15,6 @@ class FirebaseVocabularyRepository implements VocabularyRepository {
 
   final FirebaseFirestore _firestore;
   final AuthRepository _authRepository;
-
-  /// Khoảng lặp lại cho từng lần trả lời đúng liên tiếp, tính bằng ngày.
-  ///
-  /// SRS đơn giản hoá: đúng thì nhảy mốc tiếp theo, sai thì về mốc đầu. Muốn
-  /// chuẩn SM-2 thì chỉ cần đổi [_nextInterval].
-  static const _intervals = [1, 3, 7, 21, 60];
 
   String _requireUid() {
     final user = _authRepository.currentUser;
@@ -122,7 +117,12 @@ class FirebaseVocabularyRepository implements VocabularyRepository {
         final num value => value.toInt(),
         _ => 0,
       };
-      final nextDays = _nextInterval(currentDays, isCorrect: isCorrect);
+      final isFirstTime = !snapshot.exists;
+      final nextDays = AppRewards.nextIntervalDays(
+        currentDays: currentDays,
+        isCorrect: isCorrect,
+        isFirstTime: isFirstTime,
+      );
 
       final batch = _firestore.batch();
       batch.set(
@@ -134,8 +134,6 @@ class FirebaseVocabularyRepository implements VocabularyRepository {
         ),
         SetOptions(merge: true),
       );
-
-      final isFirstTime = !snapshot.exists;
 
       // Chỉ tăng số từ đã học của chủ đề ở **lần đầu** gặp từ này, nếu không ôn
       // lại một từ cũ cũng làm tiến độ chủ đề vượt quá tổng số từ.
@@ -177,9 +175,9 @@ class FirebaseVocabularyRepository implements VocabularyRepository {
       // Trả lời sai vẫn tính là có hoạt động hôm nay, chỉ không được thưởng.
       if (isCorrect) ...{
         'experience': FieldValue.increment(
-          UserDocument.experiencePerCorrectAnswer,
+          AppRewards.experiencePerCorrectAnswer,
         ),
-        'seeds': FieldValue.increment(UserDocument.seedsPerCorrectAnswer),
+        'seeds': FieldValue.increment(AppRewards.seedsPerCorrectAnswer),
       },
       'lastActiveDate': today,
       'streakDays': UserDocument.nextStreak(userData, now: now),
@@ -191,15 +189,6 @@ class FirebaseVocabularyRepository implements VocabularyRepository {
       'correctAnswers': FieldValue.increment(isCorrect ? 1 : 0),
       'answers': FieldValue.increment(1),
     }, SetOptions(merge: true));
-  }
-
-  int _nextInterval(int currentDays, {required bool isCorrect}) {
-    // Sai thì về mốc đầu: từ chưa thuộc phải gặp lại sớm.
-    if (!isCorrect) return _intervals.first;
-
-    final index = _intervals.indexOf(currentDays);
-    if (index == -1) return _intervals.first;
-    return _intervals[(index + 1).clamp(0, _intervals.length - 1)];
   }
 
   Failure _toFailure(FirebaseException error) {
