@@ -369,11 +369,6 @@ mới quyết định học tiếp cái gì, thay vì bị đẩy thẳng vào m
 ┌──────────────────────────────────────┐
 │ ←  Học từ mới                        │
 ├──────────────────────────────────────┤
-│ ╭──────────────────────────────────╮ │
-│ │ (43%)  Đã học 66/152 từ          │ │  thẻ tổng, gradient rừng
-│ │        7 chủ đề                  │ │
-│ │ [    Học trộn mọi chủ đề     ]   │ │
-│ ╰──────────────────────────────────╯ │
 │ Chọn chủ đề                          │
 │ ╭──────────────────────────────────╮ │
 │ │ (◔ ❤️) Sức khoẻ          22% ›   │ │
@@ -390,8 +385,10 @@ mới quyết định học tiếp cái gì, thay vì bị đẩy thẳng vào m
 ```
 
 Chi tiết:
-- **Thẻ tổng** trên cùng: vòng tiến độ toàn bộ + tổng số từ + số chủ đề, kèm nút
-  "Học trộn mọi chủ đề" cho người không muốn chọn.
+- **Không có thẻ tổng.** Từng có một thẻ gradient "Đã học 66/152 từ · 7 chủ đề"
+  kèm nút "Học trộn mọi chủ đề" ở đầu trang; đã bỏ vì trang này chỉ để chọn chủ
+  đề, thẻ đó đẩy danh sách xuống dưới màn hình mà không giúp gì cho việc chọn.
+  Tiến độ tổng đã có ở trang chủ.
 - **Mỗi dòng chủ đề** (`TopicProgressTile`): vòng tiến độ có icon chủ đề ở giữa ·
   tên · `đã học/tổng` · chip trạng thái · `%` · chevron.
 - Chủ đề **đã học xong** đổi vòng và chip sang xanh lá (`leaf`), phân biệt ngay

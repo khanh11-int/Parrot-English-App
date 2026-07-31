@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:parrot/core/router/app_routes.dart';
+import 'package:parrot/features/quiz/presentation/widgets/topic_progress_tile.dart';
 
 import 'helpers/test_app.dart';
 
@@ -118,15 +119,33 @@ void main() {
     await _settle(tester);
 
     expect(find.text('Chọn chủ đề'), findsOneWidget);
-    // Mock có 7 chủ đề; kiểm vài chủ đề và nhãn tiến độ của chúng.
-    expect(find.text('Sức khoẻ'), findsOneWidget);
-    expect(find.text('4/18 từ'), findsOneWidget);
-    expect(find.text('Còn 14 từ mới'), findsOneWidget);
+
+    // Soi trong đúng thẻ của chủ đề, không tìm khắp trang: mock có hai chủ đề
+    // cùng còn 14 từ mới (Sức khoẻ 4/18 và Văn phòng 6/20), tìm khắp trang thì
+    // kết quả phụ thuộc vào chỗ danh sách bị màn hình test cắt ngang.
+    final healthTile = find.ancestor(
+      of: find.text('Sức khoẻ'),
+      matching: find.byType(TopicProgressTile),
+    );
+    expect(healthTile, findsOneWidget);
+    expect(
+      find.descendant(of: healthTile, matching: find.text('4/18 từ')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: healthTile, matching: find.text('Còn 14 từ mới')),
+      findsOneWidget,
+    );
+
     // Chủ đề học xong hiện nhãn khác.
-    expect(find.text('Đã học xong'), findsOneWidget);
-    // Tổng: 66/152 từ trên 7 chủ đề.
-    expect(find.text('Đã học 66/152 từ'), findsOneWidget);
-    expect(find.text('7 chủ đề'), findsOneWidget);
+    final familyTile = find.ancestor(
+      of: find.text('Gia đình'),
+      matching: find.byType(TopicProgressTile),
+    );
+    expect(
+      find.descendant(of: familyTile, matching: find.text('Đã học xong')),
+      findsOneWidget,
+    );
     expect(tester.takeException(), isNull);
   });
 
