@@ -1,36 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../auth/presentation/providers/auth_providers.dart';
-
-import '../../../../core/constants/app_assets.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 
-/// Một mục trong danh sách Cài đặt.
+/// Trang Cài đặt.
 ///
-/// Chưa mục nào có trang riêng, nên chưa cần field đường dẫn — thêm khi dựng
-/// trang đầu tiên.
-class _SettingsEntry {
-  const _SettingsEntry({required this.label, required this.iconAsset});
-
-  final String label;
-  final String iconAsset;
-}
-
-/// Trang Cài đặt — dùng lại bộ `assets/images/icons/`.
+/// Chỉ còn thẻ tài khoản. Trước đây trên nó là danh sách 6 mục (Thông báo, Tin
+/// nhắn, Thống kê học tập, Thành tích, Nhiệm vụ, Hồ sơ của tôi) — cả 6 đều
+/// `onTap: null` vì chưa có trang nào, tức một danh sách chỉ để ngắm. Đã bỏ;
+/// dựng lại từng mục khi trang tương ứng có thật.
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
-
-  static const _entries = [
-    _SettingsEntry(label: 'Thông báo', iconAsset: AppAssets.iconNotification),
-    _SettingsEntry(label: 'Tin nhắn', iconAsset: AppAssets.iconMessage),
-    _SettingsEntry(label: 'Thống kê học tập', iconAsset: AppAssets.iconStats),
-    _SettingsEntry(label: 'Thành tích', iconAsset: AppAssets.iconAchievement),
-    _SettingsEntry(label: 'Nhiệm vụ', iconAsset: AppAssets.iconQuest),
-    _SettingsEntry(label: 'Hồ sơ của tôi', iconAsset: AppAssets.iconProfile),
-  ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,20 +26,6 @@ class SettingsPage extends ConsumerWidget {
           padding: AppSpacing.pagePadding,
           children: [
             const SizedBox(height: AppSpacing.sm),
-            Material(
-              color: AppColors.bgBase,
-              borderRadius: AppRadius.cardBorder,
-              child: Column(
-                children: [
-                  for (final entry in _entries) ...[
-                    _SettingsRow(entry: entry),
-                    if (entry != _entries.last)
-                      const Divider(height: 1, indent: AppSpacing.lg),
-                  ],
-                ],
-              ),
-            ),
-            const SizedBox(height: AppSpacing.xl),
             if (currentUser != null) _AccountCard(email: currentUser.email),
             const SizedBox(height: AppSpacing.xl),
           ],
@@ -131,26 +100,5 @@ class _AccountCard extends ConsumerWidget {
     if (shouldSignOut != true) return;
     // Đăng xuất xong `GoRouter` tự đưa về trang đăng nhập nhờ redirect.
     await ref.read(authControllerProvider.notifier).signOut();
-  }
-}
-
-class _SettingsRow extends StatelessWidget {
-  const _SettingsRow({required this.entry});
-
-  final _SettingsEntry entry;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Image.asset(entry.iconAsset, width: 24, height: 24),
-      title: Text(entry.label, style: AppTextStyles.body),
-      trailing: const Icon(
-        Icons.chevron_right_rounded,
-        color: AppColors.textDisabled,
-      ),
-      // Mọi mục đều chưa có trang nên `onTap` để `null`: người dùng thấy ngay
-      // là chưa bấm được, thay vì bấm rồi không có gì xảy ra.
-      onTap: null,
-    );
   }
 }

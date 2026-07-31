@@ -110,7 +110,8 @@ Ký hiệu: `[ ]` chưa làm · `[x]` đã xong
 
 - [x] Entity `UserProfile` + mock repository
 - [x] `profile_page.dart` — thẻ đầu trang + `Tổng quan` 2×2 + grid bài đăng
-- [x] `settings_page.dart` — danh sách mục dùng `icon_*`
+- [x] `settings_page.dart` — chỉ còn thẻ tài khoản (email + đăng xuất). Danh
+      sách 6 mục cũ đã bỏ: cả 6 đều `onTap: null` vì chưa có trang nào
 
 ## Giai đoạn 11 — Hoàn thiện
 
@@ -276,7 +277,8 @@ vì cần quyết định hoặc phụ thuộc bên ngoài:
       `users/{uid}.groupId`, số liệu nhóm tính bằng aggregate `count()`/`sum()`
       nên không cần mở quyền ghi vào document nhóm
 - [ ] Trang chi tiết nhiệm vụ tháng
-- [ ] Các mục con trong Cài đặt (đang `onTap: null`)
+- [ ] Các trang con của Cài đặt (Thông báo, Thống kê học tập, Thành tích...) —
+      icon đã có ở `assets/images/icons/`, dựng lại mục khi trang có thật
 - [ ] `/user/:id` — trang cá nhân của người khác
 - [x] Feature `vocabulary` — đã dựng (giáo trình + tiến độ từng từ + từ đã lưu)
 - [ ] Feature `progress` (trang thống kê học tập) — chưa dựng. Thư mục khung đã

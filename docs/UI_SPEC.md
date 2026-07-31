@@ -640,12 +640,24 @@ Các bài đăng gần đây
 ```
 - Thẻ đầu trang có **nền hoạ tiết lá cây mờ**, avatar tròn, tên đậm,
   bánh răng mở `/settings`, nút làm mới ở góc phải trên.
+- Avatar là **huy hiệu hạng**, đổi theo XP — xem `RankAvatar` ở mục 11.2.
 - 3 số liệu xã hội chia đều theo chiều ngang, bấm được (mở danh sách).
 - **Tổng quan**: `GridView` 2×2, mỗi ô là `StatTile` (icon + nhãn nhỏ mờ + giá
   trị đậm). Nhãn dài thì cắt bằng `…`.
 - **Bài đăng gần đây**: grid 3 cột, ảnh vuông, khoảng cách 2px; bấm mở bài đăng.
 - Trang của người khác (`/user/:id`): thay bánh răng bằng nút
   "Theo dõi / Đang theo dõi".
+
+### 5.9b Cài đặt — `/settings`
+
+Chỉ có **một thẻ**: email đang đăng nhập + nút Đăng xuất (có bước xác nhận, vì
+đăng xuất là việc khó lùi).
+
+> Trước đây trên nó là danh sách 6 mục (Thông báo · Tin nhắn · Thống kê học tập ·
+> Thành tích · Nhiệm vụ · Hồ sơ của tôi). **Cả 6 đều `onTap: null`** vì chưa trang
+> nào tồn tại — một danh sách chỉ để ngắm, có mũi chevron mời bấm nhưng bấm không
+> đi đâu. Đã bỏ hẳn. Icon vẫn còn ở `assets/images/icons/`; dựng lại từng mục khi
+> trang tương ứng có thật.
 
 ---
 
