@@ -59,3 +59,6 @@ ui-debug.log
 # Ảnh gốc trước khi xoá chữ/nền, giữ để đối chiếu.
 # Không đóng gói vào app (không khai báo trong pubspec) nên không cần trong repo.
 assets/images_original/
+
+# Ảnh chụp giao diện sinh ra để xem, không cần theo dõi
+test/preview/

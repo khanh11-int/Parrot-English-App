@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/app_assets.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -135,10 +136,13 @@ class JourneyCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(
-                    Icons.forest_rounded,
-                    size: 18,
-                    color: AppColors.leafDark,
+                  // Ảnh cây thật thay icon Material: cùng bộ hình với huy hiệu
+                  // mốc nhóm nên hai chỗ nói cùng một ngôn ngữ hình.
+                  Image.asset(
+                    AppAssets.milestoneSprout,
+                    width: 22,
+                    height: 22,
+                    fit: BoxFit.contain,
                   ),
                   const SizedBox(width: AppSpacing.sm),
                   Expanded(

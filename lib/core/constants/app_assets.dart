@@ -11,6 +11,8 @@ abstract final class AppAssets {
   static const _items = 'assets/images/items';
   static const _ranks = 'assets/images/ranks';
   static const _topics = 'assets/images/topics';
+  static const _milestones = 'assets/images/milestones';
+  static const _decor = 'assets/images/decor';
 
   // --- Mascot con vẹt ---------------------------------------------------
   static const mascotReading = '$_mascot/reading.png';
@@ -124,6 +126,24 @@ abstract final class AppAssets {
     '$_ranks/level-5.png',
     '$_ranks/level-6.png',
   ];
+
+  // --- Huy hiệu 3 mốc nhóm học tập ---------------------------------------
+  // Cây lớn dần theo mốc: bụi lá → dừa non → dừa lớn.
+  static const milestoneSprout = '$_milestones/sprout.png';
+  static const milestoneSapling = '$_milestones/sapling.png';
+  static const milestoneGreatTree = '$_milestones/great-tree.png';
+
+  /// Huy hiệu của mốc theo [GroupMilestone.index] (0..2).
+  static String milestoneBadge(int milestoneIndex) => switch (milestoneIndex) {
+    0 => milestoneSprout,
+    1 => milestoneSapling,
+    _ => milestoneGreatTree,
+  };
+
+  // --- Hoạ tiết trang trí ------------------------------------------------
+  // Dùng ở góc các thẻ gradient lớn, độ mờ thấp để không cạnh tranh nội dung.
+  static const decorVines = '$_decor/vines.png';
+  static const decorPalmCluster = '$_decor/palm-cluster.png';
 
   // --- Ảnh 13 chủ đề tiếng Anh ------------------------------------------
   // Bộ này rộng hơn 7 chủ đề đang có trên Firestore; phần chưa dùng để dành cho

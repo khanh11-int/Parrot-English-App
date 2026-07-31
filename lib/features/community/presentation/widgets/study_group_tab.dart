@@ -12,6 +12,7 @@ import '../../../../shared/widgets/app_image.dart';
 import '../../../../shared/widgets/app_loading.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/badge_avatar.dart';
+import '../../../../shared/widgets/jungle_card.dart';
 import '../../../../shared/widgets/primary_button.dart';
 import '../../../../shared/widgets/section_header.dart';
 import '../../domain/entities/community_entities.dart';
@@ -89,12 +90,7 @@ class _InviteCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      padding: AppSpacing.cardPadding,
-      decoration: const BoxDecoration(
-        gradient: AppColors.canopyGradient,
-        borderRadius: AppRadius.cardLargeBorder,
-      ),
+    return JungleCard(
       child: Row(
         children: [
           Expanded(
@@ -191,12 +187,11 @@ class _GroupHeaderCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      padding: AppSpacing.cardPadding,
-      decoration: const BoxDecoration(
-        gradient: AppColors.canopyGradient,
-        borderRadius: AppRadius.cardLargeBorder,
-      ),
+    return JungleCard(
+      decor: AppAssets.decorPalmCluster,
+      decorWidth: 120,
+      decorHeight: 143,
+      decorOffset: const Offset(-16, -22),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -411,9 +406,10 @@ class _MilestoneBadge extends StatelessWidget {
     return Column(
       children: [
         BadgeAvatar(
-          // Chưa có bộ huy hiệu cây riêng nên tạm dùng icon vật phẩm; đổi asset
-          // sau không ảnh hưởng bố cục.
-          asset: isUnlocked ? AppAssets.itemTarget : AppAssets.itemLock,
+          // Cây lớn dần theo mốc: bụi lá → dừa non → dừa lớn. Mốc chưa đạt vẫn
+          // hiện đúng cây của nó, chỉ bị làm xám — người xem thấy trước mình
+          // đang trồng cái gì, thay vì một ô khoá vô nghĩa.
+          asset: AppAssets.milestoneBadge(milestone.index),
           isUnlocked: isUnlocked,
           isHighlighted: isCurrent,
           size: 56,

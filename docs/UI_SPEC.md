@@ -778,6 +778,8 @@ báo tập trung ở [`core/constants/app_assets.dart`](../lib/core/constants/ap
 | `stickers/` | 10 | Sticker cảm xúc, dùng cho `StickerPicker` | trong suốt |
 | `icons/` | 10 | Icon điều hướng / hệ thống, **đơn sắc phẳng** | trong suốt |
 | `ranks/` | 6 | Huy hiệu 6 hạng tầng rừng | còn nền |
+| `milestones/` | 3 | Huy hiệu 3 mốc nhóm: bụi lá → dừa non → dừa lớn | trong suốt |
+| `decor/` | 2 | Hoạ tiết cây rừng cho thẻ lớn (dây leo, cụm dừa) | trong suốt |
 | `ring/` | 1 | Vòng tiến độ — chỉ là ảnh tham chiếu thiết kế | còn nền |
 
 ### 11.1 `icons/` phải là ảnh phẳng đơn sắc
@@ -806,8 +808,23 @@ Nếu người dùng tự đặt ảnh (`users/{uid}.avatarUrl` khác rỗng) th
 tiên. **Rỗng là chuyện bình thường** — tài khoản mới luôn rỗng — nên không được
 đưa thẳng chuỗi rỗng vào `AppImage`, làm vậy sẽ hiện ô xám vỡ ảnh.
 
-> Huy hiệu mốc **nhóm** (Chồi Non / Cây Vững / Đại Thụ) vẫn dùng icon vật phẩm
-> tạm (`itemTarget` / `itemLock`) — chưa có ảnh riêng.
+Huy hiệu mốc **nhóm** dùng `milestones/` qua `AppAssets.milestoneBadge(index)`:
+Chồi Non (bụi lá) → Cây Vững (dừa non) → Đại Thụ (dừa lớn).
+
+Huy hiệu **giải đấu** ở Bảng xếp hạng cũng dùng `ranks/`, không dùng khiên/ổ khoá
+chung chung nữa — hạng chưa tới hiện đúng con vẹt của nó, mờ đi, kèm dấu `?` nhỏ.
+
+### 11.2b Huy hiệu chưa đạt: mờ đi, **không** làm xám
+
+`BadgeAvatar` khi khoá thì giảm độ mờ về `0.45` và giữ nguyên màu, kèm một dấu `?`
+nhỏ ở góc dưới phải. Hai lần trước làm sai, phát hiện được vì đã dựng ảnh thật ra
+xem:
+
+- Làm xám hẳn + độ mờ `0.35` → cái cây biến mất trên nền tròn xám nhạt.
+- Dấu `?` bọc `FittedBox` phủ kín huy hiệu → che luôn cái cây.
+
+Mục đích của ảnh là cho người học **thấy trước mình sắp trồng gì**, nên hình phải
+đọc được. Trạng thái khoá vẫn không chỉ dựa vào màu: dấu `?` là dấu hiệu chính.
 
 ### 11.3 `topics/` rộng hơn số chủ đề đang có
 
@@ -816,6 +833,20 @@ tiên. **Rỗng là chuyện bình thường** — tài khoản mới luôn rỗ
 (`technology`, `school`, `food-drinks`); phần còn lại để dành cho lúc mở thêm chủ
 đề. `TopicDocument.iconAssetFor` hiện vẫn map sang `items/*` — đổi sang
 `topics/*` là một việc riêng.
+
+### 11.3b `JungleCard` — thẻ gradient có hoạ tiết cây
+
+Dùng ở 4 thẻ lớn: đầu trang Hồ sơ, header nhóm, thẻ mời tạo nhóm, thẻ đầu tab Ôn
+tập. Ba quy tắc rút ra sau khi dựng ảnh thật ra xem:
+
+1. **Phải nhuộm một màu** (`decorColor`), không giữ màu gốc. Ảnh cây màu xanh lá
+   đặt lên thẻ gradient xanh rừng thì **hoàn toàn vô hình**. Trắng `0.16` cho thẻ
+   nền đậm, `leafDark` `0.14` cho thẻ nền nhạt.
+2. **Phải khai chiều cao tường minh** (`decorHeight`). `Positioned` chỉ có `top`
+   và `right` nên con nhận ràng buộc lỏng; `Image` chưa giải mã xong thì cao bằng
+   `0` — hoạ tiết không vẽ gì rồi thẻ giật một nhịp khi ảnh về.
+3. Hoạ tiết **tràn ra ngoài** góc thẻ (offset âm) rồi bị `ClipRRect` cắt. Cây mọc
+   vào từ ngoài khung trông tự nhiên hơn một cái cây đặt gọn trong góc.
 
 ### 11.4 Việc còn lại với kho ảnh
 
@@ -826,6 +857,5 @@ tiên. **Rỗng là chuyện bình thường** — tài khoản mới luôn rỗ
 3. **Nối `topics/` vào `TopicDocument.iconAssetFor`** khi mở thêm chủ đề.
 4. **Xuất bản `@2x` / `@3x`** (hoặc SVG cho `icons/`) — ảnh hiện chỉ ~100–300px,
    sẽ rỗ trên màn hình mật độ cao.
-5. **Chưa có:** 3 huy hiệu mốc nhóm (mầm → cây con → đại thụ), icon **hạt** và
-   icon **lá** riêng cho XP, hoạ tiết nền lá `pattern/leaves.png`, avatar nhóm
-   dạng cặp vẹt trên cành.
+5. **Chưa có:** icon **hạt** và icon **lá** riêng cho XP, avatar nhóm dạng cặp
+   vẹt trên cành.

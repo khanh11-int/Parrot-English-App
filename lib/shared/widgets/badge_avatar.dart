@@ -77,7 +77,15 @@ class BadgeAvatar extends StatelessWidget {
   }
 }
 
-/// Ảnh huy hiệu bị làm xám, phủ dấu `?` ở giữa.
+/// Ảnh huy hiệu mờ đi, kèm dấu `?` nhỏ ở góc dưới phải.
+///
+/// Hai lần chỉnh sau khi dựng ảnh thật ra xem:
+/// - **Giữ màu gốc**, chỉ giảm độ mờ. Bản đầu làm xám hẳn rồi để độ mờ 0.35 nên
+///   cái cây biến mất trên nền tròn xám nhạt.
+/// - Dấu `?` **không** còn `FittedBox` phủ kín huy hiệu. Phủ kín thì che luôn cái
+///   cây, mà mục đích của ảnh là cho người học thấy trước mình sắp trồng gì.
+///
+/// Trạng thái khoá vẫn không chỉ dựa vào màu — dấu `?` là dấu hiệu chính.
 class _LockedBadgeContent extends StatelessWidget {
   const _LockedBadgeContent({required this.asset});
 
@@ -86,35 +94,31 @@ class _LockedBadgeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.center,
       fit: StackFit.expand,
       children: [
-        Opacity(
-          opacity: 0.35,
-          child: ColorFiltered(
-            colorFilter: const ColorFilter.matrix(_greyscaleMatrix),
-            child: Image.asset(asset, fit: BoxFit.contain),
-          ),
-        ),
-        const FittedBox(
-          child: Text(
-            '?',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
+        Opacity(opacity: 0.45, child: Image.asset(asset, fit: BoxFit.contain)),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Container(
+            width: 18,
+            height: 18,
+            decoration: const BoxDecoration(
               color: AppColors.textSecondary,
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: const Text(
+              '?',
+              style: TextStyle(
+                fontSize: 12,
+                height: 1,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textOnPrimary,
+              ),
             ),
           ),
         ),
       ],
     );
   }
-
-  /// Ma trận chuyển ảnh màu sang xám theo trọng số cảm nhận sáng của mắt.
-  static const _greyscaleMatrix = <double>[
-    0.2126, 0.7152, 0.0722, 0, 0, //
-    0.2126, 0.7152, 0.0722, 0, 0, //
-    0.2126, 0.7152, 0.0722, 0, 0, //
-    0, 0, 0, 1, 0, //
-  ];
 }

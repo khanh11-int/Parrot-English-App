@@ -95,9 +95,10 @@ class _LeagueCard extends StatelessWidget {
                   const SizedBox(width: 64)
                 else
                   BadgeAvatar(
-                    asset: rank.index <= currentRank.index
-                        ? AppAssets.itemShield
-                        : AppAssets.itemLock,
+                    // Đúng huy hiệu của hạng đó, không phải khiên/ổ khoá chung
+                    // chung: hạng chưa tới vẫn hiện con vẹt của nó (mờ đi, kèm
+                    // dấu `?`) nên người học thấy trước mình đang leo tới đâu.
+                    asset: AppAssets.rankBadge(rank.index),
                     label: rank.label,
                     isUnlocked: rank.index <= currentRank.index,
                     isHighlighted: rank == currentRank,

@@ -1,0 +1,11 @@
+# Test gắn thẻ `preview` KHÔNG chạy trong `flutter test` thường.
+#
+# Chúng chỉ dùng để chụp ảnh giao diện ra `test/preview/*.png` cho người viết
+# code xem, không phải golden test để so sánh. Nếu để chạy mặc định thì chúng sẽ
+# so ảnh và đỏ trên mọi máy có font hoặc bản Flutter khác — một cái bẫy bảo trì.
+#
+# Chụp lại ảnh:
+#   flutter test --update-goldens --tags preview test/golden_preview_test.dart
+tags:
+  preview:
+    skip: "chỉ chạy khi cần chụp ảnh giao diện"
