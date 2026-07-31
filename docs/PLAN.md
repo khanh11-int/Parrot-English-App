@@ -250,8 +250,14 @@ vì cần quyết định hoặc phụ thuộc bên ngoài:
       `[0, 1, 3, 7, 21, 60]` ngày, ghi vào `users/{uid}/wordProgress`. Mốc đầu
       **0 ngày** để từ vừa học ôn lại được ngay trong ngày
 
-### Cần thiết kế thêm (xem mục 11.6 UI_SPEC)
-- [ ] 6 huy hiệu hạng tổ vết theo tầng rừng (đang tạm dùng icon vật phẩm)
+### Cần thiết kế thêm (xem mục 11.4 UI_SPEC)
+- [x] 6 huy hiệu hạng theo tầng rừng — có ảnh ở `assets/images/ranks/`,
+      lấy bằng `AppAssets.rankBadge(rank.index)`
+- [ ] **Nối** 6 huy hiệu đó vào Hồ sơ + Bảng xếp hạng (vẫn đang dùng
+      `itemTarget` / `itemLock` tạm)
+- [ ] Xoá nền cho bộ ảnh mới bằng `tools/strip_assets.py` — nhiều ảnh còn khung
+      nền bo góc, đặt cạnh ảnh cũ thấy lệch
+- [ ] Nối `assets/images/topics/` vào `TopicDocument.iconAssetFor`
 - [ ] 3 huy hiệu mốc nhóm: mầm → cây con → đại thụ
 - [ ] Icon **hạt** riêng (hiện dùng `items/coin.png`). XP tạm dùng
       `Icons.eco_rounded` — trước đây dùng ảnh kim cương, người học tưởng vừa

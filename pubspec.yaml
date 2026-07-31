@@ -42,3 +42,5 @@ flutter:
     - assets/images/icons/
     - assets/images/stickers/
     - assets/images/items/
+    - assets/images/ranks/
+    - assets/images/topics/

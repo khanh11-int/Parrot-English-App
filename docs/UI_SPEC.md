@@ -727,121 +727,60 @@ Feature **mới cần tạo** so với cây thư mục hiện tại: `image_scan
 presentation`.
 
 ---
+## 11. Kho ảnh
 
-## 11. Kho ảnh có sẵn
+**85 ảnh PNG** ở `assets/images/`, chia 7 thư mục theo vai trò. Đường dẫn khai
+báo tập trung ở [`core/constants/app_assets.dart`](../lib/core/constants/app_assets.dart)
+— mọi hằng số ở đó đều trỏ tới file có thật, và mọi file đều có hằng số trỏ tới
+(không có ảnh mồ côi).
 
-43 ảnh PNG hiện nằm ở `lib/images/`, đã đổi tên theo 5 nhóm tiền tố.
-
-### 11.1 `mascot_*` — vẹt minh hoạ (10 ảnh)
-
-| File | Nội dung | Dùng ở đâu |
-|---|---|---|
-| `mascot_camera.png` | Vẹt đeo tai nghe, cầm máy ảnh | Banner "Gửi ảnh học từ mới" (trang chủ) |
-| `mascot_reading.png` | Vẹt đọc sách | Thẻ "Học từ mới" |
-| `mascot_phone.png` | Vẹt cầm điện thoại | Thẻ "Ôn tập ngay" |
-| `mascot_teacher.png` | Vẹt mũ tốt nghiệp + kính + thước | Đầu màn hình kiểm tra / quiz |
-| `mascot_thumbs_up.png` | Vẹt nháy mắt, giơ ngón tay | Màn hình tổng kết phiên học |
-| `mascot_trophy.png` | Vẹt bê cúp vàng | Thành tích, lên hạng |
-| `mascot_quest.png` | Vẹt cầm bảng checklist | Mục "Nhiệm vụ" |
-| `mascot_reward.png` | Vẹt nhảy ra từ hộp quà | Nhận thưởng, mở hộp |
-| `mascot_reminder.png` | Vẹt cầm đồng hồ | Nhắc nhở học, thông báo streak |
-| `mascot_favorite.png` | Vẹt với bóng thoại trái tim | Từ vựng yêu thích |
-
-### 11.2 `ring_*` — vòng tiến độ (4 ảnh)
-
-`ring/learn_new.png` · `ring/review.png` · `ring/test.png` · `ring/complete.png`
-
-Đầu vẹt nằm trong vòng tiến độ tròn. Dùng cho 2 thẻ tiến độ ở trang chủ.
-
-> ⚠️ **Số liệu bị nướng vào ảnh** (`9/15`, `1/30`, `5/15`, `10/20`) → không dùng
-> trực tiếp được vì tiến độ là động. Cần **cắt lấy phần đầu vẹt**, rồi vẽ vòng
-> tiến độ + số bằng Flutter (`CircularProgressIndicator` hoặc `CustomPaint`).
-> Xem `ring_*` như ảnh tham chiếu thiết kế, không phải asset dùng ngay.
-
-### 11.3 `icon_*` — icon điều hướng / hệ thống (9 ảnh)
-
-| File | Hình | File | Hình |
+| Thư mục | Số ảnh | Nội dung | Nền |
 |---|---|---|---|
-| `icon_home.png` | Ngôi nhà | `icon_notification.png` | Cái chuông |
-| `icon_study.png` | Quyển sách | `icon_message.png` | Bóng chat |
-| `icon_quest.png` | Bảng checklist | `icon_settings.png` | Bánh răng |
-| `icon_stats.png` | Cột biểu đồ | `icon_profile.png` | Người |
-| `icon_achievement.png` | Huy chương | | |
+| `mascot/` | 30 | Vẹt trong một dáng hoặc kèm một vật phẩm | phần lớn còn nền |
+| `topics/` | 13 | 13 chủ đề tiếng Anh | phần lớn còn nền |
+| `items/` | 15 | Đồ vật phẳng: tiền tệ, vật phẩm cửa hàng, sách, cúp, vé, chuông | trong suốt |
+| `stickers/` | 10 | Sticker cảm xúc, dùng cho `StickerPicker` | trong suốt |
+| `icons/` | 10 | Icon điều hướng / hệ thống, **đơn sắc phẳng** | trong suốt |
+| `ranks/` | 6 | Huy hiệu 6 hạng tầng rừng | còn nền |
+| `ring/` | 1 | Vòng tiến độ — chỉ là ảnh tham chiếu thiết kế | còn nền |
 
-Phong cách phẳng, đơn sắc xanh. Dùng cho bottom nav và các mục trong Cài đặt.
+### 11.1 `icons/` phải là ảnh phẳng đơn sắc
 
-### 11.4 `sticker_*` — sticker cảm xúc (10 ảnh)
+`AppBottomNav` nhuộm icon bằng `BlendMode.srcIn` để đánh dấu tab đang chọn. Phép
+nhuộm đó **thay toàn bộ màu** của ảnh, nên chỉ đúng với ảnh phẳng một màu. Đưa
+ảnh nhiều màu (ví dụ bản có mascot) vào `icons/` sẽ khiến nó thành một khối màu
+đặc, mất hết chi tiết.
 
-| File | Cảm xúc | File | Cảm xúc |
-|---|---|---|---|
-| `sticker_hello.png` | Chào (vẫy tay) | `sticker_sad.png` | Buồn (khóc) |
-| `sticker_love.png` | Yêu thích (tim) | `sticker_cheer.png` | Cố lên! |
-| `sticker_thinking.png` | Đang nghĩ | `sticker_tired.png` | Mệt quá (ngủ zZ) |
-| `sticker_surprised.png` | Bất ngờ | `sticker_sorry.png` | Xin lỗi |
-| `sticker_happy.png` | Vui vẻ | `sticker_awesome.png` | Tuyệt vời! |
+Vì vậy bộ ảnh mới có sẵn bản "mascot + vật phẩm" cho home / study / message /
+profile / settings / statistics, nhưng chúng nằm ở `mascot/` chứ **không** thay
+icon điều hướng. Dùng chúng cho trạng thái rỗng, đầu mục, thẻ minh hoạ.
 
-Khớp với vật phẩm **"Sticker OK" / "Sticker yêu ngất ngày"** trong Cửa hàng →
-dùng trong **chat nhóm** và **bình luận** ở Cộng đồng. Cần thêm một
-`StickerPicker` (bottom sheet dạng grid) vào `shared/widgets/`.
+### 11.2 `ranks/` — huy hiệu 6 hạng
 
-### 11.5 `item_*` — vật phẩm & tiền tệ (10 ảnh)
+`level-1.png` … `level-6.png` khớp với [`ForestRank`](../lib/core/constants/app_labels.dart):
+vẹt nở từ trứng (Thảm Rừng) rồi lớn dần tới lúc đội vương miện (Vượt Tán). Lấy
+bằng `AppAssets.rankBadge(rank.index)`.
 
-| File | Hình | Ý nghĩa đề xuất |
-|---|---|---|
-| `item_diamond.png` | Kim cương xanh | **Ngọc** — tiền cứng (`coinGem`); nên đổi màu sang lục bảo |
-| `item_coin.png` | Xu vàng có ngôi sao | Tạm dùng cho **Hạt** (`coinSeed`) — xem ghi chú dưới |
-| `item_heart.png` | Trái tim đỏ | Sinh lực / lượt làm bài |
-| `items/boost-fruit.png` | Quả phát sáng | **Quả Tăng Tốc** (vật phẩm cửa hàng) |
-| `items/bark-shield.png` | Khiên vỏ cây | **Khiên Vỏ Cây** (vật phẩm cửa hàng) |
-| `item_energy.png` | Tia sét vàng | Icon chủ đề Công nghệ |
-| `item_shield.png` | Khiên xanh | Huy hiệu vùng an toàn ở bảng xếp hạng |
-| `item_gift.png` | Hộp quà | Icon chủ đề Đồ ăn thức uống |
-| `item_calendar.png` | Lịch | Streak, chuỗi ngày học |
-| `item_target.png` | Bia bắn | Mục tiêu ngày |
-| `item_lock.png` | Ổ khoá vàng | Tầng rừng / nội dung chưa mở |
+> **Chưa nối vào UI.** Hồ sơ và bảng xếp hạng vẫn dùng icon vật phẩm tạm
+> (`itemTarget` / `itemLock`). Đây là việc còn lại, xem `docs/PLAN.md`.
 
-> Bộ `item_*` là **phong cách chung**, chưa mang chủ đề rừng. Về sau nên vẽ lại
-> theo hướng thực vật: `item_coin` → **hạt dẻ / hạt hướng dương**, `item_energy`
-> → **quả mọng đỏ**, `item_shield` → **khiên bằng vỏ cây / lá to**, `item_gift`
-> → **bình mật hoa**. Trước mắt dùng tạm bộ hiện có, chỉ đổi **tên hiển thị**
-> trong `app_labels.dart` — UI không cần sửa khi thay ảnh sau này.
+### 11.3 `topics/` rộng hơn số chủ đề đang có
 
-### 11.6 Việc cần làm với kho ảnh
+13 ảnh chủ đề, trong khi Firestore chỉ có 7 chủ đề (`health`, `family`,
+`furniture`, `office`, `technology`, `food`, `school`). Ba ảnh khớp trực tiếp
+(`technology`, `school`, `food-drinks`); phần còn lại để dành cho lúc mở thêm chủ
+đề. `TopicDocument.iconAssetFor` hiện vẫn map sang `items/*` — đổi sang
+`topics/*` là một việc riêng.
 
-1. **Chuyển `lib/images/` → `assets/images/`.** Flutter quy ước asset nằm ngoài
-   `lib/`; ảnh trong `lib/` không được đóng gói và không load được qua
-   `AssetImage`. Sau khi chuyển, khai báo trong `pubspec.yaml`:
-   ```yaml
-   flutter:
-     assets:
-       - assets/images/
-   ```
-2. **Tách thành thư mục con** cho gọn: `mascot/`, `icons/`, `stickers/`,
-   `items/` (bỏ tiền tố khi đã có thư mục).
-3. ~~Xoá phần chữ tiếng Việt bị nướng trong ảnh.~~ **✅ Đã làm.** Cả 43 ảnh đã
-   được xoá caption, xoá nền (trắng + thẻ nền gradient) thành trong suốt, và
-   crop sát vào hình. Script tại [tools/strip_assets.py](../tools/strip_assets.py),
-   bản gốc giữ ở `assets/images_original/`.
+### 11.4 Việc còn lại với kho ảnh
 
-   > **Còn sót:** 4 ảnh `ring/*` vẫn có số (`9/15`, `1/30`, `5/15`, `10/20`) vì
-   > số nằm **bên trong** vòng tiến độ, xoá sẽ phá luôn vòng. Không sao — nhóm
-   > này chỉ dùng làm ảnh tham chiếu thiết kế (xem 11.2).
-4. **Xuất thêm bản `@2x` / `@3x`** (hoặc chuyển sang SVG cho nhóm `icon_*`) —
-   các icon hiện chỉ ~100px, sẽ bị rỗ trên máy màn hình mật độ cao.
-5. Sinh file hằng số `core/constants/app_assets.dart` để không viết chuỗi đường
-   dẫn rải rác:
-   ```dart
-   abstract final class AppAssets {
-     static const mascotCamera = 'assets/images/mascot/camera.png';
-     static const iconHome     = 'assets/images/icons/home.png';
-     // ...
-   }
-   ```
-6. **Chưa có** (cần thiết kế thêm) — tất cả theo chủ đề rừng:
-   - 6 huy hiệu hạng **tổ vẹt theo tầng rừng** (Thảm Rừng → Vượt Tán), mỗi cái
-     2 trạng thái: đã mở (màu) / chưa mở (xám + `?`).
-   - 3 huy hiệu mốc nhóm: **mầm → cây con → đại thụ**.
-   - Icon **hạt** (`coinSeed`) và icon **lá** cho XP, tách khỏi `item_coin`.
-   - Hoạ tiết nền lá cây / dây leo (`pattern/leaves.png`) để dùng ở header nhóm
-     và thẻ hồ sơ.
-   - Avatar nhóm dạng **cặp vẹt trên cành**.
+1. **Xoá nền cho ảnh mới.** Bộ cũ đã được [tools/strip_assets.py](../tools/strip_assets.py)
+   xoá caption + xoá nền + crop sát hình. Bộ mới **chưa qua bước này** nên nhiều
+   ảnh còn khung nền bo góc hoặc nền tròn — đặt cạnh ảnh cũ sẽ thấy lệch.
+2. **Nối `ranks/` vào Hồ sơ và Bảng xếp hạng** thay icon vật phẩm tạm.
+3. **Nối `topics/` vào `TopicDocument.iconAssetFor`** khi mở thêm chủ đề.
+4. **Xuất bản `@2x` / `@3x`** (hoặc SVG cho `icons/`) — ảnh hiện chỉ ~100–300px,
+   sẽ rỗ trên màn hình mật độ cao.
+5. **Chưa có:** 3 huy hiệu mốc nhóm (mầm → cây con → đại thụ), icon **hạt** và
+   icon **lá** riêng cho XP, hoạ tiết nền lá `pattern/leaves.png`, avatar nhóm
+   dạng cặp vẹt trên cành.
