@@ -272,4 +272,6 @@ vì cần quyết định hoặc phụ thuộc bên ngoài:
 - [ ] Trang chi tiết nhiệm vụ tháng
 - [ ] Các mục con trong Cài đặt (đang `onTap: null`)
 - [ ] `/user/:id` — trang cá nhân của người khác
-- [ ] Feature `vocabulary` và `progress` — chưa dựng
+- [x] Feature `vocabulary` — đã dựng (giáo trình + tiến độ từng từ + từ đã lưu)
+- [ ] Feature `progress` (trang thống kê học tập) — chưa dựng. Thư mục khung đã
+      xoá; tạo lại khi viết file đầu tiên

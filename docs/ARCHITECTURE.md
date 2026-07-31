@@ -31,25 +31,24 @@ lib/
 ├── core/                    # dùng chung TOÀN app
 │   ├── theme/               # màu sắc, ThemeData
 │   ├── router/              # cấu hình điều hướng (go_router)
-│   ├── constants/           # hằng số (padding, tên app...)
-│   ├── network/             # client gọi API (Dio...)
-│   ├── error/               # class lỗi (Failure/Exception)
-│   └── utils/               # hàm tiện ích
+│   ├── constants/           # hằng số (padding, mức thưởng, đường dẫn ảnh)
+│   ├── providers/           # provider dùng chung nhiều feature
+│   ├── network/             # client gọi API (tầng REST, hiện không dùng)
+│   └── error/               # class lỗi (Failure)
 │
 ├── features/                # mỗi tính năng 1 thư mục, cùng 1 khuôn
+│   ├── auth/                # đăng nhập / đăng ký (Firebase Auth)
 │   ├── home/                # trang chủ: mục tiêu ngày + nhiệm vụ
-│   ├── image_scan/          # chụp ảnh → nhận diện → sinh từ vựng
-│   ├── quiz/                # phiên học từ mới (nối cặp / trắc nghiệm)
+│   ├── image_scan/          # chụp ảnh → nhận diện vật thể → liệt kê từ
+│   ├── quiz/                # chọn chủ đề + phiên học từ mới
 │   ├── flashcard/           # ôn tập theo SRS
+│   ├── vocabulary/          # giáo trình từ vựng + tiến độ từng từ
 │   ├── community/           # feed, nhóm học tập, bảng xếp hạng
 │   ├── shop/                # cửa hàng vật phẩm
-│   ├── profile/             # trang cá nhân + cài đặt
-│   ├── vocabulary/          # từ vựng (chưa dựng)
-│   └── progress/            # theo dõi tiến độ (chưa dựng)
+│   └── profile/             # trang cá nhân + cài đặt
 │       ├── data/
-│       │   ├── datasources/     # nguồn thô: remote (API) / local (cache)
-│       │   ├── models/          # DTO, có fromJson/toJson
-│       │   └── repositories/    # gom datasource, trả về entity
+│       │   ├── models/          # đọc/ghi document Firestore
+│       │   └── repositories/    # trả về entity, nơi DUY NHẤT chạm SDK
 │       ├── domain/
 │       │   ├── entities/        # object nghiệp vụ thuần Dart
 │       │   └── repositories/    # interface trừu tượng (khi cần)
@@ -61,6 +60,16 @@ lib/
 └── shared/
     └── widgets/             # widget tái sử dụng giữa nhiều feature
 ```
+
+**Không có tầng `datasources/`.** Khuôn Clean Architecture đầy đủ đặt phần chạm
+SDK ở `data/datasources/` rồi `data/repositories/` chỉ lo map DTO → entity. Ở
+quy mô này thì đó là một lớp trung gian chỉ chuyển tiếp lời gọi, nên repository
+gọi `FirebaseFirestore` trực tiếp (xem `FirebaseVocabularyRepository`). Điều cần
+giữ vẫn giữ: `presentation` và `domain` không import `cloud_firestore`.
+
+Thư mục chỉ tạo khi có file thật — không để sẵn thư mục rỗng cho việc tương lai,
+vì mở ra thấy trống lại tưởng mất file. Feature/thư mục còn thiếu ghi ở
+[PLAN.md](PLAN.md).
 
 Ngoài `lib/` còn có `assets/images/` chia theo `mascot/ ring/ icons/ stickers/
 items/`; đường dẫn khai báo tập trung ở `core/constants/app_assets.dart`.
@@ -94,9 +103,9 @@ liệu** → toàn bộ phần gọi AI nằm ở tầng `data`, UI không biế
 ```
 features/chatbot/
 ├── data/
-│   ├── datasources/   # gọi API AI (Claude/OpenAI...) — nơi DUY NHẤT chạm SDK
 │   ├── models/        # DTO request/response của API
 │   └── repositories/  # ChatRepository: gửi tin nhắn, nhận trả lời
+│                      # nơi DUY NHẤT chạm SDK/API AI
 ├── domain/
 │   ├── entities/      # ChatMessage (role: user/assistant, nội dung, thời điểm)
 │   └── repositories/  # interface ChatRepository (để mock khi test)
@@ -119,9 +128,9 @@ Chụp/chọn ảnh → AI đọc chữ trong ảnh → tách ra từ vựng đ�
 ```
 features/image_scan/
 ├── data/
-│   ├── datasources/   # gọi Vision API (đọc ảnh) + OCR
 │   ├── models/        # DTO kết quả nhận diện
 │   └── repositories/  # ImageScanRepository: ảnh vào → danh sách từ ra
+│                      # nơi DUY NHẤT gọi Vision API / OCR
 ├── domain/
 │   ├── entities/      # RecognizedWord (từ, vị trí trong ảnh, độ tin cậy)
 │   └── repositories/
