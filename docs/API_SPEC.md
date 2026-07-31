@@ -357,8 +357,6 @@ trả `422` kèm `message`.
 {
   "name": "Công Tình",
   "avatar_url": "...",
-  "follower_count": 1,
-  "following_count": 5,
   "experience": 568,
   "streak_days": 1,
   "group_name": "neu"

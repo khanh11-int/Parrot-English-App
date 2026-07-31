@@ -66,8 +66,6 @@ void main() {
     const profile = UserProfile(
       name: 'Công Tình',
       avatarAsset: 'a.png',
-      followerCount: 1,
-      followingCount: 5,
       experience: 568,
       streakDays: 1,
       groupName: 'neu',

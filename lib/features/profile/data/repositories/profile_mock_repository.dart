@@ -24,8 +24,6 @@ class ProfileMockRepository implements ProfileRepository {
       // Rỗng như tài khoản thật chưa đặt ảnh: `RankAvatar` dùng huy hiệu hạng.
       // 568 XP là hạng Bụi Rậm nên hiện `ranks/level-2.png`.
       avatarAsset: '',
-      followerCount: 1,
-      followingCount: 5,
       experience: 568,
       streakDays: 1,
       groupName: 'neu',

@@ -620,9 +620,6 @@ Sticker vẹt, Vé Giải Đấu — đã xoá khỏi `shopItems` trên Firestor
 Trang cá nhân                        ⟳
 ╭──────────────────────────────────────╮
 │      🦜   Công Tình             ⚙️   │
-│        1              5              │
-│      Người          Đang             │
-│      theo dõi       theo dõi         │
 ╰──────────────────────────────────────╯
 Tổng quan
 ╭────────────────╮ ╭────────────────╮
@@ -637,18 +634,20 @@ Tổng quan
 - Thẻ đầu trang có **nền hoạ tiết lá cây mờ**, avatar tròn, tên đậm,
   bánh răng mở `/settings`, nút làm mới ở góc phải trên.
 - Avatar là **huy hiệu hạng**, đổi theo XP — xem `RankAvatar` ở mục 11.2.
-- 2 số liệu xã hội chia đều theo chiều ngang.
 - **Tổng quan**: `GridView` 2×2, mỗi ô là `StatTile` (icon + nhãn nhỏ mờ + giá
   trị đậm). Nhãn dài thì cắt bằng `…`.
-- **Không có mục "Các bài đăng gần đây"** và không có ô `Ảnh đăng`: nhánh này
-  không có dòng thời gian nên không có bài đăng nào để hiện. Lưới cũ chỉ vẽ N ô
-  xám rỗng theo `recentPostCount`, mà con số đó luôn là `0`.
-- Trang của người khác (`/user/:id`): thay bánh răng bằng nút
-  "Theo dõi / Đang theo dõi".
+- **Không có mục "Các bài đăng gần đây"**: nhánh này không có dòng thời gian nên
+  không có bài đăng nào để hiện. Lưới cũ chỉ vẽ N ô xám rỗng theo
+  `recentPostCount`, mà con số đó luôn là `0`.
+- Trang của người khác (`/user/:id`) chưa dựng.
 
-> **Còn hai số liệu chết:** `Người theo dõi` / `Đang theo dõi` luôn là `0` vì
-> chưa có chỗ nào để theo dõi ai (không có trang cá nhân người khác, không có nút
-> Theo dõi). Giữ lại vì theo dõi không phụ thuộc bài đăng.
+> **Đã bỏ cả ba số liệu xã hội** (`Ảnh đăng`, `Người theo dõi`, `Đang theo
+> dõi`). Cả ba luôn là `0`: không có dòng thời gian nên không có bài đăng, và
+> không có chỗ nào để theo dõi ai — chưa có trang cá nhân người khác, chưa có nút
+> Theo dõi. Ba con số 0 xếp hàng ngang không nói lên điều gì.
+>
+> Dựng lại khi có tính năng thật. Field trong Firestore cũng đã bỏ khỏi `toMap`
+> nên document mới không ghi `postCount` / `followerCount` / `followingCount`.
 
 ### 5.9b Cài đặt — `/settings`
 

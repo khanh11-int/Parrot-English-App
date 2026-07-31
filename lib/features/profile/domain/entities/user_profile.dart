@@ -5,8 +5,6 @@ class UserProfile {
   const UserProfile({
     required this.name,
     required this.avatarAsset,
-    required this.followerCount,
-    required this.followingCount,
     required this.experience,
     required this.streakDays,
     required this.groupName,
@@ -14,8 +12,6 @@ class UserProfile {
 
   final String name;
   final String avatarAsset;
-  final int followerCount;
-  final int followingCount;
   final int experience;
   final int streakDays;
 

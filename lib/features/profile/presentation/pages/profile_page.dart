@@ -85,73 +85,29 @@ class _ProfileHeaderCard extends StatelessWidget {
         ),
         borderRadius: AppRadius.cardLargeBorder,
       ),
-      child: Column(
+      child: Row(
         children: [
-          Row(
-            children: [
-              RankAvatar(
-                rank: profile.rank,
-                size: 56,
-                avatarAsset: profile.avatarAsset,
-              ),
-              const SizedBox(width: AppSpacing.md),
-              Expanded(
-                child: Text(
-                  profile.name,
-                  style: AppTextStyles.titleMedium,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              IconButton(
-                onPressed: () => context.push(AppRoutes.settings),
-                icon: const Icon(Icons.settings_outlined),
-                tooltip: 'Cài đặt',
-              ),
-            ],
+          RankAvatar(
+            rank: profile.rank,
+            size: 56,
+            avatarAsset: profile.avatarAsset,
           ),
-          const SizedBox(height: AppSpacing.lg),
-          Row(
-            children: [
-              Expanded(
-                child: _SocialStat(
-                  label: 'Người theo dõi',
-                  value: profile.followerCount,
-                ),
-              ),
-              Expanded(
-                child: _SocialStat(
-                  label: 'Đang theo dõi',
-                  value: profile.followingCount,
-                ),
-              ),
-            ],
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: Text(
+              profile.name,
+              style: AppTextStyles.titleMedium,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          IconButton(
+            onPressed: () => context.push(AppRoutes.settings),
+            icon: const Icon(Icons.settings_outlined),
+            tooltip: 'Cài đặt',
           ),
         ],
       ),
-    );
-  }
-}
-
-class _SocialStat extends StatelessWidget {
-  const _SocialStat({required this.label, required this.value});
-
-  final String label;
-  final int value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text('$value', style: AppTextStyles.titleMedium),
-        Text(
-          label,
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: AppTextStyles.caption,
-        ),
-      ],
     );
   }
 }

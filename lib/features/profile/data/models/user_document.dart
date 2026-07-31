@@ -13,8 +13,6 @@ class UserDocument {
     required this.streakDays,
     required this.seeds,
     required this.gems,
-    required this.followerCount,
-    required this.followingCount,
     this.groupId,
     this.groupName,
   });
@@ -61,8 +59,6 @@ class UserDocument {
   final int streakDays;
   final int seeds;
   final int gems;
-  final int followerCount;
-  final int followingCount;
   final String? groupId;
   final String? groupName;
 
@@ -75,8 +71,6 @@ class UserDocument {
       streakDays: 0,
       seeds: 0,
       gems: 0,
-      followerCount: 0,
-      followingCount: 0,
     );
   }
 
@@ -105,8 +99,6 @@ class UserDocument {
       streakDays: readInt('streakDays'),
       seeds: readInt('seeds'),
       gems: readInt('gems'),
-      followerCount: readInt('followerCount'),
-      followingCount: readInt('followingCount'),
       groupId: readStringOrNull('groupId'),
       groupName: readStringOrNull('groupName'),
     );
@@ -119,8 +111,6 @@ class UserDocument {
     'streakDays': streakDays,
     'seeds': seeds,
     'gems': gems,
-    'followerCount': followerCount,
-    'followingCount': followingCount,
     'groupId': groupId,
     'groupName': groupName,
   };
@@ -128,8 +118,6 @@ class UserDocument {
   UserProfile toEntity() => UserProfile(
     name: name,
     avatarAsset: avatarUrl,
-    followerCount: followerCount,
-    followingCount: followingCount,
     experience: experience,
     streakDays: streakDays,
     groupName: groupName,
