@@ -253,8 +253,8 @@ vì cần quyết định hoặc phụ thuộc bên ngoài:
 ### Cần thiết kế thêm (xem mục 11.4 UI_SPEC)
 - [x] 6 huy hiệu hạng theo tầng rừng — có ảnh ở `assets/images/ranks/`,
       lấy bằng `AppAssets.rankBadge(rank.index)`
-- [ ] **Nối** 6 huy hiệu đó vào Hồ sơ + Bảng xếp hạng (vẫn đang dùng
-      `itemTarget` / `itemLock` tạm)
+- [x] **Nối** 6 huy hiệu vào Hồ sơ + Bảng xếp hạng qua `RankAvatar` — avatar
+      đổi theo hạng, suy từ XP nên không lệch với nhãn hạng
 - [ ] Xoá nền cho bộ ảnh mới bằng `tools/strip_assets.py` — nhiều ảnh còn khung
       nền bo góc, đặt cạnh ảnh cũ thấy lệch
 - [ ] Nối `assets/images/topics/` vào `TopicDocument.iconAssetFor`

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_labels.dart';
 import '../../../../core/error/failure.dart';
 import '../../../auth/domain/repositories/auth_repository.dart';
@@ -45,7 +44,10 @@ class FirebaseCommunityRepository implements CommunityRepository {
           LeaderboardEntry(
             rank: i + 1,
             name: name is String && name.isNotEmpty ? name : 'Người học',
-            avatarAsset: AppAssets.stickerHello,
+            // Rỗng = chưa có ảnh tự đặt; `RankAvatar` sẽ dùng huy hiệu
+            // hạng suy từ XP. Trước đây gán cứng một sticker nên cả bảng xếp
+            // hạng ai cũng cùng một mặt.
+            avatarAsset: '',
             experience: switch (data['experience']) {
               final num value => value.toInt(),
               _ => 0,

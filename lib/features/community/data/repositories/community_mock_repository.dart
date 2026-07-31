@@ -16,58 +16,51 @@ class CommunityMockRepository implements CommunityRepository {
   Future<Leaderboard> getLeaderboard() async {
     await Future<void>.delayed(_mockDelay);
 
+    // `avatarAsset` để rỗng: bản mock cũng đi qua đúng đường của dữ liệu thật,
+    // tức `RankAvatar` chọn huy hiệu theo hạng. Gán sticker cứng ở đây thì test
+    // và bản dev sẽ không bao giờ chạm tới nhánh huy hiệu.
+    //
+    // XP trải qua 3 hạng để thấy avatar đổi: 1290 là Bụi Rậm, 300 là Thảm Rừng.
     return const Leaderboard(
       currentRank: ForestRank.lowerCanopy,
-      safeZoneEndRank: 6,
+      safeZoneEndRank: 4,
       entries: [
         LeaderboardEntry(
           rank: 1,
           name: 'Minh Anh',
-          avatarAsset: AppAssets.stickerAwesome,
-          experience: 312,
+          avatarAsset: '',
+          experience: 3120,
         ),
         LeaderboardEntry(
           rank: 2,
           name: 'Hoang Duyen',
-          avatarAsset: AppAssets.stickerHappy,
-          experience: 264,
+          avatarAsset: '',
+          experience: 2640,
         ),
         LeaderboardEntry(
           rank: 3,
           name: 'Thu Hà',
-          avatarAsset: AppAssets.stickerLove,
-          experience: 198,
+          avatarAsset: '',
+          experience: 1980,
         ),
         LeaderboardEntry(
           rank: 4,
           name: 'Lê Hồng',
-          avatarAsset: AppAssets.stickerHello,
-          experience: 154,
+          avatarAsset: '',
+          experience: 1540,
         ),
         LeaderboardEntry(
           rank: 5,
           name: 'Lê Cường',
-          avatarAsset: AppAssets.stickerThinking,
-          experience: 129,
+          avatarAsset: '',
+          experience: 1290,
         ),
         LeaderboardEntry(
           rank: 6,
-          name: 'Bá Đức',
-          avatarAsset: AppAssets.stickerSurprised,
-          experience: 122,
-        ),
-        LeaderboardEntry(
-          rank: 7,
           name: 'Công Tình',
-          avatarAsset: AppAssets.stickerCheer,
-          experience: 98,
+          avatarAsset: '',
+          experience: 300,
           isCurrentUser: true,
-        ),
-        LeaderboardEntry(
-          rank: 8,
-          name: 'Quốc Bảo',
-          avatarAsset: AppAssets.stickerTired,
-          experience: 74,
         ),
       ],
     );

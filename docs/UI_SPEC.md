@@ -761,8 +761,17 @@ icon điều hướng. Dùng chúng cho trạng thái rỗng, đầu mục, th�
 vẹt nở từ trứng (Thảm Rừng) rồi lớn dần tới lúc đội vương miện (Vượt Tán). Lấy
 bằng `AppAssets.rankBadge(rank.index)`.
 
-> **Chưa nối vào UI.** Hồ sơ và bảng xếp hạng vẫn dùng icon vật phẩm tạm
-> (`itemTarget` / `itemLock`). Đây là việc còn lại, xem `docs/PLAN.md`.
+**Avatar người học chính là huy hiệu hạng.** `RankAvatar` chọn ảnh theo
+`ForestRank.fromExperience(xp)`, nên lên hạng là avatar đổi theo — ở Hồ sơ và ở
+mọi hàng của Bảng xếp hạng. Người học nhìn avatar là biết mình đang ở tầng nào,
+không phải mở Hồ sơ đọc chữ.
+
+Nếu người dùng tự đặt ảnh (`users/{uid}.avatarUrl` khác rỗng) thì ảnh đó được ưu
+tiên. **Rỗng là chuyện bình thường** — tài khoản mới luôn rỗng — nên không được
+đưa thẳng chuỗi rỗng vào `AppImage`, làm vậy sẽ hiện ô xám vỡ ảnh.
+
+> Huy hiệu mốc **nhóm** (Chồi Non / Cây Vững / Đại Thụ) vẫn dùng icon vật phẩm
+> tạm (`itemTarget` / `itemLock`) — chưa có ảnh riêng.
 
 ### 11.3 `topics/` rộng hơn số chủ đề đang có
 

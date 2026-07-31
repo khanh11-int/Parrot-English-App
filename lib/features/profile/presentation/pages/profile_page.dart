@@ -7,7 +7,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../shared/widgets/app_image.dart';
+import '../../../../shared/widgets/rank_avatar.dart';
 import '../../../../shared/widgets/app_linear_progress.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/section_header.dart';
@@ -92,10 +92,10 @@ class _ProfileHeaderCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              CircleAvatar(
-                radius: 28,
-                backgroundColor: AppColors.bgBase,
-                child: AppImage(source: profile.avatarAsset, width: 40),
+              RankAvatar(
+                rank: profile.rank,
+                size: 56,
+                avatarAsset: profile.avatarAsset,
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(

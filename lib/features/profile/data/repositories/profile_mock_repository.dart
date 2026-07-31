@@ -1,4 +1,3 @@
-import '../../../../core/constants/app_assets.dart';
 import '../../../auth/domain/entities/app_user.dart';
 import '../../domain/entities/user_profile.dart';
 import '../../domain/repositories/profile_repository.dart';
@@ -22,7 +21,9 @@ class ProfileMockRepository implements ProfileRepository {
 
     return const UserProfile(
       name: 'Công Tình',
-      avatarAsset: AppAssets.stickerCheer,
+      // Rỗng như tài khoản thật chưa đặt ảnh: `RankAvatar` dùng huy hiệu hạng.
+      // 568 XP là hạng Bụi Rậm nên hiện `ranks/level-2.png`.
+      avatarAsset: '',
       postCount: 18,
       followerCount: 1,
       followingCount: 5,

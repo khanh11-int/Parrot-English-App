@@ -6,9 +6,9 @@ import '../../../../core/constants/app_labels.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../shared/widgets/app_image.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/badge_avatar.dart';
+import '../../../../shared/widgets/rank_avatar.dart';
 import '../../domain/entities/community_entities.dart';
 import '../providers/community_providers.dart';
 
@@ -161,10 +161,11 @@ class _LeaderboardRow extends StatelessWidget {
         children: [
           SizedBox(width: 28, child: _RankMark(rank: entry.rank)),
           const SizedBox(width: AppSpacing.sm),
-          CircleAvatar(
-            radius: 18,
+          RankAvatar.fromExperience(
+            experience: entry.experience,
+            size: 36,
+            avatarAsset: entry.avatarAsset,
             backgroundColor: AppColors.leafLight,
-            child: AppImage(source: entry.avatarAsset, width: 28),
           ),
           const SizedBox(width: AppSpacing.md),
           Expanded(
