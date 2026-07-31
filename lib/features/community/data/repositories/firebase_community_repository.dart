@@ -141,10 +141,15 @@ class FirebaseCommunityRepository implements CommunityRepository {
 
       // So thanh vien va XP nhom tinh bang aggregate ngay tren server: khong
       // tai toan bo ho so ve may, va khong co con so luu san de lech.
-      final (groupSnapshot, stats) = await (
-        groupRef.get(),
-        _membersOf(groupId).aggregate(count(), sum('experience')).get(),
-      ).wait;
+      // Khoi tao truoc roi await tung cai: van chay song song vi future trong
+      // Dart la eager. Khong dung `(f1, f2).wait` — no goi loi vao
+      // ParallelWaitError nen `on FirebaseException` ben duoi se truot.
+      final groupSnapshotFuture = groupRef.get();
+      final statsFuture = _membersOf(
+        groupId,
+      ).aggregate(count(), sum('experience')).get();
+      final groupSnapshot = await groupSnapshotFuture;
+      final stats = await statsFuture;
 
       final data = groupSnapshot.data();
       if (data == null) return null;
@@ -470,10 +475,19 @@ class FirebaseCommunityRepository implements CommunityRepository {
       final data = updated.data();
       if (data == null) throw const NotFoundFailure('Bài đăng không còn nữa.');
 
-      final (likeSnapshot, bookmarkSnapshot) = await (
-        postRef.collection(PostDocument.likesCollection).doc(uid).get(),
-        postRef.collection(PostDocument.bookmarksCollection).doc(uid).get(),
-      ).wait;
+      // Khoi tao truoc roi await tung cai: van chay song song vi future trong
+      // Dart la eager. Khong dung `(f1, f2).wait` — no goi loi vao
+      // ParallelWaitError nen `on FirebaseException` ben duoi se truot.
+      final likeSnapshotFuture = postRef
+          .collection(PostDocument.likesCollection)
+          .doc(uid)
+          .get();
+      final bookmarkSnapshotFuture = postRef
+          .collection(PostDocument.bookmarksCollection)
+          .doc(uid)
+          .get();
+      final likeSnapshot = await likeSnapshotFuture;
+      final bookmarkSnapshot = await bookmarkSnapshotFuture;
 
       return PostDocument.toEntity(
         postId,

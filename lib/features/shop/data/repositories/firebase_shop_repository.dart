@@ -34,14 +34,18 @@ class FirebaseShopRepository implements ShopRepository {
     final uid = _requireUid();
 
     try {
-      final (itemsSnapshot, userSnapshot, inventorySnapshot) = await (
-        _firestore
-            .collection(ShopItemDocument.collection)
-            .orderBy('order')
-            .get(),
-        _userDoc(uid).get(),
-        _inventory(uid).get(),
-      ).wait;
+      // Khoi tao truoc roi await tung cai: van chay song song vi future trong
+      // Dart la eager. Khong dung `(f1, f2).wait` — no goi loi vao
+      // ParallelWaitError nen `on FirebaseException` ben duoi se truot.
+      final itemsSnapshotFuture = _firestore
+          .collection(ShopItemDocument.collection)
+          .orderBy('order')
+          .get();
+      final userSnapshotFuture = _userDoc(uid).get();
+      final inventorySnapshotFuture = _inventory(uid).get();
+      final itemsSnapshot = await itemsSnapshotFuture;
+      final userSnapshot = await userSnapshotFuture;
+      final inventorySnapshot = await inventorySnapshotFuture;
 
       final ownedByItem = <String, int>{
         for (final doc in inventorySnapshot.docs)

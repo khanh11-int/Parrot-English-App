@@ -137,6 +137,11 @@ Field lưu trong document: `name`, `leaderId`, `leaderName`, `daysRemaining`.
 > **Số thành viên và XP nhóm KHÔNG lưu trong document.** App tính bằng aggregate
 > `count()` và `sum('experience')` trên `users` where `groupId == <id>`.
 >
+> Việc này cần **composite index** `users(groupId, experience)` — Firestore đòi
+> index cho `sum`/`average` khi có filter, riêng `count()` thì không. Index đã
+> khai báo trong `firestore.indexes.json`, deploy bằng
+> `firebase deploy --only firestore:indexes`.
+>
 > Lý do: nếu lưu sẵn hai con số đó thì mỗi lần có người vào/rời nhóm đều phải
 > cho họ ghi vào document nhóm — mở quyền đó ra là ai cũng sửa được XP cả nhóm.
 > Với cách hiện tại, **vào/rời nhóm chỉ ghi `users/{uid}.groupId`** của chính

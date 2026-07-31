@@ -25,10 +25,13 @@ class FirebaseLearnRepository implements LearnRepository {
       throw const ValidationFailure('Hãy chọn một chủ đề để bắt đầu học.');
     }
 
-    final (words, progress) = await (
-      _vocabularyRepository.getTopicWords(topicId),
-      _vocabularyRepository.getProgress(topicId: topicId),
-    ).wait;
+    // Khoi tao truoc roi await tung cai: van chay song song vi future trong
+    // Dart la eager. Khong dung `(f1, f2).wait` — no goi loi vao
+    // ParallelWaitError nen `on FirebaseException` ben duoi se truot.
+    final wordsFuture = _vocabularyRepository.getTopicWords(topicId);
+    final progressFuture = _vocabularyRepository.getProgress(topicId: topicId);
+    final words = await wordsFuture;
+    final progress = await progressFuture;
 
     if (words.isEmpty) {
       throw const NotFoundFailure(

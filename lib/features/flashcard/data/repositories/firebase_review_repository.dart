@@ -21,14 +21,20 @@ class FirebaseReviewRepository implements ReviewRepository {
     if (user == null) throw const UnauthorizedFailure();
 
     try {
-      final (topicsSnapshot, progressSnapshot) = await (
-        _firestore.collection(TopicDocument.collection).orderBy('order').get(),
-        _firestore
-            .collection(UserDocument.collection)
-            .doc(user.id)
-            .collection(WordProgressDocument.collection)
-            .get(),
-      ).wait;
+      // Khoi tao truoc roi await tung cai: van chay song song vi future trong
+      // Dart la eager. Khong dung `(f1, f2).wait` — no goi loi vao
+      // ParallelWaitError nen `on FirebaseException` ben duoi se truot.
+      final topicsSnapshotFuture = _firestore
+          .collection(TopicDocument.collection)
+          .orderBy('order')
+          .get();
+      final progressSnapshotFuture = _firestore
+          .collection(UserDocument.collection)
+          .doc(user.id)
+          .collection(WordProgressDocument.collection)
+          .get();
+      final topicsSnapshot = await topicsSnapshotFuture;
+      final progressSnapshot = await progressSnapshotFuture;
 
       // Nhóm tiến độ theo chủ đề trong một lượt, thay vì truy vấn lại cho từng
       // chủ đề — 7 chủ đề sẽ là 7 lượt gọi mạng không cần thiết.

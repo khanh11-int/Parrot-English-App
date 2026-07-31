@@ -25,14 +25,20 @@ class FirebaseTopicRepository implements TopicRepository {
     try {
       // Hai truy vấn chạy song song thay vì nối tiếp: người dùng chờ theo truy
       // vấn chậm nhất chứ không phải tổng thời gian cả hai.
-      final (topicsSnapshot, progressSnapshot) = await (
-        _firestore.collection(TopicDocument.collection).orderBy('order').get(),
-        _firestore
-            .collection(UserDocument.collection)
-            .doc(user.id)
-            .collection(TopicDocument.progressCollection)
-            .get(),
-      ).wait;
+      // Khoi tao truoc roi await tung cai: van chay song song vi future trong
+      // Dart la eager. Khong dung `(f1, f2).wait` — no goi loi vao
+      // ParallelWaitError nen `on FirebaseException` ben duoi se truot.
+      final topicsSnapshotFuture = _firestore
+          .collection(TopicDocument.collection)
+          .orderBy('order')
+          .get();
+      final progressSnapshotFuture = _firestore
+          .collection(UserDocument.collection)
+          .doc(user.id)
+          .collection(TopicDocument.progressCollection)
+          .get();
+      final topicsSnapshot = await topicsSnapshotFuture;
+      final progressSnapshot = await progressSnapshotFuture;
 
       final learnedByTopic = <String, int>{
         for (final doc in progressSnapshot.docs)

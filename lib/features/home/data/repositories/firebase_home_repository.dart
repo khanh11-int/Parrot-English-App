@@ -33,17 +33,25 @@ class FirebaseHomeRepository implements HomeRepository {
     try {
       // Bốn truy vấn song song: người dùng chờ theo truy vấn chậm nhất chứ
       // không phải tổng thời gian cả bốn.
-      final (
-        userSnapshot,
-        statsSnapshot,
-        progressCount,
-        topicsSnapshot,
-      ) = await (
-        userRef.get(),
-        userRef.collection(UserDocument.dailyStatsCollection).doc(today).get(),
-        userRef.collection(WordProgressDocument.collection).count().get(),
-        _firestore.collection(TopicDocument.collection).get(),
-      ).wait;
+      // Khoi tao truoc roi await tung cai: van chay song song vi future trong
+      // Dart la eager. Khong dung `(f1, f2).wait` — no goi loi vao
+      // ParallelWaitError nen `on FirebaseException` ben duoi se truot.
+      final userSnapshotFuture = userRef.get();
+      final statsSnapshotFuture = userRef
+          .collection(UserDocument.dailyStatsCollection)
+          .doc(today)
+          .get();
+      final progressCountFuture = userRef
+          .collection(WordProgressDocument.collection)
+          .count()
+          .get();
+      final topicsSnapshotFuture = _firestore
+          .collection(TopicDocument.collection)
+          .get();
+      final userSnapshot = await userSnapshotFuture;
+      final statsSnapshot = await statsSnapshotFuture;
+      final progressCount = await progressCountFuture;
+      final topicsSnapshot = await topicsSnapshotFuture;
 
       final userData = userSnapshot.data() ?? const <String, dynamic>{};
       final statsData = statsSnapshot.data() ?? const <String, dynamic>{};

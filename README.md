@@ -50,8 +50,13 @@ Trên Firebase Console cần bật thêm:
 ### 3. Nạp dữ liệu và bảo mật
 
 ```bash
-firebase deploy --only firestore:rules
+firebase deploy --only firestore:rules,firestore:indexes
 ```
+
+> Phải deploy cả **indexes**, không chỉ rules. XP nhóm tính bằng aggregate
+> `sum()` kèm filter, mà Firestore đòi composite index cho việc đó — thiếu index
+> thì tab Nhóm học tập báo lỗi. Index đã khai báo trong `firestore.indexes.json`
+> nên chỉ cần lệnh trên, không phải bấm gì trên Console.
 
 Rồi nhập dữ liệu mẫu (7 chủ đề, 56 từ, 5 vật phẩm) theo
 [docs/SEED_DATA.md](docs/SEED_DATA.md).

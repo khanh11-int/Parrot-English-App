@@ -109,10 +109,13 @@ class FirebaseVocabularyRepository implements VocabularyRepository {
     try {
       final doc = _progress(uid).doc(word.id);
       // Đọc song song: tiến độ của từ và hồ sơ (để tính streak).
-      final (snapshot, userSnapshot) = await (
-        doc.get(),
-        _userDoc(uid).get(),
-      ).wait;
+      // Khoi tao truoc roi await tung cai: van chay song song vi future trong
+      // Dart la eager. Khong dung `(f1, f2).wait` — no goi loi vao
+      // ParallelWaitError nen `on FirebaseException` ben duoi se truot.
+      final snapshotFuture = doc.get();
+      final userSnapshotFuture = _userDoc(uid).get();
+      final snapshot = await snapshotFuture;
+      final userSnapshot = await userSnapshotFuture;
       final data = snapshot.data();
 
       final currentDays = switch (data?['reviewIntervalDays']) {
