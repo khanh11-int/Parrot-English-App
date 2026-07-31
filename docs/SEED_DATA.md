@@ -58,7 +58,7 @@ tạo bản trùng.
 ⚠️ Rules **chặn client ghi** vào `topics/{id}/words` — đây là giáo trình, không
 phải dữ liệu người dùng. Thêm từ phải qua Console hoặc script (mở rules tạm).
 
-## 2. Collection `shopItems` — 5 document
+## 2. Collection `shopItems` — 2 document
 
 Mỗi document có **5 field**:
 
@@ -74,9 +74,10 @@ Mỗi document có **5 field**:
 |---|---|---|---|---|---|
 | `boost-fruit` | Quả Tăng Tốc | Nhân đôi XP nhận được trong 15 phút | 150 | `seed` | 1 |
 | `bark-shield` | Khiên Vỏ Cây | Giữ chuỗi streak khi nghỉ 1 ngày | 200 | `seed` | 2 |
-| `nectar-bottle` | Bình Mật Hoa | Tăng 25% XP toàn app trong 24 giờ | 2 | `gem` | 3 |
-| `sticker-pack` | Sticker vẹt | Dùng sticker trong chat nhóm & bình luận | 2 | `gem` | 4 |
-| `league-ticket` | Vé Giải Đấu | Tham gia giải đấu tuần ngoài lượt thường | 300 | `seed` | 5 |
+
+> Ba vật phẩm cũ (`nectar-bottle`, `sticker-pack`, `league-ticket`) **đã xoá khỏi
+> Firestore**. Muốn thêm lại thì nhập tay theo mẫu trên và bổ sung ảnh vào
+> `ShopItemDocument.iconAssetFor` — thiếu ảnh thì vật phẩm hiện icon mặc định.
 
 ---
 

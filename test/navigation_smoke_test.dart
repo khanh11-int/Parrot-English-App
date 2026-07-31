@@ -58,9 +58,14 @@ void main() {
     router.push(AppRoutes.shop);
     await _settle(tester);
 
-    expect(find.text('Quả Tăng Tốc'), findsOneWidget);
+    // Cửa hàng chỉ còn hai vật phẩm. "Quả Tăng Tốc" xuất hiện hai lần: một ở
+    // mục "Vật phẩm của tôi" (mock cho sẵn 1 cái) và một ở mục "Mua ngay".
+    expect(find.text('Quả Tăng Tốc'), findsWidgets);
     expect(find.text('Khiên Vỏ Cây'), findsOneWidget);
-    expect(find.text('Bình Mật Hoa'), findsOneWidget);
+    // Ba vật phẩm cũ đã bỏ khỏi cửa hàng.
+    expect(find.text('Bình Mật Hoa'), findsNothing);
+    expect(find.text('Sticker vẹt'), findsNothing);
+    expect(find.text('Vé Giải Đấu'), findsNothing);
   });
 
   testWidgets('Hồ sơ hiện hạng tầng rừng suy ra từ XP', (tester) async {

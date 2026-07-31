@@ -66,14 +66,19 @@ abstract final class AppAssets {
     stickerAwesome,
   ];
 
-  // --- Vật phẩm & tiền tệ -----------------------------------------------
+  // --- Vật phẩm cửa hàng ------------------------------------------------
+  // Hai ảnh này vẽ riêng cho hai vật phẩm, đặt tên theo đúng document id trên
+  // Firestore (`boost-fruit`, `bark-shield`) để dễ đối chiếu.
+  static const itemBoostFruit = '$_items/boost-fruit.png';
+  static const itemBarkShield = '$_items/bark-shield.png';
+
+  // --- Tiền tệ & icon phụ -----------------------------------------------
   static const itemDiamond = '$_items/diamond.png';
   static const itemCoin = '$_items/coin.png';
   static const itemHeart = '$_items/heart.png';
   static const itemEnergy = '$_items/energy.png';
   static const itemShield = '$_items/shield.png';
   static const itemGift = '$_items/gift.png';
-  static const itemTicket = '$_items/ticket.png';
   static const itemCalendar = '$_items/calendar.png';
   static const itemTarget = '$_items/target.png';
   static const itemLock = '$_items/lock.png';

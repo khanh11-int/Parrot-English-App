@@ -62,13 +62,13 @@ class ShopItemDocument {
       raw == 'gem' ? ShopCurrency.gem : ShopCurrency.seed;
 
   /// Ảnh vật phẩm lấy từ asset trong app theo id, không lưu URL trên Firestore.
+  ///
+  /// Cửa hàng chỉ còn hai vật phẩm; id lạ vẫn hiện được bằng ảnh mặc định thay
+  /// vì làm sập cả trang.
   static String iconAssetFor(String itemId) {
     return switch (itemId) {
-      'boost-fruit' => AppAssets.itemEnergy,
-      'bark-shield' => AppAssets.itemShield,
-      'nectar-bottle' => AppAssets.itemGift,
-      'sticker-pack' => AppAssets.stickerHappy,
-      'league-ticket' => AppAssets.itemTicket,
+      'boost-fruit' => AppAssets.itemBoostFruit,
+      'bark-shield' => AppAssets.itemBarkShield,
       _ => AppAssets.itemTarget,
     };
   }

@@ -159,10 +159,18 @@ riêng, tầng càng cao thì nền càng nhiều ánh nắng.
 
 | Tên | Tác dụng | Giá | Asset |
 |---|---|---|---|
-| **Quả Tăng Tốc** | Nhân đôi XP trong 15 phút | 150 Hạt | `item_energy.png` |
-| **Khiên Vỏ Cây** | Giữ chuỗi streak khi nghỉ 1 ngày | 200 Hạt | `item_shield.png` |
-| **Bình Mật Hoa** | Tăng 25% XP toàn app trong 24 giờ | 2 Ngọc | `item_gift.png` |
-| **Sticker vẹt** | Dùng sticker trong chat nhóm & bình luận | 2 Ngọc | `sticker_*.png` |
+| **Quả Tăng Tốc** | Nhân đôi XP trong 15 phút | 150 Hạt | `items/boost-fruit.png` |
+| **Khiên Vỏ Cây** | Giữ chuỗi streak khi nghỉ 1 ngày | 200 Hạt | `items/bark-shield.png` |
+
+Hai ảnh này vẽ riêng cho hai vật phẩm, **đặt tên trùng document id** trên
+Firestore để dễ đối chiếu. Tên file phải là ASCII không dấu, không khoảng trắng —
+đường dẫn asset có dấu bị lỗi mã hoá URL trên web.
+
+> **Tác dụng chưa được cài đặt.** Mua thì trừ tiền và tăng số lượng thật, nhưng
+> chưa có code nào đọc `users/{uid}/inventory` để áp hiệu ứng: XP vẫn cộng theo
+> hằng số `AppRewards`, streak vẫn chỉ xét `lastActiveDate`. Muốn làm đúng thì
+> cần thêm `activeUntil` vào inventory, nút "Sử dụng", và tính buff ở Cloud
+> Functions (nếu tính ở client thì gian lận XP còn dễ hơn hiện tại).
 
 ---
 
@@ -593,14 +601,11 @@ Mua ngay
 ├──────────────────────────────────────┤
 │ 🛡  Khiên Vỏ Cây                     │
 │     Giữ chuỗi streak khi nghỉ 1 ngày │  🌰 200
-├──────────────────────────────────────┤
-│ 🍯  Bình Mật Hoa                     │
-│     Tăng 25% XP toàn app trong 24h   │  💎 2
-├──────────────────────────────────────┤
-│ 🦜  Sticker vẹt                      │
-│     Dùng sticker trong chat & bình    │  💎 2
 └──────────────────────────────────────┘
 ```
+
+Cửa hàng có **2 vật phẩm** (xem bảng ở mục 2.6). Ba món cũ — Bình Mật Hoa,
+Sticker vẹt, Vé Giải Đấu — đã xoá khỏi `shopItems` trên Firestore.
 - Mỗi dòng: icon vật phẩm (trái) · tên đậm + mô tả `textSecondary` (giữa) ·
   giá + icon tiền (phải).
 - Bấm dòng → bottom sheet xác nhận: icon lớn, tên, mô tả đầy đủ, giá, nút
@@ -786,10 +791,11 @@ dùng trong **chat nhóm** và **bình luận** ở Cộng đồng. Cần thêm 
 | `item_diamond.png` | Kim cương xanh | **Ngọc** — tiền cứng (`coinGem`); nên đổi màu sang lục bảo |
 | `item_coin.png` | Xu vàng có ngôi sao | Tạm dùng cho **Hạt** (`coinSeed`) — xem ghi chú dưới |
 | `item_heart.png` | Trái tim đỏ | Sinh lực / lượt làm bài |
-| `item_energy.png` | Tia sét vàng | **Quả Tăng Tốc** |
-| `item_shield.png` | Khiên xanh | **Khiên Vỏ Cây** — giữ streak |
-| `item_gift.png` | Hộp quà | **Bình Mật Hoa** + phần thưởng ngày |
-| `item_ticket.png` | Vé xanh | Vé tham gia giải đấu |
+| `items/boost-fruit.png` | Quả phát sáng | **Quả Tăng Tốc** (vật phẩm cửa hàng) |
+| `items/bark-shield.png` | Khiên vỏ cây | **Khiên Vỏ Cây** (vật phẩm cửa hàng) |
+| `item_energy.png` | Tia sét vàng | Icon chủ đề Công nghệ |
+| `item_shield.png` | Khiên xanh | Huy hiệu vùng an toàn ở bảng xếp hạng |
+| `item_gift.png` | Hộp quà | Icon chủ đề Đồ ăn thức uống |
 | `item_calendar.png` | Lịch | Streak, chuỗi ngày học |
 | `item_target.png` | Bia bắn | Mục tiêu ngày |
 | `item_lock.png` | Ổ khoá vàng | Tầng rừng / nội dung chưa mở |
