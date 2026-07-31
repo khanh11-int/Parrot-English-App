@@ -100,7 +100,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.reviewSession,
-        builder: (_, _) => const SessionPage(mode: SessionMode.review),
+        builder: (_, state) => SessionPage(
+          mode: SessionMode.review,
+          topicId: state.uri.queryParameters[AppRoutes.topicIdParam],
+        ),
       ),
       GoRoute(path: AppRoutes.shop, builder: (_, _) => const ShopPage()),
       GoRoute(

@@ -5,6 +5,7 @@ import '../../domain/entities/review_deck.dart';
 /// DTO của một phần tử trong `GET /me/decks`. Xem `docs/API_SPEC.md`.
 class ReviewDeckDto {
   const ReviewDeckDto({
+    required this.topicId,
     required this.topic,
     required this.totalCount,
     required this.learnedCount,
@@ -12,6 +13,7 @@ class ReviewDeckDto {
     required this.dueCount,
   });
 
+  final String topicId;
   final String topic;
   final int totalCount;
   final int learnedCount;
@@ -20,6 +22,7 @@ class ReviewDeckDto {
 
   factory ReviewDeckDto.fromJson(JsonMap json) {
     return ReviewDeckDto(
+      topicId: json.readString('topic_id'),
       topic: json.readString('topic'),
       totalCount: json.readIntOr('total_count', 0),
       learnedCount: json.readIntOr('learned_count', 0),
@@ -29,6 +32,7 @@ class ReviewDeckDto {
   }
 
   ReviewDeck toEntity() => ReviewDeck(
+    topicId: topicId,
     topic: topic,
     totalCount: totalCount,
     learnedCount: learnedCount,

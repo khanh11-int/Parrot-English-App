@@ -1,12 +1,17 @@
 /// Một bộ từ theo chủ đề, kèm số từ đã học / đã thuộc / đến hạn ôn.
 class ReviewDeck {
   const ReviewDeck({
+    required this.topicId,
     required this.topic,
     required this.totalCount,
     required this.learnedCount,
     required this.masteredCount,
     required this.dueCount,
+    this.nextDueAt,
   });
+
+  /// Id chủ đề, để mở phiên ôn riêng bộ từ này.
+  final String topicId;
 
   final String topic;
   final int totalCount;
@@ -23,6 +28,16 @@ class ReviewDeck {
 
   /// Số từ đến hạn ôn hôm nay.
   final int dueCount;
+
+  /// Thời điểm từ **kế tiếp** đến hạn, tính trong những từ chưa tới hạn.
+  ///
+  /// `null` khi bộ từ chưa học gì, hoặc khi mọi từ đã học đều đang đến hạn (lúc
+  /// đó [dueCount] đã nói hết). Dùng để trả lời câu người học thật sự quan tâm:
+  /// "bao giờ thì có cái để ôn?".
+  final DateTime? nextDueAt;
+
+  /// Còn từ đã học là còn ôn lại được, dù chưa tới hạn.
+  bool get canReview => learnedCount > 0;
 
   /// Tỉ lệ đã học, 0..1. Chặn chia cho 0 khi bộ từ còn rỗng.
   double get learnedProgress =>

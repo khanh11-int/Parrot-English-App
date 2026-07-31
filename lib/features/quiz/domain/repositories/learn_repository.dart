@@ -8,7 +8,10 @@ abstract interface class LearnRepository {
   Future<LearnSession> getLearnSession({String? topicId});
 
   /// Phiên ôn tập gồm các từ đã đến hạn theo SRS.
-  Future<LearnSession> getReviewSession();
+  ///
+  /// [topicId] `null` là ôn trộn mọi chủ đề. Hết từ đến hạn thì lấy từ đã học
+  /// để ôn lại — lịch SRS là gợi ý, không phải cái khoá.
+  Future<LearnSession> getReviewSession({String? topicId});
 
   /// Gửi kết quả phiên lên server để cộng XP và cập nhật lịch ôn.
   Future<void> submitResult(String sessionId, SessionResult result);

@@ -24,6 +24,10 @@ abstract final class AppRoutes {
   static const learnSession = '/learn/session';
   static const reviewSession = '/review-session';
 
+  /// Phiên ôn tập của một chủ đề cụ thể.
+  static String reviewSessionOfTopic(String topicId) =>
+      '$reviewSession?$topicIdParam=$topicId';
+
   /// Tên tham số truy vấn mang id chủ đề sang phiên học.
   static const topicIdParam = 'topic';
 

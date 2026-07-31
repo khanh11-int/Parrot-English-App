@@ -14,29 +14,36 @@ class ReviewMockRepository implements ReviewRepository {
   Future<List<ReviewDeck>> getDecks() async {
     await Future<void>.delayed(_mockDelay);
 
-    return const [
-      ReviewDeck(
+    return [
+      const ReviewDeck(
+        topicId: 'furniture',
         topic: 'Đồ nội thất',
         totalCount: 24,
         learnedCount: 21,
         masteredCount: 15,
         dueCount: 6,
       ),
-      ReviewDeck(
+      const ReviewDeck(
+        topicId: 'health',
         topic: 'Sức khoẻ',
         totalCount: 18,
         learnedCount: 13,
         masteredCount: 4,
         dueCount: 9,
       ),
+      // Bộ từ đã học hết mà chưa tới hạn — dùng để xem trạng thái "ôn tiếp khi
+      // nào" trên giao diện.
       ReviewDeck(
+        topicId: 'family',
         topic: 'Gia đình',
         totalCount: 12,
         learnedCount: 12,
         masteredCount: 12,
         dueCount: 0,
+        nextDueAt: DateTime.now().add(const Duration(days: 2)),
       ),
-      ReviewDeck(
+      const ReviewDeck(
+        topicId: 'technology',
         topic: 'Công nghệ',
         totalCount: 30,
         learnedCount: 23,

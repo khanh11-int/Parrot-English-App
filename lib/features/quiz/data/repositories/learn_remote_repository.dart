@@ -17,8 +17,10 @@ class LearnRemoteRepository implements LearnRepository {
   );
 
   @override
-  Future<LearnSession> getReviewSession() =>
-      _fetchSession(ApiEndpoints.reviewSession);
+  Future<LearnSession> getReviewSession({String? topicId}) => _fetchSession(
+    ApiEndpoints.reviewSession,
+    query: topicId == null ? null : {'topic': topicId},
+  );
 
   @override
   Future<void> submitResult(String sessionId, SessionResult result) async {

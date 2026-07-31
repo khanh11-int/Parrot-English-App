@@ -117,7 +117,9 @@ class SessionController
       SessionMode.learn => await repository.getLearnSession(
         topicId: key.topicId,
       ),
-      SessionMode.review => await repository.getReviewSession(),
+      SessionMode.review => await repository.getReviewSession(
+        topicId: key.topicId,
+      ),
     };
     return SessionProgress(session: session);
   }

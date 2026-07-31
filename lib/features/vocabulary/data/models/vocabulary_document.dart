@@ -59,18 +59,34 @@ abstract final class WordProgressDocument {
     'english': word.english,
     'vietnamese': word.vietnamese,
     'phonetic': word.phonetic,
-    ...toScheduleMap(reviewIntervalDays: reviewIntervalDays, dueAt: dueAt),
+    ..._scheduleFields(reviewIntervalDays: reviewIntervalDays, dueAt: dueAt),
   };
 
   /// Dữ liệu ghi ở **các lần trả lời sau**: chỉ lịch ôn, không có gì khác.
   ///
-  /// Cố tình không nhắc tới `topicId` / `english` / `vietnamese` / `phonetic`.
+  /// Cố tình không nhắc tới `english` / `vietnamese` / `phonetic`.
   /// `SetOptions(merge: true)` chỉ giữ nguyên field **không xuất hiện** trong
   /// map; field nào có mặt là bị ghi đè. Phiên ôn tập trộn nhiều chủ đề nên
-  /// không biết `topicId` của từng từ — nếu vẫn ghi lại thì nó ghi chuỗi rỗng,
-  /// xoá mất liên kết chủ đề, và `FirebaseReviewRepository.getDecks` (bỏ qua
-  /// tiến độ có `topicId` rỗng) sẽ báo bộ từ tụt về `Đã học 0/8`.
-  static Map<String, dynamic> toScheduleMap({
+  /// không biết nội dung gốc của từng từ — ghi lại là ghi chuỗi rỗng lên dữ
+  /// liệu đúng.
+  ///
+  /// [storedTopicId] là `topicId` đang có trong Firestore. Rỗng nghĩa là tiến
+  /// độ này bị bản cũ xoá mất liên kết chủ đề (bản cũ ghi lại `topicId` ở mọi
+  /// lần trả lời, mà phiên ôn tập truyền vào chuỗi rỗng). Khi đó nếu người gọi
+  /// biết chủ đề thật thì vá lại luôn — `FirebaseReviewRepository.getDecks` bỏ
+  /// qua tiến độ có `topicId` rỗng nên không vá thì bộ từ mãi báo thiếu.
+  static Map<String, dynamic> toUpdateMap({
+    required TopicWord word,
+    required String storedTopicId,
+    required int reviewIntervalDays,
+    required DateTime dueAt,
+  }) => {
+    ..._scheduleFields(reviewIntervalDays: reviewIntervalDays, dueAt: dueAt),
+    if (storedTopicId.isEmpty && word.topicId.isNotEmpty)
+      'topicId': word.topicId,
+  };
+
+  static Map<String, dynamic> _scheduleFields({
     required int reviewIntervalDays,
     required DateTime dueAt,
   }) => {

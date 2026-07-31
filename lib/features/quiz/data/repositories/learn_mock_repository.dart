@@ -75,7 +75,7 @@ class LearnMockRepository implements LearnRepository {
 
   /// Phiên ôn tập: các từ đã đến hạn ôn theo thuật toán SRS.
   @override
-  Future<LearnSession> getReviewSession() async {
+  Future<LearnSession> getReviewSession({String? topicId}) async {
     await Future<void>.delayed(_mockDelay);
 
     return const LearnSession(

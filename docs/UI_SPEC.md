@@ -447,24 +447,77 @@ Nối các cặp từ
 Màn hình tổng kết: mascot chúc mừng, số từ đã học, XP nhận được, cá nhận được,
 nút "Hoàn thành" về trang chủ.
 
-### 5.6 Ôn tập (SRS) — `/review/:sessionId`
+### 5.6 Tab Ôn tập — `/review`
 
-Dùng lại toàn bộ widget của mục 5.4, chỉ khác:
-- Nguồn từ là các từ **đến hạn ôn** theo thuật toán SRS (spaced repetition).
-  Mốc lặp lại: `0 → 1 → 3 → 7 → 21 → 60` ngày (`AppRewards.reviewIntervalDays`).
-  Mốc đầu **0 ngày** để từ vừa học ôn lại được ngay trong ngày; trả lời sai thì
-  về mốc đầu.
+```
+┌──────────────────────────────────────┐
+│ ╭──────────────────────────────────╮ │
+│ │ 5 từ đến hạn ôn            🦜    │ │  gradient rừng
+│ │ Ôn ngay để giữ chuỗi streak      │ │
+│ │ [ Ôn tập ngay ]                  │ │
+│ ╰──────────────────────────────────╯ │
+│ Bộ từ của bạn                        │
+│ ╭──────────────────────────────────╮ │
+│ │ Sức khoẻ      [5 đến hạn]     ›  │ │  bấm → ôn riêng chủ đề này
+│ │ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░ │ │
+│ │ Đã học 8/8 từ · thuộc 2          │ │
+│ ╰──────────────────────────────────╯ │
+│ ╭──────────────────────────────────╮ │
+│ │ Gia đình                      ›  │ │
+│ │ ▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░ │ │
+│ │ Đã học 6/8 từ · đến hạn mai      │ │
+│ ╰──────────────────────────────────╯ │
+│   ⊕ Còn 5 chủ đề chưa học        ›   │  → /learn
+└──────────────────────────────────────┘
+```
+
+**Chỉ liệt kê bộ từ đã học.** Chủ đề chưa chạm tới thì không ôn được; để chúng
+trong danh sách chỉ đẩy phần dùng được xuống dưới màn hình (người dùng phải cuộn
+qua 5 thẻ `Đã học 0/8` với thanh rỗng). Chúng gom thành **một dòng** ở cuối trang
+dẫn sang `/learn`.
+
+Thứ tự: **có từ đến hạn lên trước** (việc cần làm hôm nay), rồi tới bộ đã học
+nhiều hơn — bộ đang học dở đáng ôn hơn bộ mới chạm một hai từ.
+
+Thẻ tổng kết có 3 trạng thái, mỗi trạng thái nói rõ **việc tiếp theo**:
+
+| Điều kiện | Tiêu đề | Phụ đề | Nút |
+|---|---|---|---|
+| còn từ đến hạn | `N từ đến hạn ôn` | giữ streak | `Ôn tập ngay` |
+| đã học, chưa tới hạn | `Không còn từ nào đến hạn` | `Đến hạn tiếp mai · ôn lại luôn cũng được` | `Ôn lại từ đã học` |
+| chưa học gì | `Chưa có gì để ôn` | dẫn sang Học từ mới | vô hiệu hoá |
+
+Thẻ bộ từ:
+- **Bấm được** → phiên ôn riêng chủ đề đó (`/review-session?topic=<id>`). Nút lớn
+  ở thẻ tổng kết là ôn **trộn** mọi chủ đề.
+- Thanh đo theo **số từ đã học**, khớp trang Học từ mới. Đo theo "đã thuộc" thì bộ
+  từ vừa học xong vẫn hiện thanh rỗng, vì thuộc một từ cần ôn đúng vài lần trải
+  qua ba tuần.
+- Phụ đề nói **một** thông tin hữu ích, không liệt kê mọi con số: có từ đã thuộc
+  thì `· thuộc N`, chưa có thì `· đến hạn mai`. Bỏ `thuộc 0` vì suốt mấy tuần đầu
+  nó chỉ là con số 0 lặp lại ở mọi thẻ.
+- Mốc thời gian diễn đạt theo lời người nói: `hôm nay` / `mai` / `3 ngày nữa`
+  (`describeDueIn`), đếm theo **ngày lịch** chứ không theo số giờ chênh lệch — 20h
+  hôm nay tới 8h mai chỉ cách 12 tiếng nhưng người học vẫn gọi đó là "mai".
+
+### 5.6b Phiên ôn tập — `/review-session`
+
+Dùng lại toàn bộ widget của mục 5.5, chỉ khác:
+- Nguồn từ là các từ **đến hạn ôn** theo SRS (spaced repetition). Mốc lặp lại:
+  `0 → 1 → 3 → 7 → 21 → 60` ngày (`AppRewards.reviewIntervalDays`). Mốc đầu
+  **0 ngày** để từ vừa học ôn lại được ngay trong ngày; trả lời sai thì về mốc đầu.
+  Từ có khoảng lặp lại ≥ 21 ngày coi là **đã thuộc**.
 - Khi **không còn từ đến hạn** mà người dùng đã học ít nhất một từ: vẫn cho ôn
   lại, nguồn từ là toàn bộ từ đã học (xáo trộn). Lịch SRS là gợi ý, không phải
   cái khoá — chặn lại thì học xong một chủ đề là tab Ôn tập đứng im tới hôm sau.
-  Chỉ khi **chưa học từ nào** thì nút mới bị vô hiệu hoá.
-- Thẻ tổng kết ở đầu tab có 3 trạng thái: `N từ đến hạn ôn` →
-  `Không còn từ nào đến hạn / Ôn lại từ đã học` → `Chưa có gì để ôn`.
-- Thẻ mỗi bộ từ đo theo **số từ đã học** (khớp trang Học từ mới), phụ đề
-  `Đã học 8/8 từ · thuộc 2`. Đo theo "đã thuộc" thì bộ từ vừa học xong vẫn hiện
-  thanh rỗng, vì thuộc một từ cần ôn đúng vài lần trải qua ba tuần.
+- `?topic=<id>` giới hạn trong một chủ đề. Lọc "đến hạn" ngay trong Dart thay vì
+  thêm điều kiện vào truy vấn: `where topicId == X` **và** `where dueAt <= now`
+  cần composite index, mà một chủ đề chỉ vài chục từ.
 - AppBar: `← Ôn tập` + `còn N từ`.
-- Sau mỗi từ, kết quả đúng/sai cập nhật khoảng lặp lại của từ đó ở tầng domain.
+- Sau mỗi vòng, kết quả đúng/sai cập nhật khoảng lặp lại của từ đó. Lần đầu gặp
+  từ mới ghi nội dung (`toCreateMap`); các lần sau **chỉ** ghi lịch ôn
+  (`toUpdateMap`) — phiên ôn trộn chủ đề không biết nội dung gốc nên ghi lại là
+  ghi chuỗi rỗng lên dữ liệu đúng.
 
 ### 5.7 Cộng đồng — `/community`
 

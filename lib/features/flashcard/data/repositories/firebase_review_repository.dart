@@ -42,6 +42,7 @@ class FirebaseReviewRepository implements ReviewRepository {
       final learnedPerTopic = <String, int>{};
       final masteredPerTopic = <String, int>{};
       final duePerTopic = <String, int>{};
+      final nextDuePerTopic = <String, DateTime>{};
 
       for (final doc in progressSnapshot.docs) {
         final progress = WordProgressDocument.toEntity(doc.id, doc.data());
@@ -54,6 +55,12 @@ class FirebaseReviewRepository implements ReviewRepository {
         }
         if (progress.isDue(now)) {
           duePerTopic[topicId] = (duePerTopic[topicId] ?? 0) + 1;
+        } else if (progress.dueAt case final dueAt?) {
+          // Từ chưa tới hạn: giữ lại mốc sớm nhất để nói được "hôm nào ôn tiếp".
+          final current = nextDuePerTopic[topicId];
+          if (current == null || dueAt.isBefore(current)) {
+            nextDuePerTopic[topicId] = dueAt;
+          }
         }
       }
 
@@ -63,9 +70,11 @@ class FirebaseReviewRepository implements ReviewRepository {
           .map((doc) {
             final topic = TopicDocument.fromMap(doc.id, doc.data());
             return ReviewDeck(
+              topicId: doc.id,
               topic: topic.name,
               totalCount: topic.wordCount,
               learnedCount: learnedPerTopic[doc.id] ?? 0,
+              nextDueAt: nextDuePerTopic[doc.id],
               // "Đã thuộc" là từ có khoảng lặp lại đủ dài, không phải mọi từ đã
               // gặp — tính cả từ mới học thì thanh tiến độ sẽ đầy một cách giả.
               masteredCount: masteredPerTopic[doc.id] ?? 0,

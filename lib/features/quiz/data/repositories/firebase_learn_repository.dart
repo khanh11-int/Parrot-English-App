@@ -61,8 +61,18 @@ class FirebaseLearnRepository implements LearnRepository {
   }
 
   @override
-  Future<LearnSession> getReviewSession() async {
-    final due = await _vocabularyRepository.getDueProgress();
+  Future<LearnSession> getReviewSession({String? topicId}) async {
+    // Ôn một chủ đề: lọc đến hạn ngay trong Dart thay vì thêm điều kiện
+    // `topicId` vào truy vấn. Truy vấn `where topicId == X` **và**
+    // `where dueAt <= now` cần composite index, mà một chủ đề chỉ vài chục từ
+    // nên lọc ở client không đáng để phải khai thêm index rồi deploy.
+    final learned = topicId == null
+        ? const <WordProgress>[]
+        : await _vocabularyRepository.getProgress(topicId: topicId);
+    final now = DateTime.now();
+    final due = topicId == null
+        ? await _vocabularyRepository.getDueProgress()
+        : learned.where((item) => item.isDue(now)).toList();
 
     // Hết từ đến hạn thì ôn lại từ đã học, **không** chặn người dùng lại.
     //
@@ -74,13 +84,17 @@ class FirebaseLearnRepository implements LearnRepository {
     final List<WordProgress> source;
     if (due.isNotEmpty) {
       source = due;
+    } else if (topicId != null) {
+      source = [...learned]..shuffle();
     } else {
       source = [...await _vocabularyRepository.getProgress()]..shuffle();
     }
 
     if (source.isEmpty) {
-      throw const ValidationFailure(
-        'Bạn chưa học từ nào cả. Sang tab Học từ mới trước nhé!',
+      throw ValidationFailure(
+        topicId == null
+            ? 'Bạn chưa học từ nào cả. Sang tab Học từ mới trước nhé!'
+            : 'Chủ đề này bạn chưa học từ nào. Học từ mới trước nhé!',
       );
     }
 
