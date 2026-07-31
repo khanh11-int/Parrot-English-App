@@ -24,5 +24,4 @@ abstract interface class AuthRepository {
   Future<void> signOut();
 
   /// Gửi email đặt lại mật khẩu.
-  Future<void> sendPasswordReset(String email);
 }

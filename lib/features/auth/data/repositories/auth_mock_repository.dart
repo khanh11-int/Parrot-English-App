@@ -65,9 +65,6 @@ class AuthMockRepository implements AuthRepository {
   @override
   Future<void> signOut() async => _emit(null);
 
-  @override
-  Future<void> sendPasswordReset(String email) async {}
-
   void _emit(AppUser? user) {
     _currentUser = user;
     _controller.add(user);

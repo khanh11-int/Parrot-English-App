@@ -49,10 +49,6 @@ class FirebaseAuthRepository implements AuthRepository {
   @override
   Future<void> signOut() => _guard(_auth.signOut);
 
-  @override
-  Future<void> sendPasswordReset(String email) =>
-      _guard(() => _auth.sendPasswordResetEmail(email: email.trim()));
-
   AppUser? _toAppUser(User? user) {
     if (user == null) return null;
     return AppUser(

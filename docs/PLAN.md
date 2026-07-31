@@ -189,7 +189,7 @@ chạy được khi chưa có backend.
 - [x] `AuthMockRepository` — cho test, không cần Firebase
 - [x] `authStateProvider` / `currentUserProvider` / `AuthController`
 - [x] `AppTextField` + `AuthValidators` trong `shared/widgets/`
-- [x] `LoginPage` (có quên mật khẩu) + `RegisterPage`
+- [x] `LoginPage` + `RegisterPage`
 - [x] Chặn route: `routerProvider` + `redirect` + `refreshListenable`
 - [x] Nút đăng xuất trong Cài đặt (có hỏi xác nhận)
 - [x] Lời chào trang chủ lấy tên người đăng nhập thật

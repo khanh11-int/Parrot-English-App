@@ -49,37 +49,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     }
   }
 
-  Future<void> _resetPassword() async {
-    final emailError = AuthValidators.email(_emailController.text);
-    if (emailError != null) {
-      _showError('Nhập email của bạn trước đã, rồi bấm lại.');
-      return;
-    }
-
-    final result = await ref
-        .read(authControllerProvider.notifier)
-        .sendPasswordReset(_emailController.text);
-    if (!mounted) return;
-
-    switch (result) {
-      case AuthSucceeded():
-        _showMessage('Đã gửi email đặt lại mật khẩu. Kiểm tra hộp thư nhé.');
-      case AuthRejected(:final message):
-        _showError(message);
-    }
-  }
-
-  void _showError(String message) => _show(message, isError: true);
-
-  void _showMessage(String message) => _show(message, isError: false);
-
-  void _show(String message, {required bool isError}) {
+  void _showError(String message) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
           content: Text(message),
-          backgroundColor: isError ? AppColors.danger : null,
+          backgroundColor: AppColors.danger,
           duration: AppDurations.snackBar,
         ),
       );
@@ -138,15 +114,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         autofillHints: const [AutofillHints.password],
                         onSubmitted: _submit,
                       ),
-                      const SizedBox(height: AppSpacing.sm),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: isBusy ? null : _resetPassword,
-                          child: const Text('Quên mật khẩu?'),
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.sm),
+                      const SizedBox(height: AppSpacing.lg),
                       PrimaryButton(
                         label: 'Đăng nhập',
                         isLoading: isBusy,

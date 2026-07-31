@@ -70,9 +70,6 @@ class AuthController extends Notifier<bool> {
   Future<AuthResult> signOut() =>
       _run(() => ref.read(authRepositoryProvider).signOut());
 
-  Future<AuthResult> sendPasswordReset(String email) =>
-      _run(() => ref.read(authRepositoryProvider).sendPasswordReset(email));
-
   Future<AuthResult> _run(Future<void> Function() action) async {
     if (state) return const AuthRejected('Đang xử lý, vui lòng đợi.');
 
