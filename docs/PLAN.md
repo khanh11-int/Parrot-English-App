@@ -143,28 +143,20 @@ Ký hiệu: `[ ]` chưa làm · `[x]` đã xong
 - Icon `assets/images/icons/` là ảnh phẳng đơn sắc nên nhuộm được bằng
   `BlendMode.srcIn` để đổi màu theo tab active/inactive.
 
-## Giai đoạn 12 — Nối REST API
+## Giai đoạn 12 — Nối REST API *(đã xoá)*
 
-Chuyển từng repository từ mock cứng sang gọi REST. Nguyên tắc: **abstract
-repository ở `domain/`**, hai cài đặt ở `data/` (`*RemoteRepository` dùng REST,
-`*MockRepository` giữ dữ liệu cứng). Provider chọn một theo cấu hình → app vẫn
-chạy được khi chưa có backend.
+Từng làm xong phía client: `dio`, `core/config/app_config.dart`,
+`core/network/` (api_client + api_endpoints + api_providers + json_reader),
+6 `*_remote_repository.dart`, 6 `*_dtos.dart`, `API_SPEC.md`.
 
-- [x] Thêm `dio` vào `pubspec.yaml`
-- [x] `core/config/app_config.dart` — base URL qua `--dart-define`, cờ dùng mock
+**Đã xoá toàn bộ** vì backend thật không bao giờ được dựng —
+Firebase thay thế hẳn. Cả cụm là mã chết: không provider nào đọc tới nó, nên nó
+chỉ làm người mới đọc code nhầm rằng app gọi REST. Cần lại thì lấy từ lịch sử
+git.
+
+Hai thứ **giữ lại** vì các repository Firebase vẫn dùng:
 - [x] `core/error/failure.dart` — phân loại lỗi + thông điệp tiếng Việt
-- [x] `core/network/api_client.dart` — Dio + interceptor + map lỗi sang `Failure`
-- [x] `core/network/api_endpoints.dart` — hằng số đường dẫn
-- [x] `API_SPEC.md` — đặc tả endpoint cho người làm backend
 - [x] `AsyncValueView` hiện thông điệp theo loại `Failure`
-- [x] home: DTO + abstract + remote + mock
-- [x] image_scan: DTO + abstract + remote + mock (upload multipart + poll kết quả)
-- [x] quiz: DTO + abstract + remote + mock
-- [x] flashcard: DTO + abstract + remote + mock
-- [x] community: DTO + abstract + remote + mock (like / bookmark gọi API)
-- [x] shop: DTO + abstract + remote + mock (mua gọi API)
-- [x] profile: DTO + abstract + remote + mock
-- [x] Test: DTO parse đúng JSON, `Failure` map đúng, test cũ vẫn pass
 
 ## Giai đoạn 13 — Sửa trang chủ & thêm trang chọn chủ đề
 
@@ -174,12 +166,12 @@ chạy được khi chưa có backend.
 - [x] Trang chủ: nhiệm vụ tháng gọn 1 dòng, nhiệm vụ ngày có thanh full width
 - [x] `HomeSummary.userName` + DTO + mock
 - [x] Entity `VocabularyTopic` (tiến độ suy từ learned/total)
-- [x] `LearnRepository.getTopics()` + DTO + mock + remote + `GET /me/topics`
+- [x] `LearnRepository.getTopics()` + DTO + mock + remote
 - [x] `TopicProgressTile` — vòng tiến độ + tên + số từ + chip trạng thái
 - [x] `TopicListPage` tại `/learn` + thẻ tổng + nút học trộn mọi chủ đề
 - [x] Phiên học nhận theo chủ đề: `sessionProvider` thành family theo
       `(mode, topicId)`, route `/learn/session?topic=<id>`
-- [x] Cập nhật test (50 test pass) + UI_SPEC mục 5.1 và 5.4 + API_SPEC
+- [x] Cập nhật test (50 test pass) + UI_SPEC mục 5.1 và 5.4
 
 ## Giai đoạn 14 — Firebase + đăng nhập
 
@@ -231,8 +223,7 @@ chạy được khi chưa có backend.
 - [ ] Khóa ghi `experience`/`seeds`/`gems` — rules hiện cho chủ sở hữu tự ghi
       nên XP **gian lận được**; chỉ sửa được bằng Cloud Functions (gói Blaze)
 - [ ] Cloud Functions cho AI nhận diện ảnh (cần gói Blaze)
-- [ ] Quyết định: bỏ hay giữ tầng REST ở giai đoạn 12 (`dio`, `api_client`,
-      6 `*_remote_repository.dart`, `API_SPEC.md`)
+- [x] Quyết định: **bỏ** tầng REST ở giai đoạn 12 — xem ghi chú giai đoạn 12
 
 ---
 
@@ -246,11 +237,8 @@ vì cần quyết định hoặc phụ thuộc bên ngoài:
       xem trước giả
 - [ ] Phát âm TTS (`flutter_tts`) — `SpeakerButton` **đã xoá** vì không màn hình
       nào dùng; dựng lại nút cùng lúc với tính năng
-- [x] Tầng gọi REST API — xong phía client, xem `API_SPEC.md`
-- [ ] **Backend thật** — cần người dựng theo `API_SPEC.md`, đã bao gồm proxy
-      gọi AI (KHÔNG nhúng API key trong app)
-- [ ] Đăng nhập + refresh token + lưu token bằng `flutter_secure_storage`
-      (hiện token đọc từ `--dart-define`, chỉ để tiện phát triển)
+- [ ] Cloud Functions làm proxy gọi AI (KHÔNG nhúng API key trong app) —
+      thay cho backend REST đã bỏ, cần gói Blaze
 - [ ] Lưu offline (`isar` / `drift`) cho bộ từ và lịch ôn SRS
 - [x] Thuật toán SRS thật — `AppRewards.nextIntervalDays`, mốc
       `[0, 1, 3, 7, 21, 60]` ngày, ghi vào `users/{uid}/wordProgress`. Mốc đầu

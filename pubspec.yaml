@@ -19,9 +19,6 @@ dependencies:
   # Điều hướng / routing khai báo tập trung
   go_router: ^14.6.2
 
-  # Gọi REST API (interceptor, multipart upload, timeout)
-  dio: ^5.7.0
-
   # Firebase: xác thực + database thật
   firebase_core: ^4.12.1
   firebase_auth: ^6.5.6

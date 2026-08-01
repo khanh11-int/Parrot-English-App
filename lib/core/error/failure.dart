@@ -21,11 +21,6 @@ class NetworkFailure extends Failure {
   const NetworkFailure([super.message = 'Không có kết nối mạng.']);
 }
 
-/// Server nhận request nhưng phản hồi quá chậm.
-class TimeoutFailure extends Failure {
-  const TimeoutFailure([super.message = 'Máy chủ phản hồi quá lâu.']);
-}
-
 /// Hết phiên đăng nhập (401 / 403).
 class UnauthorizedFailure extends Failure {
   const UnauthorizedFailure([
@@ -53,24 +48,9 @@ class ValidationFailure extends Failure {
   bool get isRetryable => false;
 }
 
-/// Gọi quá nhiều lần (429). Với tính năng AI thì đây là trường hợp hay gặp.
-class RateLimitFailure extends Failure {
-  const RateLimitFailure([
-    super.message = 'Bạn đang dùng quá nhanh. Thử lại sau một lát nhé.',
-  ]);
-}
-
 /// Lỗi phía server (5xx).
 class ServerFailure extends Failure {
   const ServerFailure([super.message = 'Máy chủ đang gặp sự cố.']);
-}
-
-/// Phản hồi không đúng định dạng mong đợi — thường là backend đổi schema.
-class ParsingFailure extends Failure {
-  const ParsingFailure([super.message = 'Dữ liệu trả về không đọc được.']);
-
-  @override
-  bool get isRetryable => false;
 }
 
 /// Người dùng chủ động huỷ request.

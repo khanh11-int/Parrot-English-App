@@ -207,7 +207,6 @@ thấy — ví dụ hoạ tiết lá xanh đặt trên thẻ gradient xanh thì 
 | [docs/CODING_GUIDELINES.md](docs/CODING_GUIDELINES.md) | Quy tắc viết code |
 | [docs/SEED_DATA.md](docs/SEED_DATA.md) | Dữ liệu cần nạp vào Firestore |
 | [docs/PLAN.md](docs/PLAN.md) | Tiến độ và việc còn lại |
-| [docs/API_SPEC.md](docs/API_SPEC.md) | Hợp đồng REST API — **không còn dùng**, xem ghi chú cuối |
 
 ## Giới hạn đã biết
 
@@ -224,10 +223,3 @@ thấy — ví dụ hoạ tiết lá xanh đặt trên thẻ gradient xanh thì 
   tới nó, để lại chỉ là mã chết. Làm TTS thì dựng lại nút cùng lúc.
 
 Danh sách đầy đủ: [docs/PLAN.md](docs/PLAN.md).
-
-## Ghi chú về tầng REST
-
-Dự án từng có một tầng gọi REST hoàn chỉnh (`lib/core/network/`, các file
-`*_remote_repository.dart`, [docs/API_SPEC.md](docs/API_SPEC.md)) trước khi
-chuyển sang Firebase. Phần đó **hiện không dùng** nhưng vẫn giữ trong repo, để
-dành cho trường hợp về sau muốn tự dựng backend riêng thay vì phụ thuộc Firebase.

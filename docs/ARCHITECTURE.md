@@ -3,8 +3,8 @@
 App học tiếng Anh, dùng **Feature-first + Clean Architecture (rút gọn)**.
 Đề xuất state management: **Riverpod** (đã khai báo sẵn trong `pubspec.yaml`).
 
-> **Trạng thái:** toàn bộ giao diện đã dựng với dữ liệu **mock ở tầng `data`**
-> (chưa gọi API). Đặc tả UI ở [UI_SPEC.md](UI_SPEC.md), tiến độ ở
+> **Trạng thái:** dữ liệu thật từ **Firebase Auth + Cloud Firestore**; bản mock
+> chỉ còn dùng trong test. Đặc tả UI ở [UI_SPEC.md](UI_SPEC.md), tiến độ ở
 > [PLAN.md](PLAN.md).
 
 ## Ý tưởng cốt lõi
@@ -33,13 +33,11 @@ lib/
 │   ├── router/              # cấu hình điều hướng (go_router)
 │   ├── constants/           # hằng số (padding, mức thưởng, đường dẫn ảnh)
 │   ├── providers/           # provider dùng chung nhiều feature
-│   ├── network/             # client gọi API (tầng REST, hiện không dùng)
 │   └── error/               # class lỗi (Failure)
 │
 ├── features/                # mỗi tính năng 1 thư mục, cùng 1 khuôn
 │   ├── auth/                # đăng nhập / đăng ký (Firebase Auth)
 │   ├── home/                # trang chủ: mục tiêu ngày + nhiệm vụ
-│   ├── image_scan/          # chụp ảnh → nhận diện vật thể → liệt kê từ
 │   ├── quiz/                # chọn chủ đề + phiên học từ mới
 │   ├── flashcard/           # ôn tập theo SRS
 │   ├── vocabulary/          # giáo trình từ vựng + tiến độ từng từ
@@ -161,7 +159,6 @@ qua tầng domain, không copy code).
 
 - `flutter_riverpod` — quản lý state *(đã có)*
 - `go_router` — điều hướng *(đã có)*
-- `dio` + `retrofit` — gọi API
 - `isar` / `drift` — lưu offline (rất cần cho app học tập)
 - `freezed` + `json_serializable` — model immutable + parse JSON
 - `flutter_tts` — phát âm từ tiếng Anh (chưa làm, xem `docs/PLAN.md`)
