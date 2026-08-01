@@ -475,8 +475,11 @@ Thẻ bộ từ:
   từ vừa học xong vẫn hiện thanh rỗng, vì thuộc một từ cần ôn đúng vài lần trải
   qua ba tuần.
 - Phụ đề nói **một** thông tin hữu ích, không liệt kê mọi con số: có từ đã thuộc
-  thì `· thuộc N`, chưa có thì `· đến hạn mai`. Bỏ `thuộc 0` vì suốt mấy tuần đầu
-  nó chỉ là con số 0 lặp lại ở mọi thẻ.
+  thì `· đã thuộc N từ`, chưa có thì `· đến hạn mai`. Bỏ `thuộc 0` vì suốt mấy
+  tuần đầu nó chỉ là con số 0 lặp lại ở mọi thẻ.
+- Chip số từ cần ôn ghi đủ **`N từ cần ôn`**, không viết tắt thành `N đến hạn`:
+  bản tắt thiếu cả danh từ lẫn động từ nên đọc lên không rõ *N cái gì, đến hạn để
+  làm gì*.
 - Mốc thời gian diễn đạt theo lời người nói: `hôm nay` / `mai` / `3 ngày nữa`
   (`describeDueIn`), đếm theo **ngày lịch** chứ không theo số giờ chênh lệch — 20h
   hôm nay tới 8h mai chỉ cách 12 tiếng nhưng người học vẫn gọi đó là "mai".

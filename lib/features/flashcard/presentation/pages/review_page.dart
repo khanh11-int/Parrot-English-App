@@ -258,7 +258,7 @@ class _DeckCard extends StatelessWidget {
   static String _subtitleFor(ReviewDeck deck) {
     final progress = 'Đã học ${deck.learnedCount}/${deck.totalCount} từ';
     if (deck.masteredCount > 0) {
-      return '$progress · thuộc ${deck.masteredCount}';
+      return '$progress · đã thuộc ${deck.masteredCount} từ';
     }
     final when = describeDueIn(deck.nextDueAt);
     return when == null ? progress : '$progress · đến hạn $when';
@@ -312,6 +312,10 @@ class _UntouchedTopicsTile extends StatelessWidget {
   }
 }
 
+/// Chip số từ cần ôn của một bộ từ.
+///
+/// Ghi đủ **"N từ cần ôn"**, không viết tắt thành "N đến hạn": chip cũ thiếu cả
+/// danh từ lẫn động từ nên đọc lên không rõ 4 cái gì, đến hạn để làm gì.
 class _DueBadge extends StatelessWidget {
   const _DueBadge({required this.count});
 
@@ -329,7 +333,7 @@ class _DueBadge extends StatelessWidget {
         borderRadius: AppRadius.chipBorder,
       ),
       child: Text(
-        '$count đến hạn',
+        '$count từ cần ôn',
         style: AppTextStyles.caption.copyWith(
           color: AppColors.primary,
           fontWeight: FontWeight.w600,

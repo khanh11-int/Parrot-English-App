@@ -132,7 +132,7 @@ void main() {
     router.go(AppRoutes.review);
     await settleMockData(tester);
 
-    expect(find.text('Đã học 8/8 từ · thuộc 2'), findsOneWidget);
+    expect(find.text('Đã học 8/8 từ · đã thuộc 2 từ'), findsOneWidget);
     expect(find.text('3 từ đến hạn ôn'), findsOneWidget);
   });
 
