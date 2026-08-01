@@ -227,7 +227,6 @@ màn hình đều lắp từ đây.
 | `ProgressCard` | Thẻ có tiêu đề + thanh tiến độ + tỉ lệ `9/15` | Trang chủ |
 | `LinearProgress` | Thanh tiến độ bo tròn, cao 8 | Nhiệm vụ, mốc nhóm |
 | `VocabCard` | Thẻ 1 từ: radio chọn, từ EN, IPA, nghĩa VI, chip chủ đề, nút loa | Kết quả nhận diện, Feed |
-| `SpeakerButton` | Nút loa tròn, có trạng thái đang phát | `VocabCard` |
 | `BadgeAvatar` | Huy hiệu tròn, hỗ trợ trạng thái khoá (xám + `?`) | Rank, mốc nhóm |
 | `SectionHeader` | Tiêu đề mục + slot hành động bên phải | Nhiều trang |
 | `StatTile` | Ô thống kê: icon + nhãn nhỏ + giá trị | "Tổng quan" hồ sơ |
@@ -249,7 +248,6 @@ Quy tắc:
   `primary` và nền sang `primaryLight`.
 - Nghĩa tiếng Việt và IPA nằm cùng dòng, phân cách bằng ` – `, màu
   `textSecondary`.
-- Nút loa ở góc phải, đọc từ tiếng Anh (TTS).
 - Chip chủ đề: chưa chọn thì hiện "chọn chủ đề", chọn rồi hiện tên chủ đề.
 - Có 2 biến thể: `VocabCard.selectable` (trong kết quả nhận diện) và
   `VocabCard.compact` (nhúng trong bài đăng ở feed, kèm nút "Lưu từ vựng").

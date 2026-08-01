@@ -41,7 +41,6 @@ Ký hiệu: `[ ]` chưa làm · `[x]` đã xong
 - [x] `SectionHeader`
 - [x] `StatTile`
 - [x] `TopicChip`
-- [x] `SpeakerButton`
 - [x] `BadgeAvatar` (có trạng thái khoá)
 - [x] `EmptyState`
 - [x] `AppLoading` (skeleton)
@@ -239,8 +238,8 @@ vì cần quyết định hoặc phụ thuộc bên ngoài:
 ### Cần package / backend
 - [ ] Camera thật (`camera` hoặc `image_picker`) — `ScanPage` đang dùng khung
       xem trước giả
-- [ ] Phát âm TTS (`just_audio` / `flutter_tts`) — `SpeakerButton` hiện chỉ báo
-      "sẽ có ở bản sau"
+- [ ] Phát âm TTS (`flutter_tts`) — `SpeakerButton` **đã xoá** vì không màn hình
+      nào dùng; dựng lại nút cùng lúc với tính năng
 - [x] Tầng gọi REST API — xong phía client, xem `API_SPEC.md`
 - [ ] **Backend thật** — cần người dựng theo `API_SPEC.md`, đã bao gồm proxy
       gọi AI (KHÔNG nhúng API key trong app)

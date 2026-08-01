@@ -69,7 +69,6 @@ void main() {
           phonetic: '/tʃeə(r)/',
           isSelected: isSelected,
           onSelectedChanged: onSelectedChanged,
-          onSpeak: () {},
           onTopicTap: () {},
         ),
       );

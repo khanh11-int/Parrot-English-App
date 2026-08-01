@@ -220,9 +220,8 @@ thấy — ví dụ hoạ tiết lá xanh đặt trên thẻ gradient xanh thì 
 - **Vật phẩm cửa hàng chưa có tác dụng.** Mua thì trừ tiền và tăng số lượng
   thật, nhưng chưa code nào đọc `users/{uid}/inventory` để áp hiệu ứng: XP vẫn
   cộng theo hằng số, streak vẫn chỉ xét `lastActiveDate`.
-- **Phát âm (TTS) chưa làm.** `SpeakerButton` và `VocabCard` đã viết nhưng ở
-  nhánh này **không màn hình nào dùng** — hai chỗ dùng cũ là trang kết quả nhận
-  diện ảnh và thẻ bài đăng, cả hai đã xoá. Giữ lại để lắp TTS vào sau.
+- **Không có phát âm (TTS).** `SpeakerButton` đã xoá — không màn hình nào dùng
+  tới nó, để lại chỉ là mã chết. Làm TTS thì dựng lại nút cùng lúc.
 
 Danh sách đầy đủ: [docs/PLAN.md](docs/PLAN.md).
 

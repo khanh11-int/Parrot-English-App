@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_text_styles.dart';
-import 'speaker_button.dart';
 import 'topic_chip.dart';
 
 /// Thẻ hiển thị một từ vựng — widget dùng lại nhiều nhất trong app.
@@ -16,7 +15,6 @@ class VocabCard extends StatelessWidget {
     required this.english,
     required this.vietnamese,
     required this.phonetic,
-    required this.onSpeak,
     required this.onTopicTap,
     this.topic,
     this.isSelected = false,
@@ -28,7 +26,6 @@ class VocabCard extends StatelessWidget {
   final String english;
   final String vietnamese;
   final String phonetic;
-  final VoidCallback onSpeak;
   final VoidCallback onTopicTap;
   final String? topic;
 
@@ -93,8 +90,6 @@ class VocabCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(width: AppSpacing.sm),
-                    SpeakerButton(onPressed: onSpeak),
                   ],
                 ),
                 const SizedBox(height: AppSpacing.md),

@@ -164,7 +164,7 @@ qua tầng domain, không copy code).
 - `dio` + `retrofit` — gọi API
 - `isar` / `drift` — lưu offline (rất cần cho app học tập)
 - `freezed` + `json_serializable` — model immutable + parse JSON
-- `just_audio` — phát âm / luyện nghe
+- `flutter_tts` — phát âm từ tiếng Anh (chưa làm, xem `docs/PLAN.md`)
 
 Cho tính năng AI (khi làm tới):
 - `image_picker` / `camera` — chụp hoặc chọn ảnh từ máy
