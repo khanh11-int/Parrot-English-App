@@ -108,8 +108,14 @@ class SessionProgress {
 }
 
 /// Điều khiển một phiên học: chuyển vòng, đếm đúng/sai, gửi kết quả lên server.
+///
+/// `AutoDispose` là **bắt buộc**, không phải tối ưu bộ nhớ.
+///
+/// Không có nó thì phiên học được giữ lại sau khi thoát: học xong 4/8 từ của một
+/// chủ đề rồi vào lại chính chủ đề đó sẽ thấy **ngay màn hình tổng kết cũ**, vì
+/// `SessionProgress.isFinished` vẫn còn `true` từ lần trước.
 class SessionController
-    extends FamilyAsyncNotifier<SessionProgress, SessionKey> {
+    extends AutoDisposeFamilyAsyncNotifier<SessionProgress, SessionKey> {
   @override
   Future<SessionProgress> build(SessionKey key) async {
     final repository = ref.read(learnRepositoryProvider);
@@ -173,6 +179,11 @@ class SessionController
     // `arg` là khoá family mà provider được tạo với — chính là (mode, topicId).
     final topicId = arg.topicId;
     final repository = ref.read(vocabularyRepositoryProvider);
+    // Lấy `revision` **trước** khi `await`: provider này là `autoDispose`, người
+    // học thoát giữa phiên là nó bị huỷ, lúc đó chạm vào `ref` sẽ ném lỗi. Bản
+    // thân `userDataRevisionProvider` không autoDispose nên giữ tham chiếu này
+    // qua `await` là an toàn.
+    final revision = ref.read(userDataRevisionProvider.notifier);
     await Future.wait([
       for (final pair in pairs)
         repository
@@ -198,10 +209,7 @@ class SessionController
 
     // Ghi xong mới báo: XP / hạt / streak / tiến độ chủ đề / lịch ôn ở các tab
     // khác tự tải lại. Nếu báo trước khi ghi xong thì chúng đọc lại đúng số cũ.
-    //
-    // `ref.read` thay vì `ref.watch` vì đây là lúc ghi, không phải phụ thuộc —
-    // và phiên học không được tự tải lại giữa lúc người ta đang làm bài.
-    ref.read(userDataRevisionProvider.notifier).bump();
+    revision.bump();
   }
 
   /// Gửi kết quả lên server.
@@ -219,9 +227,7 @@ class SessionController
   }
 }
 
-final sessionProvider =
-    AsyncNotifierProvider.family<
-      SessionController,
-      SessionProgress,
-      SessionKey
-    >(SessionController.new);
+final sessionProvider = AsyncNotifierProvider.autoDispose
+    .family<SessionController, SessionProgress, SessionKey>(
+      SessionController.new,
+    );

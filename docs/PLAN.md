@@ -127,6 +127,12 @@ Ký hiệu: `[ ]` chưa làm · `[x]` đã xong
 
 ## Ghi chú phát sinh khi làm
 
+- `sessionProvider` **phải** là `autoDispose`. Không có nó thì phiên học được giữ
+  lại sau khi thoát: học xong 4/8 từ của một chủ đề rồi vào lại chính chủ đề đó
+  sẽ hiện ngay màn hình tổng kết cũ, vì `isFinished` vẫn còn `true`. Kèm theo:
+  trong `SessionController`, mọi thứ lấy từ `ref` phải lấy **trước** `await` —
+  người học thoát giữa phiên là provider bị huỷ, chạm `ref` sau đó sẽ ném lỗi.
+
 - `AppDurations` đặt chung trong `app_spacing.dart` thay vì file riêng — cả hai
   đều là "định lượng thiết kế", tách file riêng cho 4 hằng số là vụn.
 - Route phiên ôn tập dùng `/review-session` thay cho `/review/:id` trong
