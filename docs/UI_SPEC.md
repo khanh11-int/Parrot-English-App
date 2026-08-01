@@ -515,7 +515,7 @@ Dùng lại toàn bộ widget của mục 5.5, chỉ khác:
 
 ```
 ╭──────────────────────────────────────╮
-│ 🦜🦜  neu                🔔 💬 ↩︎    │  gradient canopy → leaf
+│ 🦜🦜  neu                   💬 ↩︎    │  gradient canopy → leaf
 │       8 thành viên                   │
 │       Trưởng nhóm: Hoang Duyen       │
 ╰──────────────────────────────────────╯
@@ -531,7 +531,10 @@ Dùng lại toàn bộ widget của mục 5.5, chỉ khác:
 ╰──────────────────────────────────────╯
 ```
 - Header nhóm: gradient `canopy → leaf` (tán rừng), hoạ tiết lá mờ, avatar nhóm
-  dạng cặp vẹt, 3 icon hành động (thông báo, chat nhóm, rời nhóm).
+  dạng cặp vẹt, **2 icon hành động**: chat nhóm và rời nhóm.
+  - Từng có icon 🔔 thông báo nhưng `onPressed: null` vì chưa làm — đã bỏ. Mọi
+    nút trên header giờ đều bấm được, nên `_GroupActionIcon.onPressed` là tham số
+    **bắt buộc**, không cho lọt thêm nút chết vào.
 - Mốc: 3 chặng **Chồi Non → Cây Vững → Đại Thụ** (xem mục 2.6). Huy hiệu là cây
   lớn dần: mầm → cây con → đại thụ. **Chưa đạt hiện dạng xám + dấu `?`**; đạt
   rồi thì hiện màu và có hiệu ứng sáng nhẹ. Ngưỡng ghi bằng XP kèm icon lá.

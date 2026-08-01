@@ -247,12 +247,6 @@ class _GroupActions extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       children: [
-        // Thông báo nhóm chưa làm nên để `null`: người dùng thấy ngay là chưa
-        // bấm được thay vì bấm rồi không có gì xảy ra.
-        const _GroupActionIcon(
-          icon: Icons.notifications_none_rounded,
-          tooltip: 'Thông báo (chưa có)',
-        ),
         _GroupActionIcon(
           icon: Icons.chat_bubble_outline_rounded,
           tooltip: 'Chat nhóm',
@@ -306,16 +300,20 @@ class _GroupActions extends ConsumerWidget {
   }
 }
 
+/// Nút hành động trên header nhóm.
+///
+/// `onPressed` **bắt buộc**: mọi nút ở đây đều phải bấm được. Trước đây nó là
+/// tuỳ chọn để chứa nút chuông thông báo chưa làm — nút đó đã bỏ.
 class _GroupActionIcon extends StatelessWidget {
   const _GroupActionIcon({
     required this.icon,
     required this.tooltip,
-    this.onPressed,
+    required this.onPressed,
   });
 
   final IconData icon;
   final String tooltip;
-  final VoidCallback? onPressed;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -324,7 +322,6 @@ class _GroupActionIcon extends StatelessWidget {
       icon: Icon(icon, size: 20),
       tooltip: tooltip,
       color: AppColors.textOnPrimary,
-      disabledColor: Colors.white70,
       constraints: const BoxConstraints.tightFor(width: 36, height: 36),
       padding: EdgeInsets.zero,
     );

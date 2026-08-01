@@ -278,6 +278,8 @@ vì cần quyết định hoặc phụ thuộc bên ngoài:
 - [x] Tạo nhóm / tham gia nhóm / rời nhóm — thành viên là
       `users/{uid}.groupId`, số liệu nhóm tính bằng aggregate `count()`/`sum()`
       nên không cần mở quyền ghi vào document nhóm
+- [ ] Thông báo nhóm — icon 🔔 trên header nhóm **đã bỏ** vì chưa làm; thêm lại
+      cùng lúc với tính năng, không để nút chết trước
 - [ ] Trang chi tiết nhiệm vụ tháng
 - [ ] Các trang con của Cài đặt (Thông báo, Thống kê học tập, Thành tích...) —
       icon đã có ở `assets/images/icons/`, dựng lại mục khi trang có thật

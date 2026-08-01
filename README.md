@@ -223,8 +223,6 @@ thấy — ví dụ hoạ tiết lá xanh đặt trên thẻ gradient xanh thì 
 - **Phát âm (TTS) chưa làm.** `SpeakerButton` và `VocabCard` đã viết nhưng ở
   nhánh này **không màn hình nào dùng** — hai chỗ dùng cũ là trang kết quả nhận
   diện ảnh và thẻ bài đăng, cả hai đã xoá. Giữ lại để lắp TTS vào sau.
-- **Thông báo nhóm chưa làm.** Icon 🔔 để `null` có chủ ý, để người dùng thấy
-  ngay là chưa bấm được.
 
 Danh sách đầy đủ: [docs/PLAN.md](docs/PLAN.md).
 
