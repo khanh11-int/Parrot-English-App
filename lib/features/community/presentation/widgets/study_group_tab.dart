@@ -14,7 +14,7 @@ import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/badge_avatar.dart';
 import '../../../../shared/widgets/primary_button.dart';
 import '../../../../shared/widgets/section_header.dart';
-import '../../domain/entities/community_entities.dart';
+import '../../domain/entities/study_group.dart';
 import '../providers/community_providers.dart';
 import 'group_join_sheet.dart';
 import 'joinable_group_card.dart';

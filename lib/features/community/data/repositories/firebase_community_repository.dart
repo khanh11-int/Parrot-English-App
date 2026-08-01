@@ -4,7 +4,10 @@ import '../../../../core/constants/app_labels.dart';
 import '../../../../core/error/failure.dart';
 import '../../../auth/domain/repositories/auth_repository.dart';
 import '../../../profile/data/models/user_document.dart';
-import '../../domain/entities/community_entities.dart';
+import '../../domain/entities/chat_message.dart';
+import '../../domain/entities/leaderboard.dart';
+import '../../domain/entities/study_group.dart';
+import '../../domain/entities/study_group_summary.dart';
 import '../../domain/repositories/community_repository.dart';
 import '../models/community_documents.dart';
 

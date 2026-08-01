@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:parrot/features/quiz/data/repositories/learn_mock_repository.dart';
 import 'package:parrot/features/quiz/presentation/providers/learn_providers.dart';
 import 'package:parrot/features/vocabulary/domain/entities/topic_word.dart';
+import 'package:parrot/features/vocabulary/domain/entities/word_progress.dart';
 import 'package:parrot/features/vocabulary/domain/repositories/vocabulary_repository.dart';
 import 'package:parrot/features/vocabulary/presentation/providers/vocabulary_providers.dart';
 

@@ -6,7 +6,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/app_error_view.dart';
 import '../../../../shared/widgets/empty_state.dart';
 import '../../../../shared/widgets/message_composer.dart';
-import '../../domain/entities/community_entities.dart';
+import '../../domain/entities/chat_message.dart';
 import '../providers/community_providers.dart';
 
 /// Chat của một nhóm học tập.

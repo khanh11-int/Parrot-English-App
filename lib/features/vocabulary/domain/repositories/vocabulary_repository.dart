@@ -1,4 +1,5 @@
 import '../entities/topic_word.dart';
+import '../entities/word_progress.dart';
 
 /// Giáo trình từ vựng + tiến độ học của người dùng.
 abstract interface class VocabularyRepository {

@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../core/constants/app_assets.dart';
-import '../../domain/entities/community_entities.dart';
+import '../../domain/entities/chat_message.dart';
+import '../../domain/entities/study_group.dart';
 
 /// Ánh xạ document Firestore `groups/{groupId}`.
 abstract final class GroupDocument {

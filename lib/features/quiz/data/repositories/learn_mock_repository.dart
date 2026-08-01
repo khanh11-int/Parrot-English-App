@@ -1,4 +1,7 @@
-import '../../domain/entities/learn_question.dart';
+import '../../domain/entities/exercise.dart';
+import '../../domain/entities/learn_session.dart';
+import '../../domain/entities/session_result.dart';
+import '../../domain/entities/word_pair.dart';
 import '../../domain/repositories/learn_repository.dart';
 
 /// Dữ liệu mock, dùng khi chưa khai báo `PARROT_API_BASE_URL`.

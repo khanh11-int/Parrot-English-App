@@ -1,4 +1,7 @@
-import '../entities/community_entities.dart';
+import '../entities/chat_message.dart';
+import '../entities/leaderboard.dart';
+import '../entities/study_group.dart';
+import '../entities/study_group_summary.dart';
 
 /// Nguồn dữ liệu Cộng đồng: xếp hạng và nhóm học tập.
 ///

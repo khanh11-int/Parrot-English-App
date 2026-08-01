@@ -1,5 +1,7 @@
 import '../../../../core/constants/app_assets.dart';
+import '../../domain/entities/shop_data.dart';
 import '../../domain/entities/shop_item.dart';
+import '../../domain/entities/wallet.dart';
 import '../../domain/repositories/shop_repository.dart';
 
 /// Dữ liệu mock, dùng khi chưa khai báo `PARROT_API_BASE_URL`.

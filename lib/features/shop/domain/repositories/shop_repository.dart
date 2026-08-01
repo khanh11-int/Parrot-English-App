@@ -1,4 +1,4 @@
-import '../entities/shop_item.dart';
+import '../entities/shop_data.dart';
 
 /// Nguồn dữ liệu Cửa hàng.
 abstract interface class ShopRepository {

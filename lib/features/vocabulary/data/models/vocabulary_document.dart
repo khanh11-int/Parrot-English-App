@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../domain/entities/topic_word.dart';
+import '../../domain/entities/word_progress.dart';
 
 /// Ánh xạ `topics/{topicId}/words/{wordId}` — giáo trình dùng chung.
 abstract final class TopicWordDocument {

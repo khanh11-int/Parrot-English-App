@@ -1,8 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:parrot/core/constants/app_labels.dart';
 import 'package:parrot/features/home/domain/entities/home_summary.dart';
+import 'package:parrot/features/home/domain/entities/quest.dart';
 import 'package:parrot/features/profile/domain/entities/user_profile.dart';
 import 'package:parrot/features/shop/domain/entities/shop_item.dart';
+import 'package:parrot/features/shop/domain/entities/wallet.dart';
 
 void main() {
   group('Quest', () {

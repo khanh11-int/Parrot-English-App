@@ -6,6 +6,7 @@ import '../../../profile/data/models/user_document.dart';
 import '../../../quiz/data/models/topic_document.dart';
 import '../../../vocabulary/data/models/vocabulary_document.dart';
 import '../../domain/entities/home_summary.dart';
+import '../../domain/entities/quest.dart';
 import '../../domain/repositories/home_repository.dart';
 
 /// Dữ liệu trang chủ tổng hợp từ Firestore.

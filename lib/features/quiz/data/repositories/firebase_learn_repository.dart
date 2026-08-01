@@ -1,7 +1,11 @@
 import '../../../../core/error/failure.dart';
 import '../../../vocabulary/domain/entities/topic_word.dart';
+import '../../../vocabulary/domain/entities/word_progress.dart';
 import '../../../vocabulary/domain/repositories/vocabulary_repository.dart';
-import '../../domain/entities/learn_question.dart';
+import '../../domain/entities/exercise.dart';
+import '../../domain/entities/learn_session.dart';
+import '../../domain/entities/session_result.dart';
+import '../../domain/entities/word_pair.dart';
 import '../../domain/repositories/learn_repository.dart';
 
 /// Sinh phiên học từ **giáo trình của chủ đề** trên Firestore.

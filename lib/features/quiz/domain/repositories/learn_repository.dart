@@ -1,4 +1,5 @@
-import '../entities/learn_question.dart';
+import '../entities/learn_session.dart';
+import '../entities/session_result.dart';
 
 /// Nguồn nội dung phiên học và phiên ôn tập.
 abstract interface class LearnRepository {

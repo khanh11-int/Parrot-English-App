@@ -6,7 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/primary_button.dart';
-import '../../domain/entities/learn_question.dart';
+import '../../domain/entities/session_result.dart';
 
 /// Tổng kết sau khi hoàn thành phiên học / ôn tập.
 class SessionSummaryPage extends StatelessWidget {

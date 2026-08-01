@@ -58,6 +58,27 @@ import '../providers/vocabulary_providers.dart';
 - **1 class chính / 1 file.** File tên theo class đó.
 - Widget quá lớn → tách thành widget con trong `presentation/widgets/`.
 
+### Không đặt tên file kiểu hòm chứa
+
+Cấm những cái tên như `community_entities.dart`, `models.dart`, `utils.dart`.
+Tên đó không nói được file làm gì, nên mọi khái niệm mới lại bị nhồi thêm vào —
+`community_entities.dart` từng chứa cùng lúc bảng xếp hạng, tin nhắn chat và
+nhóm học tập, ba thứ chẳng liên quan gì nhau. Hệ quả thực tế: sửa entity nhóm
+học tập thì mọi màn hình chat cũng phải biên dịch lại, và người đọc phải cuộn
+qua ba khái niệm để tìm một cái.
+
+Được phép ở chung file **chỉ khi** một trong hai điều sau đúng:
+
+1. **Dart bắt buộc** — lớp con của `sealed class` phải nằm cùng library, nên
+   `Exercise` + hai lớp con ở chung `exercise.dart`.
+2. **Quan hệ bộ phận** — thứ nhỏ không có nghĩa khi tách khỏi thứ chứa nó:
+   `LeaderboardEntry` là một hàng của `Leaderboard`, `Quest` là một phần tử của
+   `QuestGroup`, `ShopCurrency` chỉ tồn tại để phân loại giá `ShopItem`.
+
+Hai read model của cùng một khái niệm **không** thuộc diện này: `StudyGroup`
+(nhóm của tôi) và `StudyGroupSummary` (nhóm trong danh sách khám phá) do hai màn
+hình khác nhau dùng, quyền đọc Firestore cũng khác → hai file.
+
 ---
 
 ## 4. Widget

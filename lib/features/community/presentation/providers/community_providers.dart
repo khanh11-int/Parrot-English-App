@@ -5,7 +5,10 @@ import '../../../../core/error/failure.dart';
 import '../../../../core/providers/user_data_revision.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../data/repositories/firebase_community_repository.dart';
-import '../../domain/entities/community_entities.dart';
+import '../../domain/entities/chat_message.dart';
+import '../../domain/entities/leaderboard.dart';
+import '../../domain/entities/study_group.dart';
+import '../../domain/entities/study_group_summary.dart';
 import '../../domain/repositories/community_repository.dart';
 
 /// Dữ liệu Cộng đồng đọc từ Firestore.

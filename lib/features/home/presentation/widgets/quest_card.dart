@@ -4,7 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_linear_progress.dart';
-import '../../domain/entities/home_summary.dart';
+import '../../domain/entities/quest.dart';
 
 /// Thẻ nhóm nhiệm vụ hằng ngày: mỗi nhiệm vụ một dòng, thanh tiến độ chiếm hết
 /// chiều ngang.

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:parrot/core/router/app_routes.dart';
 import 'package:parrot/features/community/data/repositories/community_mock_repository.dart';
-import 'package:parrot/features/community/domain/entities/community_entities.dart';
+import 'package:parrot/features/community/domain/entities/study_group.dart';
 import 'package:parrot/features/community/presentation/providers/community_providers.dart';
 import 'package:parrot/shared/widgets/async_value_view.dart';
 

@@ -1,6 +1,9 @@
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_labels.dart';
-import '../../domain/entities/community_entities.dart';
+import '../../domain/entities/chat_message.dart';
+import '../../domain/entities/leaderboard.dart';
+import '../../domain/entities/study_group.dart';
+import '../../domain/entities/study_group_summary.dart';
 import '../../domain/repositories/community_repository.dart';
 
 /// Dữ liệu mock, dùng khi chưa khai báo `PARROT_API_BASE_URL`.

@@ -6,7 +6,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_linear_progress.dart';
 import '../../../../shared/widgets/async_value_view.dart';
-import '../../domain/entities/learn_question.dart';
+import '../../domain/entities/exercise.dart';
 import '../providers/learn_providers.dart';
 import '../widgets/match_pairs_exercise.dart';
 import '../widgets/multiple_choice_exercise.dart';

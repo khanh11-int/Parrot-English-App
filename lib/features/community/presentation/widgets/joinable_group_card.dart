@@ -5,7 +5,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/secondary_button.dart';
-import '../../domain/entities/community_entities.dart';
+import '../../domain/entities/study_group_summary.dart';
 import '../providers/community_providers.dart';
 
 /// Một nhóm có thể tham gia, kèm nút "Tham gia" ngay trên thẻ.

@@ -1,4 +1,7 @@
 /// Loại tiền dùng để mua vật phẩm.
+///
+/// Nằm cùng file với [ShopItem] vì nó chỉ tồn tại để phân loại giá của vật
+/// phẩm; tách riêng thì mở file ra chỉ thấy một dòng `enum`.
 enum ShopCurrency { seed, gem }
 
 /// Một vật phẩm trong Cửa hàng.
@@ -36,34 +39,4 @@ class ShopItem {
       ownedCount: ownedCount ?? this.ownedCount,
     );
   }
-}
-
-/// Số dư hai loại tiền của người dùng.
-class Wallet {
-  const Wallet({required this.seeds, required this.gems});
-
-  final int seeds;
-  final int gems;
-
-  int amountOf(ShopCurrency currency) => switch (currency) {
-    ShopCurrency.seed => seeds,
-    ShopCurrency.gem => gems,
-  };
-
-  bool canAfford(ShopItem item) => amountOf(item.currency) >= item.price;
-
-  Wallet spend(ShopItem item) => switch (item.currency) {
-    ShopCurrency.seed => Wallet(seeds: seeds - item.price, gems: gems),
-    ShopCurrency.gem => Wallet(seeds: seeds, gems: gems - item.price),
-  };
-}
-
-/// Toàn bộ dữ liệu của Cửa hàng.
-class ShopData {
-  const ShopData({required this.wallet, required this.items});
-
-  final Wallet wallet;
-  final List<ShopItem> items;
-
-  List<ShopItem> get ownedItems => items.where((item) => item.isOwned).toList();
 }

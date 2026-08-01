@@ -5,6 +5,7 @@ import '../../../../core/error/failure.dart';
 import '../../../../core/providers/user_data_revision.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../data/repositories/firebase_shop_repository.dart';
+import '../../domain/entities/shop_data.dart';
 import '../../domain/entities/shop_item.dart';
 import '../../domain/repositories/shop_repository.dart';
 

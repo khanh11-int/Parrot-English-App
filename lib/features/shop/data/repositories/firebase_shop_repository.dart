@@ -3,7 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../core/error/failure.dart';
 import '../../../auth/domain/repositories/auth_repository.dart';
 import '../../../profile/data/models/user_document.dart';
+import '../../domain/entities/shop_data.dart';
 import '../../domain/entities/shop_item.dart';
+import '../../domain/entities/wallet.dart';
 import '../../domain/repositories/shop_repository.dart';
 import '../models/shop_item_document.dart';
 

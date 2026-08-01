@@ -8,6 +8,7 @@ import '../../../../shared/widgets/app_image.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/currency_pill.dart';
 import '../../../../shared/widgets/section_header.dart';
+import '../../domain/entities/shop_data.dart';
 import '../../domain/entities/shop_item.dart';
 import '../providers/shop_providers.dart';
 import '../widgets/purchase_sheet.dart';

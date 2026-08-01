@@ -9,7 +9,7 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/badge_avatar.dart';
 import '../../../../shared/widgets/rank_avatar.dart';
-import '../../domain/entities/community_entities.dart';
+import '../../domain/entities/leaderboard.dart';
 import '../providers/community_providers.dart';
 
 /// Tab 3 — Bảng xếp hạng giải đấu tuần.

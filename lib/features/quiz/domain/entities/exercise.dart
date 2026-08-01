@@ -1,15 +1,4 @@
-/// Một cặp từ Anh–Việt, đơn vị nhỏ nhất của mọi dạng bài tập.
-class WordPair {
-  const WordPair({
-    required this.id,
-    required this.english,
-    required this.vietnamese,
-  });
-
-  final String id;
-  final String english;
-  final String vietnamese;
-}
+import 'word_pair.dart';
 
 /// Các dạng bài tập trong một phiên học.
 enum ExerciseKind {
@@ -26,6 +15,10 @@ enum ExerciseKind {
 }
 
 /// Một vòng bài tập.
+///
+/// Cả cây thừa kế **buộc phải** nằm trong một file: Dart chỉ cho `sealed class`
+/// có lớp con trong cùng library. Đổi lại, `switch` trên [Exercise] được kiểm
+/// đủ nhánh lúc biên dịch — thêm dạng bài mới mà quên xử lý là lỗi ngay.
 sealed class Exercise {
   const Exercise({required this.kind});
 
@@ -56,40 +49,4 @@ class MultipleChoiceExerciseData extends Exercise {
 
   /// Câu hỏi hiện cho người học, ví dụ `'Diet' có nghĩa là gì?`.
   String get question => "'${word.english}' có nghĩa là gì?";
-}
-
-/// Một phiên học gồm nhiều vòng.
-class LearnSession {
-  const LearnSession({
-    required this.id,
-    required this.title,
-    required this.exercises,
-  });
-
-  /// Id do server cấp, dùng khi gửi kết quả phiên lên.
-  final String id;
-  final String title;
-  final List<Exercise> exercises;
-}
-
-/// Kết quả sau khi hoàn thành phiên học.
-class SessionResult {
-  const SessionResult({
-    required this.learnedWordCount,
-    required this.correctCount,
-    required this.wrongCount,
-    required this.earnedExperience,
-    required this.earnedSeeds,
-  });
-
-  final int learnedWordCount;
-  final int correctCount;
-  final int wrongCount;
-  final int earnedExperience;
-  final int earnedSeeds;
-
-  int get totalAnswers => correctCount + wrongCount;
-
-  /// Tỉ lệ đúng, 0..1. Trả 0 khi chưa trả lời câu nào để tránh chia cho 0.
-  double get accuracy => totalAnswers == 0 ? 0 : correctCount / totalAnswers;
 }

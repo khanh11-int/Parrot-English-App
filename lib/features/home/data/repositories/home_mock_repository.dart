@@ -1,4 +1,5 @@
 import '../../domain/entities/home_summary.dart';
+import '../../domain/entities/quest.dart';
 import '../../domain/repositories/home_repository.dart';
 
 /// Dữ liệu trang chủ dạng mock, dùng khi chưa khai báo `PARROT_API_BASE_URL`.

@@ -6,6 +6,7 @@ import '../../../auth/domain/repositories/auth_repository.dart';
 import '../../../profile/data/models/user_document.dart';
 import '../../../quiz/data/models/topic_document.dart';
 import '../../domain/entities/topic_word.dart';
+import '../../domain/entities/word_progress.dart';
 import '../../domain/repositories/vocabulary_repository.dart';
 import '../models/vocabulary_document.dart';
 
