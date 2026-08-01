@@ -63,68 +63,84 @@
 
 ## Cách chạy
 
-Dự án trỏ tới một Firebase project riêng, nên **phải tự tạo project của bạn** —
-`lib/firebase_options.dart` trong repo không dùng được cho người khác.
-
-<details>
-<summary><b>1. Cài công cụ</b></summary>
-
-```bash
-npm install -g firebase-tools
-firebase login
-dart pub global activate flutterfire_cli
-```
-
-Windows: thêm `%LOCALAPPDATA%\Pub\Cache\bin` vào PATH rồi **khởi động lại**
-VS Code — tiến trình đang chạy không thấy PATH mới.
-
-</details>
-
-<details>
-<summary><b>2. Tạo và nối Firebase project</b></summary>
-
-```bash
-flutterfire configure --platforms=android,ios,web
-```
-
-Trên Firebase Console bật thêm:
-
-- **Authentication** → *Sign-in method* → **Email/Password**
-- **Firestore Database** → *Create database* → **production mode**, location
-  `asia-southeast1`
-
-</details>
-
-<details>
-<summary><b>3. Deploy rules và indexes</b></summary>
-
-```bash
-firebase deploy --only firestore:rules,firestore:indexes
-```
-
-> [!IMPORTANT]
-> Phải deploy **cả indexes**, không chỉ rules. XP nhóm tính bằng aggregate
-> `sum()` kèm filter, mà Firestore đòi composite index cho việc đó — thiếu index
-> thì tab Nhóm học tập báo lỗi. Index đã khai trong `firestore.indexes.json`.
-
-Rồi nạp dữ liệu mẫu (7 chủ đề, 56 từ, 2 vật phẩm) theo
-[docs/SEED_DATA.md](docs/SEED_DATA.md).
-
-</details>
-
-<details>
-<summary><b>4. Chạy</b></summary>
-
 ```bash
 flutter pub get
 flutter run
 ```
+
+Chỉ vậy. Cấu hình Firebase (`lib/firebase_options.dart`,
+`android/app/google-services.json`) **đã có trong repo** và dùng được cho mọi
+người — clone về là chạy được ngay với đúng dữ liệu chung của nhóm.
+
+> [!NOTE]
+> `apiKey` trong hai file đó **không phải mật khẩu**. Firebase gọi nó là *API
+> key* nhưng nó chỉ là mã định danh project, ai mở app cũng đọc được — bảo mật
+> nằm ở [firestore.rules](firestore.rules) + Firebase Auth. Google ghi rõ điều
+> này trong tài liệu chính thức. Thứ **thật sự là bí mật** là service account
+> JSON, đã bị `.gitignore` chặn.
 
 Windows cần bật **Developer Mode** (`start ms-settings:developers`) — Flutter
 dùng symlink cho plugin native.
 
 > Thêm / đổi tên / xoá file trong `assets/` thì phải **dừng app và chạy lại**.
 > Hot reload không sinh lại `AssetManifest`, ảnh mới sẽ không hiện.
+
+<details>
+<summary><b>Đừng chạy <code>flutterfire configure</code></b></summary>
+
+Lệnh đó **ghi đè** `lib/firebase_options.dart` và
+`android/app/google-services.json` bằng project của riêng bạn. Kết quả: máy bạn
+trỏ sang một Firestore trống, không thấy 7 chủ đề / 56 từ của nhóm, và commit
+lên thì kéo cả nhóm theo.
+
+Chỉ chạy nó khi bạn **cố ý** muốn dựng project Firebase riêng (xem mục dưới).
+
+</details>
+
+<details>
+<summary><b>Sửa rules hoặc index thì cần thêm gì</b></summary>
+
+```bash
+npm install -g firebase-tools
+firebase login
+firebase deploy --only firestore:rules,firestore:indexes
+```
+
+Không cần chỉ định project — [`.firebaserc`](.firebaserc) đã ghim
+`parrot-english-app`. Tài khoản Google của bạn phải được mời vào project với
+quyền đủ (xem [docs/TEAM_SETUP.md](docs/TEAM_SETUP.md)).
+
+> [!IMPORTANT]
+> Phải deploy **cả indexes**, không chỉ rules. XP nhóm tính bằng aggregate
+> `sum()` kèm filter, mà Firestore đòi composite index cho việc đó — thiếu index
+> thì tab Nhóm học tập báo lỗi. Index đã khai trong `firestore.indexes.json`.
+
+</details>
+
+<details>
+<summary><b>Dựng Firebase project riêng (không dùng chung với nhóm)</b></summary>
+
+```bash
+npm install -g firebase-tools
+firebase login
+dart pub global activate flutterfire_cli
+flutterfire configure --platforms=android,ios,web
+```
+
+Windows: thêm `%LOCALAPPDATA%\Pub\Cache\bin` vào PATH rồi **khởi động lại**
+VS Code — tiến trình đang chạy không thấy PATH mới.
+
+Trên Firebase Console của project mới, bật:
+
+- **Authentication** → *Sign-in method* → **Email/Password**
+- **Firestore Database** → *Create database* → **production mode**, location
+  `asia-southeast1`
+
+Rồi `firebase deploy --only firestore:rules,firestore:indexes` và nạp lại dữ
+liệu mẫu (7 chủ đề, 56 từ, 2 vật phẩm) theo
+[docs/SEED_DATA.md](docs/SEED_DATA.md).
+
+**Đừng commit** `firebase_options.dart` / `google-services.json` đã bị đổi.
 
 </details>
 
@@ -179,13 +195,13 @@ sửa được XP nhóm của người khác.
 ```bash
 dart format .      # phải sạch
 flutter analyze    # phải 0 issue
-flutter test       # 111 test
+flutter test       # 104 test
 ```
 
 | Số liệu | |
 |---|---|
-| Dart trong `lib/` | ~11.600 dòng · 125 file |
-| Dart trong `test/` | ~1.800 dòng · 111 test |
+| Dart trong `lib/` | ~10.500 dòng · 117 file |
+| Dart trong `test/` | ~1.800 dòng · 104 test |
 | `flutter analyze` | 0 issue |
 
 **Chụp ảnh giao diện để xem** (không phải golden test so sánh):
@@ -206,6 +222,7 @@ thấy — ví dụ hoạ tiết lá xanh đặt trên thẻ gradient xanh thì 
 | [docs/UI_SPEC.md](docs/UI_SPEC.md) | Design token, đặc tả từng màn hình, kho ảnh |
 | [docs/CODING_GUIDELINES.md](docs/CODING_GUIDELINES.md) | Quy tắc viết code |
 | [docs/SEED_DATA.md](docs/SEED_DATA.md) | Dữ liệu cần nạp vào Firestore |
+| [docs/TEAM_SETUP.md](docs/TEAM_SETUP.md) | Chia sẻ Firebase cho cả nhóm: quyền, dữ liệu chung/riêng |
 | [docs/PLAN.md](docs/PLAN.md) | Tiến độ và việc còn lại |
 
 ## Giới hạn đã biết
